@@ -12,12 +12,12 @@ A web app that teaches English vocabulary to Hebrew-speaking children through 4 
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v1.5.1   | 02/20 | UX: Green checkmark badge on completed game cards with pop animation                     |
 | v1.5.0   | 02/20 | Feature: Subject tabs — menu ready for English + future Math support                     |
 | v1.4.2   | 02/20 | UX: Session celebration — fireworks + trophy popup after completing all 4 games           |
 | v1.4.1   | 02/20 | UX: Shuffle button — ensures different questions each practice session                   |
 | v1.4.0   | 02/20 | Content: All 55 words from Jet 2 Unit 2, new sentences, unit-based data structure        |
 | v1.3.0   | 02/20 | UX: Pink bows background, pastel cards, RTL fixes, polished menu design                  |
-| v1.2.0   | 02/20 | Chore: Stripped newsletter code — clean, minimal learning app codebase                   |
 
 ---
 
