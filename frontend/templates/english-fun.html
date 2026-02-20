@@ -440,6 +440,13 @@ body {
     transform: translateY(-1px);
 }
 
+.game-card.completed {
+    opacity: 0.45;
+    cursor: default;
+    pointer-events: none;
+    filter: grayscale(0.3);
+}
+
 .game-card-word-match { background: #c4b5fd; }
 .game-card-sentence-builder { background: #fdba74; }
 .game-card-listen-choose { background: #7dd3fc; }
@@ -1200,28 +1207,28 @@ body {
     </div>
 
     <div class="game-cards">
-        <div class="game-card game-card-word-match slide-up" style="animation-delay: 0.1s" onclick="startGame(1)">
+        <div class="game-card game-card-word-match slide-up" id="game-card-1" style="animation-delay: 0.1s" onclick="startGame(1)">
             <div class="card-emoji">🔤</div>
             <div class="card-text">
                 <div class="card-title">מה המילה?</div>
                 <div class="card-desc">התאימי את המילה באנגלית</div>
             </div>
         </div>
-        <div class="game-card game-card-sentence-builder slide-up" style="animation-delay: 0.2s" onclick="startGame(2)">
+        <div class="game-card game-card-sentence-builder slide-up" id="game-card-2" style="animation-delay: 0.2s" onclick="startGame(2)">
             <div class="card-emoji">📝</div>
             <div class="card-text">
                 <div class="card-title">תרגמי את המשפט</div>
                 <div class="card-desc">סדרי את המילים בסדר הנכון</div>
             </div>
         </div>
-        <div class="game-card game-card-listen-choose slide-up" style="animation-delay: 0.3s" onclick="startGame(3)">
+        <div class="game-card game-card-listen-choose slide-up" id="game-card-3" style="animation-delay: 0.3s" onclick="startGame(3)">
             <div class="card-emoji">🔊</div>
             <div class="card-text">
                 <div class="card-title">האזיני ובחרי</div>
                 <div class="card-desc">שמעי את המילה ובחרי תמונה</div>
             </div>
         </div>
-        <div class="game-card game-card-true-false slide-up" style="animation-delay: 0.4s" onclick="startGame(4)">
+        <div class="game-card game-card-true-false slide-up" id="game-card-4" style="animation-delay: 0.4s" onclick="startGame(4)">
             <div class="card-emoji">🤔</div>
             <div class="card-text">
                 <div class="card-title">כן או לא?</div>
@@ -1776,6 +1783,11 @@ function closeSessionPopup() {
     // Reset session for another round
     state.sessionGames = new Set();
     state.sessionStars = 0;
+    // Re-enable all game cards
+    for (let i = 1; i <= 4; i++) {
+        const card = document.getElementById(`game-card-${i}`);
+        if (card) card.classList.remove('completed');
+    }
 }
 
 // Welcome screen: wait for button click
@@ -2206,9 +2218,11 @@ function finishGame() {
     const maxScores = { 1: 10, 2: 12, 3: 10, 4: 8 };
     const max = maxScores[state.currentGame] || 10;
 
-    // Track session progress
+    // Track session progress + mark card as completed
     state.sessionGames.add(state.currentGame);
     state.sessionStars += state.gameScore;
+    const completedCard = document.getElementById(`game-card-${state.currentGame}`);
+    if (completedCard) completedCard.classList.add('completed');
 
     document.getElementById('complete-score').textContent =
         `${state.gameScore} / ${max} ⭐ הרווחת`;
