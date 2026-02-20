@@ -291,7 +291,7 @@ body {
     left: 0;
     width: 100%;
     background: #fce4ec;
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-xl) var(--space-2xl);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     justify-content: center;
     z-index: 20;
@@ -307,11 +307,71 @@ body {
     gap: var(--space-sm);
 }
 
+/* Subject tabs — fixed vertical sidebar on the right */
+.subject-tabs {
+    position: fixed;
+    right: var(--space-2xl);
+    top: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    z-index: 15;
+}
+
+.subject-tab {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-family: var(--font-display);
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    font-weight: 500;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.subject-tab.active {
+    background: #fce4ec;
+    color: var(--text-dark);
+    border-color: rgba(236, 72, 153, 0.2);
+    box-shadow: 0 2px 8px rgba(236, 72, 153, 0.15);
+}
+
+.subject-tab.disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.subject-tab.disabled .tab-lock {
+    font-size: 0.7rem;
+}
+
+.subject-tab:not(.active):not(.disabled):hover {
+    background: rgba(0, 0, 0, 0.07);
+}
+
+@keyframes tabShake {
+    0%, 100% { transform: translateY(0); }
+    20% { transform: translateY(-2px); }
+    40% { transform: translateY(2px); }
+    60% { transform: translateY(-1px); }
+    80% { transform: translateY(1px); }
+}
+
+.subject-tab.shake {
+    animation: tabShake 0.4s ease;
+}
+
 .menu-subtitle {
     font-family: var(--font-body);
     font-size: clamp(1.1rem, 3.5vw, 1.4rem);
     color: var(--text-muted);
-    margin-top: 70px;
+    margin-top: 90px;
     margin-bottom: var(--space-md);
     text-align: center;
 }
@@ -1111,7 +1171,7 @@ body {
      ====================================================================== -->
 <div class="screen active" id="welcome-screen">
     <div class="welcome-title">שלום אריאל! 👋</div>
-    <div class="welcome-subtitle">בואי ללמוד אנגלית 🎉</div>
+    <div class="welcome-subtitle">בואי ללמוד בכיף 🎉</div>
     <button class="welcome-btn" id="welcome-btn" onclick="goToMenu()">מתחילים ▶️</button>
 </div>
 
@@ -1120,7 +1180,6 @@ body {
      ====================================================================== -->
 <div class="screen" id="menu-screen">
     <div class="app-header">
-        <div class="app-title">🌟 English Fun</div>
         <div class="header-right">
             <div class="star-counter">
                 <span class="star-icon">⭐</span>
@@ -1128,6 +1187,11 @@ body {
             </div>
             <button class="shuffle-btn" onclick="shuffleQuestions()" title="ערבבי שאלות חדשות">🔀</button>
         </div>
+    </div>
+
+    <div class="subject-tabs" id="subject-tabs">
+        <button class="subject-tab active" onclick="switchSubject('english')">🇺🇸 אנגלית</button>
+        <button class="subject-tab disabled" onclick="switchSubject('math')">🔢 חשבון <span class="tab-lock">🔒</span></button>
     </div>
 
     <div class="menu-subtitle">
@@ -1640,6 +1704,20 @@ function showEmojiParade() {
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
+}
+
+function switchSubject(subject) {
+    if (subject === 'math') {
+        // Shake the disabled tab as feedback
+        const mathTab = document.querySelector('.subject-tab.disabled');
+        mathTab.classList.remove('shake');
+        mathTab.offsetHeight; // force reflow
+        mathTab.classList.add('shake');
+        return;
+    }
+    // Future: switch active tab + show different game cards
+    document.querySelectorAll('.subject-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector(`[onclick="switchSubject('${subject}')"]`).classList.add('active');
 }
 
 function goToMenu() {
