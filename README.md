@@ -12,6 +12,7 @@ A web app that teaches English vocabulary to Hebrew-speaking children through 4 
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v1.3.0   | 02/20 | UX: Pink bows background, pastel cards, RTL fixes, polished menu design                  |
 | v1.2.0   | 02/20 | Chore: Stripped newsletter code — clean, minimal learning app codebase                   |
 | v1.1.0   | 02/20 | Feature: Backend + DB integration — progress saves across sessions, weak word tracking   |
 | v1.0.0   | 02/20 | Feature: Ariel's English Adventure — 4 learning games with rewards and animations        |

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fce4ec"/>
+  <!-- Bow 1 - top left area -->
+  <g transform="translate(50,50) scale(0.4)" fill="none" stroke="#e8a0b4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Left loop -->
+    <path d="M50,50 C30,20 5,15 10,40 C15,55 35,55 50,50Z"/>
+    <!-- Right loop -->
+    <path d="M50,50 C70,20 95,15 90,40 C85,55 65,55 50,50Z"/>
+    <!-- Left tail -->
+    <path d="M50,50 C40,65 25,85 20,95"/>
+    <!-- Right tail -->
+    <path d="M50,50 C60,65 75,85 80,95"/>
+    <!-- Center knot -->
+    <ellipse cx="50" cy="50" rx="6" ry="5" fill="#e8a0b4" opacity="0.3"/>
+  </g>
+  <!-- Bow 2 - bottom right area, slightly different -->
+  <g transform="translate(140,145) scale(0.35) rotate(-15)" fill="none" stroke="#d4849b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Left loop with dots -->
+    <path d="M50,50 C25,15 0,20 12,42 C20,55 38,55 50,50Z"/>
+    <!-- Right loop with dots -->
+    <path d="M50,50 C75,15 100,20 88,42 C80,55 62,55 50,50Z"/>
+    <!-- Dots on left loop -->
+    <circle cx="28" cy="35" r="2" fill="#d4849b" opacity="0.5"/>
+    <circle cx="35" cy="28" r="1.5" fill="#d4849b" opacity="0.5"/>
+    <circle cx="22" cy="42" r="1.5" fill="#d4849b" opacity="0.5"/>
+    <!-- Dots on right loop -->
+    <circle cx="72" cy="35" r="2" fill="#d4849b" opacity="0.5"/>
+    <circle cx="65" cy="28" r="1.5" fill="#d4849b" opacity="0.5"/>
+    <circle cx="78" cy="42" r="1.5" fill="#d4849b" opacity="0.5"/>
+    <!-- Tails -->
+    <path d="M50,50 C42,68 30,82 22,92"/>
+    <path d="M50,50 C58,68 70,82 78,92"/>
+    <!-- Center knot -->
+    <ellipse cx="50" cy="50" rx="6" ry="5" fill="#d4849b" opacity="0.3"/>
+  </g>
+  <!-- Bow 3 - top right, small simple -->
+  <g transform="translate(160,30) scale(0.25) rotate(10)" fill="none" stroke="#e8a0b4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50,50 C28,18 2,18 12,42 C18,55 36,55 50,50Z"/>
+    <path d="M50,50 C72,18 98,18 88,42 C82,55 64,55 50,50Z"/>
+    <path d="M50,50 C43,62 32,78 28,88"/>
+    <path d="M50,50 C57,62 68,78 72,88"/>
+    <ellipse cx="50" cy="50" rx="5" ry="4" fill="#e8a0b4" opacity="0.3"/>
+  </g>
+  <!-- Bow 4 - bottom left, medium -->
+  <g transform="translate(15,160) scale(0.28) rotate(5)" fill="none" stroke="#dba0b8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50,50 C30,22 8,16 12,40 C16,54 36,56 50,50Z"/>
+    <path d="M50,50 C70,22 92,16 88,40 C84,54 64,56 50,50Z"/>
+    <path d="M50,50 C44,64 34,80 28,90"/>
+    <path d="M50,50 C56,64 66,80 72,90"/>
+    <ellipse cx="50" cy="50" rx="6" ry="5" fill="#dba0b8" opacity="0.3"/>
+  </g>
+</svg>

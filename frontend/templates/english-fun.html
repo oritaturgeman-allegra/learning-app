@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ariel's English Adventure 🌟</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -272,6 +273,35 @@ body {
 /* ==========================================================================
    MAIN MENU
    ========================================================================== */
+#menu-screen::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('/static/bg-bows.svg') repeat;
+    background-size: 250px 250px;
+    z-index: -1;
+}
+
+#menu-screen .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #fce4ec;
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    justify-content: center;
+    gap: var(--space-lg);
+    z-index: 20;
+}
+
+#menu-screen .game-cards {
+    margin-top: 60px;
+}
+
 .menu-subtitle {
     font-family: var(--font-body);
     font-size: clamp(1.1rem, 3.5vw, 1.4rem);
@@ -309,10 +339,10 @@ body {
     transform: translateY(-1px);
 }
 
-.game-card.purple { background: var(--grad-purple); }
-.game-card.orange { background: var(--grad-orange); }
-.game-card.blue { background: var(--grad-blue); }
-.game-card.pink { background: var(--grad-pink); }
+.game-card.purple { background: #c4b5fd; }
+.game-card.orange { background: #fdba74; }
+.game-card.blue { background: #7dd3fc; }
+.game-card.pink { background: #f9a8d4; }
 
 .game-card .card-emoji {
     font-size: 2.5rem;
@@ -325,7 +355,7 @@ body {
 .game-card .card-title {
     font-family: var(--font-display);
     font-size: clamp(1.2rem, 4vw, 1.5rem);
-    font-weight: 700;
+    font-weight: 400;
     margin-bottom: 4px;
 }
 
@@ -791,6 +821,20 @@ body {
 .mascot.wiggle { animation: wiggle 0.6s ease-in-out, float 3s ease-in-out infinite; }
 
 /* ==========================================================================
+   VERSION FOOTER
+   ========================================================================== */
+.app-version {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.35);
+    letter-spacing: 0.5px;
+    z-index: 999;
+    pointer-events: none;
+}
+
+/* ==========================================================================
    MILESTONE OVERLAY
    ========================================================================== */
 .milestone-overlay {
@@ -877,7 +921,7 @@ body {
 <!-- =====================================================================
      MASCOT
      ====================================================================== -->
-<div class="mascot" id="mascot" title="!אני הכוכב שלך">⭐</div>
+<div class="mascot" id="mascot" title="אני הכוכב שלך!">⭐</div>
 
 <!-- =====================================================================
      MILESTONE OVERLAY
@@ -885,7 +929,7 @@ body {
 <div class="milestone-overlay" id="milestone-overlay">
     <div class="milestone-content">
         <div class="milestone-emoji" id="milestone-emoji">🎉</div>
-        <div class="milestone-text" id="milestone-text">!כל הכבוד אריאל</div>
+        <div class="milestone-text" id="milestone-text">כל הכבוד אריאל!</div>
         <div class="milestone-sub" id="milestone-sub"></div>
     </div>
 </div>
@@ -899,9 +943,9 @@ body {
      WELCOME SCREEN
      ====================================================================== -->
 <div class="screen active" id="welcome-screen">
-    <div class="welcome-title">!שלום אריאל 👋</div>
+    <div class="welcome-title">שלום אריאל! 👋</div>
     <div class="welcome-subtitle">בואי ללמוד אנגלית 🎉</div>
-    <button class="welcome-btn" id="welcome-btn" onclick="goToMenu()">!יאללה בואי ▶️</button>
+    <button class="welcome-btn" id="welcome-btn" onclick="goToMenu()">מתחילים ▶️</button>
 </div>
 
 <!-- =====================================================================
@@ -909,20 +953,20 @@ body {
      ====================================================================== -->
 <div class="screen" id="menu-screen">
     <div class="app-header">
-        <div class="app-title">🌟 English Fun</div>
         <div class="star-counter">
             <span class="star-icon">⭐</span>
             <span id="star-count">0</span>
         </div>
+        <div class="app-title">🌟 English Fun</div>
     </div>
 
-    <div class="menu-subtitle">?בחרי משחק, אריאל 🎮</div>
+    <div class="menu-subtitle">🎮 בחרי משחק, אריאל</div>
 
     <div class="game-cards">
         <div class="game-card purple slide-up" style="animation-delay: 0.1s" onclick="startGame(1)">
             <div class="card-emoji">🔤</div>
             <div class="card-text">
-                <div class="card-title">?מה המילה</div>
+                <div class="card-title">מה המילה?</div>
                 <div class="card-desc">התאימי את המילה באנגלית</div>
             </div>
         </div>
@@ -943,8 +987,8 @@ body {
         <div class="game-card pink slide-up" style="animation-delay: 0.4s" onclick="startGame(4)">
             <div class="card-emoji">🤔</div>
             <div class="card-text">
-                <div class="card-title">?כן או לא</div>
-                <div class="card-desc">?האם המשפט נכון</div>
+                <div class="card-title">כן או לא?</div>
+                <div class="card-desc">האם המשפט נכון?</div>
             </div>
         </div>
     </div>
@@ -955,11 +999,11 @@ body {
      ====================================================================== -->
 <div class="screen" id="game-screen">
     <div class="app-header">
-        <div class="app-title">🌟 English Fun</div>
         <div class="star-counter">
             <span class="star-icon">⭐</span>
             <span id="game-star-count">0</span>
         </div>
+        <div class="app-title">🌟 English Fun</div>
     </div>
 
     <div class="game-header">
@@ -981,7 +1025,7 @@ body {
      ====================================================================== -->
 <div class="screen" id="complete-screen">
     <div class="complete-emoji">🎉</div>
-    <div class="complete-title">!כל הכבוד אריאל</div>
+    <div class="complete-title">כל הכבוד אריאל!</div>
     <div class="complete-score" id="complete-score"></div>
     <div class="complete-stars" id="complete-total-stars"></div>
     <div class="complete-buttons">
@@ -1287,7 +1331,7 @@ function checkMilestone() {
 function showMilestone() {
     const overlay = document.getElementById('milestone-overlay');
     document.getElementById('milestone-emoji').textContent = '🎉';
-    document.getElementById('milestone-text').textContent = '!כל הכבוד אריאל';
+    document.getElementById('milestone-text').textContent = 'כל הכבוד אריאל!';
     document.getElementById('milestone-sub').textContent = `⭐ ${state.totalStars} כוכבים!`;
     overlay.classList.add('active');
     playCelebration();
@@ -1304,7 +1348,7 @@ function showMilestone() {
 function showEmojiParade() {
     const overlay = document.getElementById('milestone-overlay');
     document.getElementById('milestone-emoji').textContent = '🏆';
-    document.getElementById('milestone-text').textContent = '!כל הכבוד אריאל';
+    document.getElementById('milestone-text').textContent = 'כל הכבוד אריאל!';
     document.getElementById('milestone-sub').textContent = `🌟 ${state.totalStars} כוכבים — מדהים!`;
     overlay.classList.add('active');
     playCelebration();
@@ -1345,18 +1389,8 @@ function goToMenu() {
     });
 }
 
-// Welcome screen: auto-transition after 3 seconds
-let welcomeTimer = null;
-
-function initWelcome() {
-    welcomeTimer = setTimeout(() => {
-        goToMenu();
-    }, 3000);
-}
-
-// Override: clicking button goes immediately
+// Welcome screen: wait for button click
 function welcomeClick() {
-    if (welcomeTimer) clearTimeout(welcomeTimer);
     initAudio(); // First user gesture — unlock AudioContext
     goToMenu();
 }
@@ -1385,10 +1419,10 @@ function startGame(gameNum) {
 }
 
 /* ==========================================================================
-   GAME 1: WORD MATCH — ?מה המילה
+   GAME 1: WORD MATCH — מה המילה?
    ========================================================================== */
 function initGame1() {
-    document.getElementById('game-title').textContent = '?מה המילה 🔤';
+    document.getElementById('game-title').textContent = 'מה המילה? 🔤';
     state.totalRounds = 10;
     state.gameData = shuffle([...vocabulary]).slice(0, 10);
     showGame1Round();
@@ -1633,7 +1667,7 @@ function showGame3Round() {
     const content = document.getElementById('game-content');
     content.innerHTML = `
         <div class="question-area pop-in">
-            <div class="question-text">?מה המילה ששמעת</div>
+            <div class="question-text">מה המילה ששמעת?</div>
             <button class="speaker-btn large" onclick="speak('${word.english}')" title="שמעי שוב">🔊</button>
         </div>
         <div class="answer-grid">
@@ -1692,10 +1726,10 @@ function checkGame3Answer(btn, selected, correct) {
 }
 
 /* ==========================================================================
-   GAME 4: TRUE OR FALSE — ?כן או לא
+   GAME 4: TRUE OR FALSE — כן או לא?
    ========================================================================== */
 function initGame4() {
-    document.getElementById('game-title').textContent = '?כן או לא 🤔';
+    document.getElementById('game-title').textContent = 'כן או לא? 🤔';
     state.totalRounds = 8;
     state.gameData = shuffle([...trueFalseSentences]).slice(0, 8);
     showGame4Round();
@@ -1809,7 +1843,6 @@ function finishGame() {
    ========================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
     updateStarDisplay();
-    initWelcome();
 
     // Load progress from API (async, non-blocking)
     loadProgress();
@@ -1818,5 +1851,8 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('welcome-btn').onclick = welcomeClick;
 });
 </script>
+
+<footer class="app-version">v{{ version }}</footer>
+
 </body>
 </html>

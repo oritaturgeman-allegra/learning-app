@@ -8,10 +8,11 @@ from typing import Any, Dict
 import sentry_sdk
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from backend.config import config
-from backend.defaults import APP_METADATA
+from backend.defaults import APP_METADATA, APP_VERSION
 from backend.exceptions import AppError
 from backend.logging_config import setup_logging
 from backend.routes.game import router as game_router
@@ -34,8 +35,9 @@ init_sentry(
 # Initialize FastAPI app
 app = FastAPI(**APP_METADATA)
 
-# Setup Jinja2 templates
+# Setup Jinja2 templates and static files
 templates = Jinja2Templates(directory="frontend/templates")
+app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 
 # Include routers
 app.include_router(game_router)
@@ -103,7 +105,7 @@ async def index(request: Request) -> HTMLResponse:
     """Serve the English learning app."""
     return templates.TemplateResponse(
         "english-fun.html",
-        {"request": request},
+        {"request": request, "version": APP_VERSION},
     )
 
 
