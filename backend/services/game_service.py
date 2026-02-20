@@ -182,6 +182,41 @@ class GameService:
         except SQLAlchemyError as e:
             raise GameError("get_progress", str(e))
 
+    def get_practiced_words(self, user_id: Optional[int] = None) -> List[str]:
+        """
+        Get all unique vocabulary words ever practiced across all games.
+
+        Extracts words from the word_results JSON column of all game results.
+
+        Args:
+            user_id: Optional user ID filter
+
+        Returns:
+            Sorted list of unique practiced word strings
+        """
+        try:
+            with session_scope() as session:
+                query = session.query(GameResult.word_results)
+                if user_id is not None:
+                    query = query.filter(GameResult.user_id == user_id)
+
+                rows = query.all()
+
+                practiced: set[str] = set()
+                for (word_results_json,) in rows:
+                    if not word_results_json:
+                        continue
+                    word_list = json.loads(word_results_json)
+                    for w in word_list:
+                        word = w.get("word", "").strip()
+                        if word:
+                            practiced.add(word.lower())
+
+                return sorted(practiced)
+
+        except SQLAlchemyError as e:
+            raise GameError("get_practiced_words", str(e))
+
 
 # Singleton instance
 _game_service: Optional[GameService] = None

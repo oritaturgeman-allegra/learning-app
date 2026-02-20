@@ -1,4 +1,4 @@
-# Sprint 6: Feb 6 - Feb 19, 2026
+# Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
 **Production Launch** - Deploy the application to production, then enhance with content discovery features.
@@ -147,6 +147,6 @@ Sprint is successful if:
 
 ---
 
-**Sprint Start:** February 6, 2026
-**Sprint End:** February 19, 2026
-**Next Sprint Planning:** February 20, 2026
+**Sprint Start:** February 20, 2026
+**Sprint End:** March 5, 2026
+**Next Sprint Planning:** March 6, 2026

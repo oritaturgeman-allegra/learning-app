@@ -1,4 +1,4 @@
-# Sprint 1: Nov 28 - Dec 11, 2025
+# Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
 Ship **v1.3.7 - v1.13.0** with podcast optimization, source monitoring, database storage, crypto coverage, polished UI, and FastAPI migration.

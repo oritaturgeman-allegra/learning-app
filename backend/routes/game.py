@@ -91,3 +91,22 @@ async def get_progress() -> Dict[str, Any]:
     except GameError as e:
         logger.error(f"Failed to get progress: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/practiced-words")
+async def get_practiced_words() -> Dict[str, Any]:
+    """
+    Get all unique vocabulary words ever practiced across all games.
+
+    Returns a sorted list of word strings derived from game result history.
+    """
+    try:
+        game_service = get_game_service()
+        words = game_service.get_practiced_words()
+        return {
+            "success": True,
+            "data": {"practiced_words": words},
+        }
+    except GameError as e:
+        logger.error(f"Failed to get practiced words: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

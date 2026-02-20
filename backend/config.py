@@ -70,7 +70,7 @@ class AppConfig:
 
         return cls(
             database_url=_clean_database_url(
-                os.getenv("DATABASE_URL", "sqlite:///data/learning.db")
+                os.getenv("LEARNING_DATABASE_URL", "sqlite:///data/learning.db")
             ),
             sql_echo=os.getenv("SQL_ECHO", "false").lower() == "true",
             flask_host=os.getenv("FLASK_HOST", "0.0.0.0"),

@@ -173,3 +173,55 @@ class TestGetProgress:
 
         progress = game_service.get_progress()
         assert len(progress["recent_games"]) == 10
+
+
+class TestGetPracticedWords:
+    """Tests for GameService.get_practiced_words()."""
+
+    def test_empty_practiced_words(self, game_service):
+        """No games played returns empty list."""
+        words = game_service.get_practiced_words()
+        assert words == []
+
+    def test_practiced_words_after_games(self, game_service):
+        """Practiced words are extracted from game results."""
+        game_service.save_game_result(
+            game_type="word_match",
+            score=8,
+            max_score=10,
+            word_results=[
+                {"word": "coat", "correct": True, "category": "clothes"},
+                {"word": "boots", "correct": False, "category": "clothes"},
+            ],
+        )
+        game_service.save_game_result(
+            game_type="listen_choose",
+            score=7,
+            max_score=10,
+            word_results=[
+                {"word": "dress", "correct": True, "category": "clothes"},
+                {"word": "coat", "correct": True, "category": "clothes"},
+            ],
+        )
+
+        words = game_service.get_practiced_words()
+        assert "boots" in words
+        assert "coat" in words
+        assert "dress" in words
+        assert len(words) == 3  # unique words only
+
+    def test_practiced_words_are_sorted(self, game_service):
+        """Practiced words are returned in alphabetical order."""
+        game_service.save_game_result(
+            game_type="word_match",
+            score=5,
+            max_score=10,
+            word_results=[
+                {"word": "summer", "correct": True, "category": "seasons"},
+                {"word": "coat", "correct": True, "category": "clothes"},
+                {"word": "autumn", "correct": True, "category": "seasons"},
+            ],
+        )
+
+        words = game_service.get_practiced_words()
+        assert words == ["autumn", "coat", "summer"]

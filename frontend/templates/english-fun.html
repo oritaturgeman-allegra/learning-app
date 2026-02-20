@@ -371,13 +371,13 @@ body {
 .word-tracker {
     position: fixed;
     left: var(--space-2xl);
-    width: 460px;
+    width: 480px;
     overflow: visible;
     background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%);
     border-radius: var(--radius-lg);
     border: 1.5px solid rgba(236, 72, 153, 0.15);
     box-shadow: 0 4px 20px rgba(236, 72, 153, 0.1);
-    padding: var(--space-lg);
+    padding: var(--space-lg) var(--space-xl);
     z-index: 15;
     direction: ltr;
 }
@@ -397,47 +397,37 @@ body {
     font-family: var(--font-body);
     font-size: 0.9rem;
     color: var(--text-muted);
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
     direction: rtl;
 }
 
 .word-tracker-list {
-    column-count: 3;
-    column-gap: var(--space-lg);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
 }
 
-.word-item {
+.word-chip-tracker {
     font-family: var(--font-display);
     font-size: 0.95rem;
+    font-weight: 500;
     color: var(--text-dark);
-    padding: 3px var(--space-xs);
-    border-radius: 4px;
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1.5px solid rgba(236, 72, 153, 0.15);
+    border-radius: 20px;
+    padding: 6px 14px;
+    transition: all 0.4s ease;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    break-inside: avoid;
-    line-height: 1.5;
 }
 
-.word-item.practiced {
-    text-decoration: line-through;
+.word-chip-tracker.practiced {
+    background: rgba(164, 184, 148, 0.3);
+    border-color: rgba(164, 184, 148, 0.4);
     color: var(--text-muted);
-    opacity: 0.5;
-}
-
-/* Scrollbar styling for word tracker */
-.word-tracker::-webkit-scrollbar {
-    width: 4px;
-}
-
-.word-tracker::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.word-tracker::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.12);
-    border-radius: 2px;
+    text-decoration: line-through;
+    opacity: 0.6;
+    transform: scale(0.93);
 }
 
 /* Hide word tracker on small screens */
@@ -1851,6 +1841,7 @@ function goToMenu() {
     showScreen('menu-screen');
     updateStarDisplay();
     buildWordTracker();
+    loadPracticedWords();
     // Re-trigger slide-up animations
     document.querySelectorAll('.game-card').forEach((card, i) => {
         card.style.animation = 'none';
@@ -1929,11 +1920,11 @@ function buildWordTracker() {
 
     const sorted = [...vocabulary].sort((a, b) => a.english.localeCompare(b.english));
     list.innerHTML = sorted.map(w =>
-        `<div class="word-item" data-word="${w.english}">${w.english}</div>`
+        `<span class="word-chip-tracker" data-word="${w.english}">${w.english}</span>`
     ).join('');
 
     // Re-apply practiced state
-    document.querySelectorAll('.word-item').forEach(el => {
+    document.querySelectorAll('.word-chip-tracker').forEach(el => {
         if (state.practicedWords.has(el.dataset.word.toLowerCase())) {
             el.classList.add('practiced');
         }
@@ -1952,7 +1943,7 @@ function positionWordTracker() {
     const lastCard = document.getElementById('game-card-4');
     if (!tracker || !firstCard || !lastCard) return;
 
-    const topY = firstCard.getBoundingClientRect().top;
+    const topY = firstCard.getBoundingClientRect().top - 30;
     const bottomY = lastCard.getBoundingClientRect().bottom;
     const height = bottomY - topY;
 
@@ -1992,7 +1983,7 @@ function markPracticedWords() {
     words.forEach(w => state.practicedWords.add(w));
 
     // Update UI
-    document.querySelectorAll('.word-item').forEach(el => {
+    document.querySelectorAll('.word-chip-tracker').forEach(el => {
         if (state.practicedWords.has(el.dataset.word.toLowerCase())) {
             el.classList.add('practiced');
         }
@@ -2009,13 +2000,36 @@ function updateWordTrackerCount() {
     countEl.textContent = `${remaining}/${vocabulary.length} נשארו`;
 }
 
-/** Reset word tracker for a new session */
+/** Reset word tracker UI for a new session (keeps DB data) */
 function resetWordTracker() {
     state.practicedWords = new Set();
-    document.querySelectorAll('.word-item').forEach(el => {
+    document.querySelectorAll('.word-chip-tracker').forEach(el => {
         el.classList.remove('practiced');
     });
     updateWordTrackerCount();
+    // Re-load from DB so all-time progress is shown
+    loadPracticedWords();
+}
+
+/** Load practiced words from the database */
+async function loadPracticedWords() {
+    try {
+        const res = await fetch(`${API_BASE}/practiced-words`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success && data.data.practiced_words) {
+            data.data.practiced_words.forEach(w => state.practicedWords.add(w));
+            // Update chip UI
+            document.querySelectorAll('.word-chip-tracker').forEach(el => {
+                if (state.practicedWords.has(el.dataset.word.toLowerCase())) {
+                    el.classList.add('practiced');
+                }
+            });
+            updateWordTrackerCount();
+        }
+    } catch (e) {
+        // Silently fail — word tracker still works with session data
+    }
 }
 
 /* ==========================================================================

@@ -1,4 +1,4 @@
-# Sprint 7: Feb 20 - Mar 5, 2026
+# Sprint 2: Mar 6 - Mar 19, 2026
 
 ## Sprint Goal
 **Post-Launch Quality & Compliance** - Add analytics, GDPR compliance, and automated testing after production deployment.
@@ -98,6 +98,6 @@ Sprint is successful if:
 
 ---
 
-**Sprint Start:** February 20, 2026
-**Sprint End:** March 5, 2026
-**Next Sprint Planning:** March 6, 2026
+**Sprint Start:** March 6, 2026
+**Sprint End:** March 19, 2026
+**Next Sprint Planning:** March 20, 2026
