@@ -84,7 +84,7 @@ class TestAppConfig:
         assert config.tts_voice_alex == "nova"
         assert config.tts_voice_guy == "fable"
         assert config.flask_host == "0.0.0.0"
-        assert config.flask_port == 5000
+        assert config.flask_port == 8000
         assert config.flask_debug is False
         mock_load_dotenv.assert_called_once()
 

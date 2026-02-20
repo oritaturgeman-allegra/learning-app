@@ -23,6 +23,7 @@ from backend.logging_config import setup_logging
 from backend.routes.api import router as api_router
 from backend.routes.auth import router as auth_router
 from backend.routes.feedback import router as feedback_router
+from backend.routes.game import router as game_router
 from backend.sentry_config import init_sentry
 from backend.services.db_service import get_db_service
 from backend.services.health_service import (
@@ -131,6 +132,7 @@ app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 app.include_router(api_router)
 app.include_router(auth_router)
 app.include_router(feedback_router)
+app.include_router(game_router)
 
 
 # --- Global Exception Handlers ---
@@ -194,15 +196,10 @@ logger.info("Web application initialized")
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    """Serve landing page (logged out)."""
+    """Serve the English learning app."""
     return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "version": APP_VERSION,
-            "changelog": APP_CHANGELOG,
-            "current_year": datetime.now().year,
-        },
+        "english-fun.html",
+        {"request": request},
     )
 
 

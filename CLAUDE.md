@@ -5,22 +5,32 @@ Gamified English learning web app for a 9.5-year-old Israeli girl. Teaches vocab
 ## Commands
 
 ```bash
-# Run the app — just open in browser
-open english-fun.html
+# Run web app
+.venv/bin/python -m backend.web_app
+# Open http://localhost:8000
 
-# Or serve locally
-python3 -m http.server 8000
-# Open http://localhost:8000/english-fun.html
+# Test
+.venv/bin/pytest tests/unit/test_game_service.py -v  # Game tests
+.venv/bin/pytest tests/ --cov=backend                 # Full suite
 ```
 
 ## Stack
 
-- **Frontend:** Single HTML file, vanilla JS + CSS animations
+- **Backend:** Python 3.13, FastAPI, SQLAlchemy (SQLite dev / PostgreSQL prod)
+- **Frontend:** Single HTML template, vanilla JS + CSS animations
 - **Audio:** Web Speech API (TTS), AudioContext (sound effects)
 - **Fonts:** Google Fonts (Fredoka display, Rubik body/Hebrew)
-- **Storage:** localStorage for star persistence
+- **Storage:** Database (game results, progress) + localStorage (fallback)
 - **Languages:** Hebrew UI (RTL) + English content (LTR)
-- **Dependencies:** None (no build tools, no backend)
+- **Testing:** pytest, pytest-cov, pytest-mock
+
+## API Routes
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Serve the learning app |
+| POST | `/api/game/result` | Save a game result (score + per-word accuracy) |
+| GET | `/api/game/progress` | Get total stars, accuracy by game, weak words |
 
 ## Key References
 

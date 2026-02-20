@@ -69,11 +69,15 @@ RSS_FETCH_HEADERS: Dict[str, str] = {
 }
 
 # App version (single source of truth)
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.1.0"
 
 # Recent changelog entries (shown in "What's New" popup)
 # Keep only the 3 most recent entries. Each entry: (version, description)
 APP_CHANGELOG: List[Dict[str, str]] = [
+    {
+        "version": "1.1.0",
+        "text": "Your progress is saved! Stars and game results now persist in the database",
+    },
     {
         "version": "1.0.0",
         "text": "Ariel's English Adventure — 4 fun learning games with stars, sounds, and animations",

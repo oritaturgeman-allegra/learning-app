@@ -87,19 +87,19 @@ class AppConfig:
 
     # Server Settings
     flask_host: str = "0.0.0.0"
-    flask_port: int = 5000
+    flask_port: int = 8000
     flask_debug: bool = False
 
     # Google OAuth Settings
     google_client_id: str = ""
     google_client_secret: str = ""
-    google_redirect_uri: str = "http://localhost:5000/api/auth/google/callback"
+    google_redirect_uri: str = "http://localhost:8000/api/auth/google/callback"
 
     # Email Settings
     email_api_key: str = ""  # SendGrid API key
     email_from_address: str = "yournewsletter.yourway@gmail.com"
     email_from_name: str = "Your Newsletter, Your Way"
-    base_url: str = "http://localhost:5000"  # For verification links
+    base_url: str = "http://localhost:8000"  # For verification links
     verification_token_ttl_hours: int = 24  # Token expiration time
 
     # Scheduler Settings
@@ -191,18 +191,18 @@ class AppConfig:
             gemini_voice_alex=os.getenv("GEMINI_VOICE_ALEX", "Aoede"),
             gemini_voice_guy=os.getenv("GEMINI_VOICE_GUY", "Orus"),
             flask_host=os.getenv("FLASK_HOST", "0.0.0.0"),
-            flask_port=int(os.getenv("FLASK_PORT", "5000")),
+            flask_port=int(os.getenv("FLASK_PORT", "8000")),
             flask_debug=os.getenv("FLASK_DEBUG", "false").lower() == "true",
             google_client_id=os.getenv("GOOGLE_CLIENT_ID", ""),
             google_client_secret=os.getenv("GOOGLE_CLIENT_SECRET", ""),
             google_redirect_uri=os.getenv(
-                "GOOGLE_REDIRECT_URI", "http://localhost:5000/api/auth/google/callback"
+                "GOOGLE_REDIRECT_URI", "http://localhost:8000/api/auth/google/callback"
             ),
             # Email settings
             email_api_key=os.getenv("EMAIL_API_KEY", ""),
             email_from_address=os.getenv("EMAIL_FROM_ADDRESS", "yournewsletter.yourway@gmail.com"),
             email_from_name=os.getenv("EMAIL_FROM_NAME", "Your Newsletter, Your Way"),
-            base_url=os.getenv("BASE_URL", "http://localhost:5000"),
+            base_url=os.getenv("BASE_URL", "http://localhost:8000"),
             verification_token_ttl_hours=int(os.getenv("VERIFICATION_TOKEN_TTL_HOURS", "24")),
             # Scheduler settings
             schedule_enabled=os.getenv("SCHEDULE_ENABLED", "true").lower() == "true",

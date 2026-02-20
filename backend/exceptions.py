@@ -171,6 +171,21 @@ class RateLimitExceeded(NewsletterError):
         super().__init__(f"Rate limit exceeded for {endpoint}. Retry after {retry_after} seconds.")
 
 
+class GameError(NewsletterError):
+    """
+    Raised when game operations fail.
+
+    Attributes:
+        operation: The game operation that failed (e.g., "save_result", "get_progress")
+        details: Error details
+    """
+
+    def __init__(self, operation: str, details: str):
+        self.operation = operation
+        self.details = details
+        super().__init__(f"Game {operation} failed: {details}")
+
+
 class FeedbackError(NewsletterError):
     """
     Raised when feedback submission fails.

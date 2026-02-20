@@ -1071,6 +1071,59 @@ let state = {
     gameData: [],
     answering: false,      // prevent double-taps
     scrambleWords: [],      // words placed in drop zone for Game 2
+    wordResults: [],        // per-word results for API tracking
+};
+
+/* ==========================================================================
+   API INTEGRATION
+   ========================================================================== */
+const API_BASE = '/api/game';
+
+/** Load progress from API, fallback to localStorage */
+async function loadProgress() {
+    try {
+        const res = await fetch(`${API_BASE}/progress`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success) {
+                state.totalStars = data.data.total_stars;
+                localStorage.setItem('ariel_stars', state.totalStars.toString());
+                updateStarDisplay();
+                return;
+            }
+        }
+    } catch (e) {
+        // API unavailable — use localStorage fallback
+    }
+}
+
+/** Save game result to API, always save to localStorage too */
+async function saveGameResult(gameType, score, maxScore, wordResults) {
+    // Always save to localStorage as fallback
+    saveStars();
+
+    try {
+        await fetch(`${API_BASE}/result`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                game_type: gameType,
+                score: score,
+                max_score: maxScore,
+                word_results: wordResults,
+            }),
+        });
+    } catch (e) {
+        // API unavailable — localStorage already saved
+    }
+}
+
+/** Map game number to game_type string */
+const GAME_TYPE_MAP = {
+    1: 'word_match',
+    2: 'sentence_scramble',
+    3: 'listen_choose',
+    4: 'true_false',
 };
 
 /* ==========================================================================
@@ -1317,6 +1370,7 @@ function startGame(gameNum) {
     state.currentRound = 0;
     state.gameScore = 0;
     state.answering = false;
+    state.wordResults = [];
 
     switch (gameNum) {
         case 1: initGame1(); break;
@@ -1395,6 +1449,14 @@ function checkGame1Answer(btn, selected, correct) {
             }
         });
     }
+
+    // Track word result
+    const word = state.gameData[state.currentRound];
+    state.wordResults.push({
+        word: correct,
+        correct: selected === correct,
+        category: word ? word.category : '',
+    });
 
     speak(correct);
     state.currentRound++;
@@ -1532,6 +1594,13 @@ function checkGame2Answer() {
         feedback.innerHTML = `<div class="correct-sentence">❌ התשובה הנכונה: ${sentence.english}</div>`;
     }
 
+    // Track sentence result
+    state.wordResults.push({
+        word: sentence.english,
+        correct: isCorrect,
+        category: 'sentence',
+    });
+
     speak(sentence.english);
     state.currentRound++;
 
@@ -1606,6 +1675,14 @@ function checkGame3Answer(btn, selected, correct) {
         });
     }
 
+    // Track word result
+    const word3 = state.gameData[state.currentRound];
+    state.wordResults.push({
+        word: correct,
+        correct: selected === correct,
+        category: word3 ? word3.category : '',
+    });
+
     speak(correct);
     state.currentRound++;
 
@@ -1676,6 +1753,14 @@ function checkGame4Answer(btn, selected, correct) {
         });
     }
 
+    // Track sentence result
+    const item4 = state.gameData[state.currentRound];
+    state.wordResults.push({
+        word: item4 ? item4.english : '',
+        correct: selected === correct,
+        category: 'true_false',
+    });
+
     state.currentRound++;
 
     setTimeout(() => {
@@ -1703,6 +1788,12 @@ function finishGame() {
     document.getElementById('complete-total-stars').textContent =
         `⭐ ${state.totalStars} :סה"כ כוכבים`;
 
+    // Save to API
+    const gameType = GAME_TYPE_MAP[state.currentGame];
+    if (gameType) {
+        saveGameResult(gameType, state.gameScore, max, state.wordResults);
+    }
+
     // Set replay button
     const replayBtn = document.getElementById('replay-btn');
     const gameNum = state.currentGame;
@@ -1719,6 +1810,9 @@ function finishGame() {
 window.addEventListener('DOMContentLoaded', () => {
     updateStarDisplay();
     initWelcome();
+
+    // Load progress from API (async, non-blocking)
+    loadProgress();
 
     // Wire welcome button
     document.getElementById('welcome-btn').onclick = welcomeClick;

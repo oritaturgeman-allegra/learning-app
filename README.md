@@ -12,23 +12,19 @@ A TinyTap-inspired web app that teaches English vocabulary to Hebrew-speaking ch
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v1.1.0   | 02/20 | Feature: Backend + DB integration — progress saves across sessions, weak word tracking   |
 | v1.0.0   | 02/20 | Feature: Ariel's English Adventure — 4 learning games with rewards and animations        |
 
 ---
 
-## How to Play
-
-Just open the file in your browser — no installation needed!
+## How to Run
 
 ```bash
-# Option 1: Double-click english-fun.html in Finder
+# Start the server
+.venv/bin/python -m backend.web_app
 
-# Option 2: Open from terminal
-open english-fun.html
-
-# Option 3: Serve locally
-python3 -m http.server 8000
-# Then open http://localhost:8000/english-fun.html
+# Open in browser
+open http://localhost:8000
 ```
 
 ## Games
@@ -43,19 +39,24 @@ python3 -m http.server 8000
 ## Features
 
 - 🌈 Vibrant, kid-friendly UI with gradient cards and animations
-- ⭐ Star rewards system with localStorage persistence
+- ⭐ Star rewards system with persistent progress tracking
 - 🎉 Confetti rain on correct answers, celebration at milestones
 - 🔊 Text-to-speech pronunciation for all English words
 - 🎵 Sound effects via AudioContext (chime, buzz, celebration melody)
 - 🌟 Bouncing mascot star that wiggles on correct answers
 - 📱 Responsive design — works on desktop and mobile
-- 🔌 Fully offline — no backend or API calls needed
+- 📊 Weak word detection — tracks words you get wrong most often
 
 ## Tech Stack
 
-- Single HTML file (~900 lines)
-- Vanilla JS + CSS animations
-- Web Speech API for pronunciation
-- AudioContext for sound effects
-- Google Fonts (Fredoka + Rubik)
-- localStorage for progress persistence
+- **Backend:** Python 3.13, FastAPI, SQLAlchemy (SQLite)
+- **Frontend:** Jinja2-served HTML, vanilla JS + CSS animations
+- **Audio:** Web Speech API (TTS), AudioContext (sound effects)
+- **Fonts:** Google Fonts (Fredoka + Rubik)
+
+## API
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/game/result` | POST | Save a game result with per-word accuracy |
+| `/api/game/progress` | GET | Get stars, games played, weak words, recent history |

@@ -12,6 +12,7 @@ from backend.models.article_selection import ArticleSelection
 from backend.models.user import User
 from backend.models.podcast_generation import PodcastGeneration
 from backend.models.analytics_report import AnalyticsReport
+from backend.models.game_result import GameResult
 
 __all__ = [
     "Base",
@@ -25,4 +26,5 @@ __all__ = [
     "User",
     "PodcastGeneration",
     "AnalyticsReport",
+    "GameResult",
 ]
