@@ -1,0 +1,44 @@
+# Pre-commit hooks for code quality
+# Run `pre-commit install` to enable hooks
+# Run `pre-commit run --all-files` to run on all files
+
+repos:
+  # Black - Code formatting
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        language_version: python3.13
+        args: [--line-length=100]
+
+  # Ruff - Fast linter (replaces flake8, isort, and more)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+
+  # MyPy - Type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - types-requests
+          - types-cachetools
+          - pydantic
+        args: [--ignore-missing-imports, --disable-error-code=no-any-return]
+        exclude: ^(tests/|alembic/)
+
+  # General pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: [--maxkb=500]
+        exclude: \.(png|jpg|jpeg|webp|gif)$
+      - id: check-merge-conflict
+      - id: debug-statements

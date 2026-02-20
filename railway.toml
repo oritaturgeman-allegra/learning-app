@@ -1,0 +1,19 @@
+# Railway Configuration for Capital Market Newsletter
+# Docs: https://docs.railway.com/reference/config-as-code
+
+[build]
+# Use Dockerfile for building
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# Health check configuration
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+
+# Restart policy
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+# Number of instances (1 required when using volumes)
+numReplicas = 1

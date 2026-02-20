@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background-color: #fcfbf8;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 600px; width: 100%; background-color: #f7f4ef; border-radius: 16px; border: 1px solid #e6e0d8;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px; text-align: center;">
+                            <h1 style="margin: 0; color: #2e2e2e; font-size: 24px; font-weight: 600;">
+                                Your Newsletter, Your Way
+                            </h1>
+                        </td>
+                    </tr>
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 20px 40px;">
+                            <p style="margin: 0 0 20px; color: #555555; font-size: 16px; line-height: 1.6;">
+                                {{ greeting }}
+                            </p>
+                            <p style="margin: 0 0 30px; color: #555555; font-size: 16px; line-height: 1.6;">
+                                Thanks for signing up! Please verify your email address by clicking the button below.
+                            </p>
+                            <!-- CTA Button -->
+                            <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td align="center" style="padding: 10px 0 30px;">
+                                        <a href="{{ verification_url }}"
+                                           style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #d9a090 0%, #c9998a 100%); color: white; text-decoration: none; border-radius: 9999px; font-weight: 600; font-size: 16px;">
+                                            Verify My Email
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin: 0 0 15px; color: #888888; font-size: 14px; line-height: 1.6;">
+                                This link will expire in 24 hours. If you didn't create an account, you can safely ignore this email.
+                            </p>
+                            <p style="margin: 0; color: #888888; font-size: 14px; line-height: 1.6;">
+                                Or copy and paste this link into your browser:<br>
+                                <a href="{{ verification_url }}" style="color: #d9a090; word-break: break-all;">{{ verification_url }}</a>
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 30px 40px; border-top: 1px solid #e6e0d8; text-align: center;">
+                            <p style="margin: 0; color: #888888; font-size: 12px;">
+                                Your Newsletter, Your Way - AI-powered market insights
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

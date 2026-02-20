@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Newsletter, Your Way</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/static/images/newsletter-logo-v3.svg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <!-- CSS: organized by concern -->
+    <link rel="stylesheet" href="/static/css/base.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/layout.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/badges.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/buttons.css?v={{ version }}">
+
+    <link rel="stylesheet" href="/static/css/features.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/progress.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/modals.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/podcast.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/news.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/sentiment.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/commentary.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/cookie-consent.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/accessibility.css?v={{ version }}">
+</head>
+<body>
+{% set authenticated = true %}
+{% include '_header.html' %}
+
+    <div class="container">
+        <main class="main-content" id="main-content" role="main" tabindex="-1">
+            <div class="newsletter-action-wrapper">
+{% include '_topic_selector.html' %}
+            </div>
+
+            <!-- Skeleton loaders - shown before content loads -->
+            <div class="skeleton-section" id="skeleton-section">
+                <div class="skeleton-cards">
+                    <div class="skeleton-card">
+                        <div class="skeleton-header">
+                            <div class="skeleton-circle"></div>
+                            <div class="skeleton-title"></div>
+                        </div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line"></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton-header">
+                            <div class="skeleton-circle"></div>
+                            <div class="skeleton-title"></div>
+                        </div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line"></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton-header">
+                            <div class="skeleton-circle"></div>
+                            <div class="skeleton-title"></div>
+                        </div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line"></div>
+                    </div>
+                </div>
+                <p class="skeleton-hint">Select your topics above and click "Get My Newsletter"</p>
+            </div>
+
+        <div class="error" id="error" role="alert" aria-live="assertive"></div>
+
+        <!-- Sentiment Sidebar (fixed on left) -->
+        <div class="sentiment-sidebar" id="sentiment-sidebar">
+            <div class="sentiment-card" id="sentiment-card">
+                <div class="sentiment-header-label">MARKET MOOD</div>
+                <h2 class="sentiment-title">Sentiment Tracker</h2>
+
+                <div class="sentiment-tabs" role="tablist" aria-label="Market sentiment filters">
+                    <button class="sentiment-tab active" data-market="all" onclick="switchSentimentMarket('all')" role="tab" aria-selected="true">
+                        All
+                    </button>
+                    <button class="sentiment-tab" data-market="us" onclick="switchSentimentMarket('us')" role="tab" aria-selected="false">
+                        <span class="tab-emoji" aria-hidden="true">🇺🇸</span> U.S.
+                    </button>
+                    <button class="sentiment-tab" data-market="israel" onclick="switchSentimentMarket('israel')" role="tab" aria-selected="false">
+                        <span class="tab-emoji" aria-hidden="true">🇮🇱</span> Israel
+                    </button>
+                    <button class="sentiment-tab" data-market="ai" onclick="switchSentimentMarket('ai')" role="tab" aria-selected="false">
+                        <img class="tab-emoji-icon" src="/static/images/ai-industry-icon.svg" alt="" aria-hidden="true" width="12" height="12"> AI
+                    </button>
+                    <button class="sentiment-tab" data-market="crypto" onclick="switchSentimentMarket('crypto')" role="tab" aria-selected="false">
+                        <span class="tab-emoji" aria-hidden="true">₿</span> Crypto
+                    </button>
+                    <button class="sentiment-tab" data-market="space" onclick="switchSentimentMarket('space')" role="tab" aria-selected="false">
+                        <span class="tab-emoji" aria-hidden="true">🚀</span> Space
+                    </button>
+                    <button class="sentiment-tab" data-market="infrastructure" onclick="switchSentimentMarket('infrastructure')" role="tab" aria-selected="false">
+                        <span class="tab-emoji" aria-hidden="true">🏗️</span> Infra
+                    </button>
+                    <button class="sentiment-tab" data-market="energy" onclick="switchSentimentMarket('energy')" role="tab" aria-selected="false">
+                        <span class="tab-emoji" aria-hidden="true">⚡</span> Energy
+                    </button>
+                </div>
+
+                <div class="sentiment-score-section">
+                    <span class="sentiment-score neutral" id="sentiment-score">69</span>
+                    <div class="sentiment-label-section">
+                        <span class="sentiment-label neutral" id="sentiment-label">Neutral</span>
+                        <span class="sentiment-sublabel" id="sentiment-sublabel">7-day average</span>
+                    </div>
+                </div>
+
+                <div class="sentiment-chart-container">
+                    <div class="chart-y-axis" id="chart-y-axis">
+                        <span>100</span>
+                        <span>75</span>
+                        <span>50</span>
+                        <span>25</span>
+                        <span>0</span>
+                    </div>
+                    <div class="chart-svg-container">
+                        <svg class="chart-svg" id="sentiment-chart-svg" viewBox="0 0 300 100" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="sentiment-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#d9a090;stop-opacity:0.3" />
+                                    <stop offset="100%" style="stop-color:#d9a090;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Grid lines -->
+                            <line class="chart-grid-line" x1="0" y1="0" x2="300" y2="0" />
+                            <line class="chart-grid-line" x1="0" y1="25" x2="300" y2="25" />
+                            <line class="chart-grid-line" x1="0" y1="50" x2="300" y2="50" />
+                            <line class="chart-grid-line" x1="0" y1="75" x2="300" y2="75" />
+                            <line class="chart-grid-line" x1="0" y1="100" x2="300" y2="100" />
+                            <!-- Area fill -->
+                            <path class="chart-area" id="chart-area" />
+                            <!-- Line -->
+                            <path class="chart-line" id="chart-line" />
+                            <!-- Dots -->
+                            <g id="chart-dots"></g>
+                        </svg>
+                    </div>
+                    <div class="chart-x-axis" id="chart-x-axis">
+                        <!-- Labels set dynamically by sentiment.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Podcast Sidebar (fixed on left, below Sentiment Tracker) -->
+        <div class="podcast-sidebar" id="podcast-sidebar">
+            <div class="podcast-section sidebar-podcast" id="podcast-section">
+                <div class="podcast-header-label">AUDIO</div>
+                <h2 class="podcast-sidebar-title">Podcast</h2>
+                <p class="podcast-subtitle">Your news, on the go</p>
+
+                <!-- Generate button - shown before generation -->
+                <button class="generate-podcast-btn" id="generate-podcast-btn" onclick="generatePodcast()" aria-label="Generate podcast for selected categories">
+                    <span class="btn-spinner"></span>
+                    <span class="btn-text">Generate Podcast</span>
+                </button>
+
+                <!-- Podcast message - for errors / limit reached -->
+                <p class="podcast-message" id="podcast-message"></p>
+
+                <!-- Podcast controls - shown after generation -->
+                <div class="podcast-controls" id="podcast-controls">
+                    <button class="play-pause-btn" id="play-pause-btn" onclick="togglePlayPause()" aria-label="Play podcast">▶</button>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progress-bar" onclick="seekAudio(event)" role="slider" aria-label="Audio progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="time-display">
+                            <span id="current-time">0:00</span>
+                            <span id="duration">0:00</span>
+                        </div>
+                    </div>
+                    <div class="speed-controls" role="group" aria-label="Playback speed">
+                        <button class="speed-btn" onclick="setSpeed(1.1)" aria-label="Set playback speed to 1.1x">1.1x</button>
+                        <button class="speed-btn" onclick="setSpeed(1.2)" aria-label="Set playback speed to 1.2x">1.2x</button>
+                        <button class="speed-btn" onclick="setSpeed(1.3)" aria-label="Set playback speed to 1.3x">1.3x</button>
+                    </div>
+                    <button class="download-btn" id="download-btn" onclick="downloadPodcast()" aria-label="Download podcast"><img src="/static/images/download-arrow.svg" alt="" aria-hidden="true" width="16" height="16"></button>
+                </div>
+
+                <audio id="podcast-audio" preload="metadata"></audio>
+            </div>
+        </div>
+
+        <div class="result" id="result">
+            <div class="stats" id="stats"></div>
+
+            <div class="bullets-section">
+                <!-- Carousel Container -->
+                {% set slides = [
+                    {'id': 'us', 'emoji': '🇺🇸', 'title': 'U.S. Market', 'icon': none},
+                    {'id': 'israel', 'emoji': '🇮🇱', 'title': 'Israeli Market', 'icon': none},
+                    {'id': 'ai', 'emoji': none, 'title': 'AI Industry', 'icon': '/static/images/ai-industry-icon.svg'},
+                    {'id': 'crypto', 'emoji': '₿', 'title': 'Crypto', 'icon': none},
+                    {'id': 'space', 'emoji': '🚀', 'title': 'Space', 'icon': none},
+                    {'id': 'infrastructure', 'emoji': '🏗️', 'title': 'Infrastructure', 'icon': none},
+                    {'id': 'energy', 'emoji': '⚡', 'title': 'Energy', 'icon': none}
+                ] %}
+                <div class="carousel-container">
+                    <div class="news-tabs" id="news-tabs" role="tablist" aria-label="News categories">
+                        {% for slide in slides %}
+                        <button class="news-tab" role="tab" data-index="{{ loop.index0 }}" data-category="{{ slide.id }}" onclick="goToSlide({{ loop.index0 }})" aria-selected="false">
+                            {% if slide.icon %}
+                            <img src="{{ slide.icon }}" class="news-tab-icon" alt="" width="14" height="14">
+                            {% else %}
+                            <span class="news-tab-emoji">{{ slide.emoji }}</span>
+                            {% endif %}
+                            <span>{{ slide.title }}</span>
+                        </button>
+                        {% endfor %}
+                    </div>
+                    <div class="carousel-track" id="carousel-track">
+                        {% for slide in slides %}
+                        <div class="carousel-slide" id="{{ slide.id }}-section" role="tabpanel">
+                            <div class="slide-content" id="{{ slide.id }}-bullets"></div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar (fixed on right) -->
+        <div class="right-sidebar" id="right-sidebar">
+            <div class="live-market-commentary" id="right-card">
+                <div class="commentary-header-label">MARKET VOICES</div>
+                <h2 class="commentary-title">Live Market Commentary</h2>
+                <p class="commentary-subtitle">Selected real-time insights from trusted market voices</p>
+
+                <div class="commentary-tweets">
+                    <a href="https://x.com/WSJ" target="_blank" rel="noopener noreferrer" class="tweet-card">
+                        <div class="tweet-header">
+                            <span class="tweet-source">Wall Street Journal</span>
+                            <span class="tweet-handle">@WSJ</span>
+                            <span class="tweet-time">10m ago</span>
+                        </div>
+                        <p class="tweet-content">"Fed signals potential rate pause as inflation shows signs of cooling..."</p>
+                        <span class="tweet-type">News Desk</span>
+                    </a>
+
+                    <a href="https://x.com/globaborsa" target="_blank" rel="noopener noreferrer" class="tweet-card">
+                        <div class="tweet-header">
+                            <span class="tweet-source">Globes</span>
+                            <span class="tweet-handle">@globaborsa</span>
+                            <span class="tweet-time">18m ago</span>
+                        </div>
+                        <p class="tweet-content">"Tel Aviv 35 index rises 1.2% as banking sector leads gains..."</p>
+                        <span class="tweet-type">News Desk</span>
+                    </a>
+
+                    <a href="https://x.com/Reuters" target="_blank" rel="noopener noreferrer" class="tweet-card">
+                        <div class="tweet-header">
+                            <span class="tweet-source">Reuters</span>
+                            <span class="tweet-handle">@Reuters</span>
+                            <span class="tweet-time">25m ago</span>
+                        </div>
+                        <p class="tweet-content">"S&P 500 closes at record high amid strong earnings reports..."</p>
+                        <span class="tweet-type">News Desk</span>
+                    </a>
+
+                    <a href="https://x.com/CoinDesk" target="_blank" rel="noopener noreferrer" class="tweet-card">
+                        <div class="tweet-header">
+                            <span class="tweet-source">CoinDesk</span>
+                            <span class="tweet-handle">@CoinDesk</span>
+                            <span class="tweet-time">42m ago</span>
+                        </div>
+                        <p class="tweet-content">"Bitcoin holds above $100K as institutional interest grows..."</p>
+                        <span class="tweet-type">News Desk</span>
+                    </a>
+
+                    <a href="https://x.com/Bloomberg" target="_blank" rel="noopener noreferrer" class="tweet-card">
+                        <div class="tweet-header">
+                            <span class="tweet-source">Bloomberg</span>
+                            <span class="tweet-handle">@Bloomberg</span>
+                            <span class="tweet-time">1h ago</span>
+                        </div>
+                        <p class="tweet-content">"Tech sector leads market gains as AI optimism continues..."</p>
+                        <span class="tweet-type">Strategist</span>
+                    </a>
+
+                    <a href="https://x.com/TheMarker" target="_blank" rel="noopener noreferrer" class="tweet-card">
+                        <div class="tweet-header">
+                            <span class="tweet-source">TheMarker</span>
+                            <span class="tweet-handle">@TheMarker</span>
+                            <span class="tweet-time">1h ago</span>
+                        </div>
+                        <p class="tweet-content">"Bank of Israel holds rates steady, signals cautious outlook..."</p>
+                        <span class="tweet-type">Journalist</span>
+                    </a>
+
+                    <a href="https://x.com/nvidia" target="_blank" rel="noopener noreferrer" class="tweet-card">
+                        <div class="tweet-header">
+                            <span class="tweet-source">NVIDIA</span>
+                            <span class="tweet-handle">@nvidia</span>
+                            <span class="tweet-time">2h ago</span>
+                        </div>
+                        <p class="tweet-content">"New Blackwell chips shipping ahead of schedule to meet AI demand..."</p>
+                        <span class="tweet-type">Official</span>
+                    </a>
+
+                    <a href="https://x.com/CNBC" target="_blank" rel="noopener noreferrer" class="tweet-card">
+                        <div class="tweet-header">
+                            <span class="tweet-source">CNBC</span>
+                            <span class="tweet-handle">@CNBC</span>
+                            <span class="tweet-time">2h ago</span>
+                        </div>
+                        <p class="tweet-content">"Treasury yields slip as investors await key economic data..."</p>
+                        <span class="tweet-type">News Desk</span>
+                    </a>
+                </div>
+
+                <div class="commentary-footer">
+                    <span>Public posts</span>
+                    <span class="commentary-footer-divider"></span>
+                    <span>Linked to original source</span>
+                </div>
+            </div>
+        </div>
+
+{% include '_disclaimer.html' %}
+        </main>
+    </div>
+
+{% include '_footer.html' %}
+
+{% include '_feedback_modal.html' %}
+
+{% include '_version_update_modal.html' %}
+
+{% include '_cookie_consent.html' %}
+
+    <script src="/static/js/config.js?v={{ version }}"></script>
+    <script src="/static/js/modals.js?v={{ version }}"></script>
+    <script src="/static/js/cookie-consent.js?v={{ version }}"></script>
+    <script src="/static/js/filters.js?v={{ version }}"></script>
+    <script src="/static/js/newsletter.js?v={{ version }}"></script>
+    <script src="/static/js/sentiment.js?v={{ version }}"></script>
+</body>
+</html>

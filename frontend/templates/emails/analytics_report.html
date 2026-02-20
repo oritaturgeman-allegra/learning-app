@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed Analytics Report</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background-color: #fcfbf8;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 900px; width: 100%; background-color: #f7f4ef; border-radius: 16px; border: 1px solid #e6e0d8;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px;">
+                            <table role="presentation" style="width: 100%;">
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <h1 style="margin: 0; color: #2e2e2e; font-size: 24px; font-weight: 600;">
+                                            Feed Analytics Report
+                                        </h1>
+                                        <p style="margin: 10px 0 0; color: #7a9ab8; font-size: 14px;">
+                                            {{ date }} | Your Newsletter, Your Way
+                                        </p>
+                                    </td>
+                                    <td style="width: 40px; vertical-align: top; text-align: right;">
+                                        <a href="{{ copy_url }}" title="Copy report data to clipboard" style="text-decoration: none; font-size: 20px;">📋</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Summary Stats -->
+                    <tr>
+                        <td style="padding: 0 40px 20px;">
+                            <div style="background-color: #eef3f8; border: 1px solid #d4dfea; border-radius: 10px; padding: 20px; text-align: center;">
+                                <table role="presentation" style="width: 100%;">
+                                    <tr>
+                                        <td style="width: 33%; text-align: center;">
+                                            <p style="margin: 0; color: #888888; font-size: 12px; text-transform: uppercase;">Articles Fetched</p>
+                                            <p style="margin: 5px 0 0; color: #2e2e2e; font-size: 28px; font-weight: 600;">{{ total_articles }}</p>
+                                        </td>
+                                        <td style="width: 33%; text-align: center; border-left: 1px solid #d4dfea; border-right: 1px solid #d4dfea;">
+                                            <p style="margin: 0; color: #888888; font-size: 12px; text-transform: uppercase;">Selected</p>
+                                            <p style="margin: 5px 0 0; color: #2e2e2e; font-size: 28px; font-weight: 600;">{{ total_selected }}</p>
+                                        </td>
+                                        <td style="width: 33%; text-align: center;">
+                                            <p style="margin: 0; color: #888888; font-size: 12px; text-transform: uppercase;">Acceptance Rate</p>
+                                            <p style="margin: 5px 0 0; color: {% if acceptance_rate >= 0.4 %}#4CAF50{% elif acceptance_rate >= 0.25 %}#FF9800{% else %}#f44336{% endif %}; font-size: 28px; font-weight: 600;">{{ "%.0f"|format(acceptance_rate * 100) }}%</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- AI Summary -->
+                    <tr>
+                        <td style="padding: 0 40px 20px;">
+                            <div style="background-color: white; border: 1px solid #e6e0d8; border-radius: 12px; padding: 20px;">
+                                <p style="margin: 0 0 10px; color: #888888; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    AI Analysis
+                                </p>
+                                <p style="margin: 0; color: #555555; font-size: 16px; line-height: 1.6;">{{ summary }}</p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    {% if highlights %}
+                    <!-- What's Working -->
+                    <tr>
+                        <td style="padding: 0 40px 20px;">
+                            <div style="background-color: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 12px; padding: 20px;">
+                                <p style="margin: 0 0 10px; color: #2e7d32; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    What's Working
+                                </p>
+                                <ul style="margin: 0; padding-left: 20px; color: #555555;">
+                                    {% for highlight in highlights %}
+                                    <li style="margin-bottom: 8px;">{{ highlight }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    {% if action_items %}
+                    <!-- Action Required -->
+                    <tr>
+                        <td style="padding: 0 40px 20px;">
+                            <div style="background-color: white; border: 1px solid #e6e0d8; border-radius: 12px; padding: 20px;">
+                                <p style="margin: 0 0 15px; color: #888888; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    Action Required
+                                </p>
+                                {% for item in action_items %}
+                                <div style="margin-bottom: 15px; padding-bottom: 15px; {% if not loop.last %}border-bottom: 1px solid #f0f0f0;{% endif %}">
+                                    <p style="margin: 0 0 5px; color: #2e2e2e; font-weight: 600;">
+                                        {% if item.priority == 'high' %}<span style="color: #f44336;">[HIGH]</span>{% elif item.priority == 'medium' %}<span style="color: #FF9800;">[MED]</span>{% else %}<span style="color: #9E9E9E;">[LOW]</span>{% endif %}
+                                        {{ item.action }}
+                                    </p>
+                                    {% if item.source %}
+                                    <p style="margin: 0 0 3px; color: #7a9ab8; font-size: 13px;">
+                                        Source: {{ item.source }}{% if item.category %} ({{ item.category }}){% endif %}
+                                    </p>
+                                    {% endif %}
+                                    <p style="margin: 0; color: #777777; font-size: 14px;">{{ item.reason }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 30px 40px; border-top: 1px solid #e6e0d8; text-align: center;">
+                            <p style="margin: 0; color: #888888; font-size: 12px;">
+                                This report was generated automatically by the AI Analytics Service.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

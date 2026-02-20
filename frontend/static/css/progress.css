@@ -1,0 +1,144 @@
+/* Progress: cache status, analysis progress, podcast generation progress */
+
+/* ============================================
+   Cache Status
+   ============================================ */
+
+.action-cache-status {
+    visibility: hidden;
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #666;
+}
+
+.action-cache-status.show {
+    visibility: visible;
+}
+
+.cache-status-icon {
+    font-size: 10px;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+.cache-time {
+    font-size: 12px;
+    font-weight: 700;
+    color: #666;
+}
+
+/* ============================================
+   Progress Bars - Analysis
+   ============================================ */
+
+.analysis-progress-container {
+    margin: 20px auto;
+    padding: 20px;
+    background: #f0ebe3;
+    border-radius: 12px;
+    max-width: 600px;
+}
+
+.analysis-progress-wrapper {
+    width: 100%;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.analysis-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #d9a090 0%, #c9886a 100%);
+    transition: width 0.3s ease;
+    border-radius: 12px;
+}
+
+.analysis-progress-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    z-index: 1;
+}
+
+.analysis-progress-message {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+/* ============================================
+   Progress Bars - Podcast Generation
+   ============================================ */
+
+.generation-progress-container {
+    margin: 20px auto;
+    padding: 16px;
+    background: linear-gradient(135deg, #f5f0f5 0%, #f8f6f0 100%);
+    border-radius: 12px;
+    max-width: 350px;
+}
+
+.generation-progress-wrapper {
+    width: 100%;
+    height: 24px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.generation-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #a8c4e8 0%, #8ab4e0 100%);
+    transition: width 0.3s ease;
+    border-radius: 12px;
+}
+
+.generation-progress-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    z-index: 1;
+}
+
+.generation-progress-message {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.cancel-podcast-btn {
+    background: #ffb3c1;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.cancel-podcast-btn:hover {
+    background: #ff8fa1;
+}

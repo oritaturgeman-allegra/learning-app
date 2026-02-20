@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ariel's English Adventure 🌟</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+/* ==========================================================================
+   DESIGN TOKENS
+   ========================================================================== */
+:root {
+    /* Colors */
+    --purple: #a855f7;
+    --purple-dark: #9333ea;
+    --orange: #f97316;
+    --orange-dark: #ea580c;
+    --yellow: #eab308;
+    --pink: #ec4899;
+    --pink-dark: #db2777;
+    --green: #22c55e;
+    --green-dark: #16a34a;
+    --blue: #3b82f6;
+    --blue-dark: #2563eb;
+    --red: #ef4444;
+    --red-dark: #dc2626;
+    --bg: #f5f0ff;
+    --white: #ffffff;
+    --text-dark: #1e1b4b;
+    --text-muted: #6b7280;
+    --gold: #f59e0b;
+    --gold-bg: #fef3c7;
+
+    /* Gradients */
+    --grad-purple: linear-gradient(135deg, #a855f7, #7c3aed);
+    --grad-orange: linear-gradient(135deg, #f97316, #eab308);
+    --grad-blue: linear-gradient(135deg, #3b82f6, #06b6d4);
+    --grad-pink: linear-gradient(135deg, #ec4899, #a855f7);
+    --grad-green: linear-gradient(135deg, #22c55e, #10b981);
+    --grad-rainbow: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
+    --grad-welcome: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+
+    /* Borders */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --radius-pill: 9999px;
+
+    /* Fonts */
+    --font-display: 'Fredoka', 'Rubik', sans-serif;
+    --font-body: 'Rubik', 'Fredoka', sans-serif;
+}
+
+/* ==========================================================================
+   BASE STYLES
+   ========================================================================== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ltr {
+    direction: ltr;
+    text-align: left;
+}
+
+.rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    padding: var(--space-lg);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.08); }
+    70% { transform: scale(0.95); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(60px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 50%, 90% { transform: translateX(-6px); }
+    30%, 70% { transform: translateX(6px); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-15deg) scale(1.2); }
+    50% { transform: rotate(15deg) scale(1.3); }
+    75% { transform: rotate(-10deg) scale(1.2); }
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes gradientCycle {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes confettiFall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.4); }
+    50% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.8); }
+}
+
+@keyframes emojiParade {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    20% { opacity: 1; }
+    50% { transform: translateY(30vh) scale(1.5); opacity: 1; }
+    100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+}
+
+.bounce-in { animation: bounceIn 0.6s ease-out; }
+.slide-up { animation: slideUp 0.5s ease-out forwards; opacity: 0; }
+.shake { animation: shake 0.5s ease-in-out; }
+.pop-in { animation: popIn 0.4s ease-out; }
+.wiggle { animation: wiggle 0.6s ease-in-out; }
+
+/* ==========================================================================
+   WELCOME SCREEN
+   ========================================================================== */
+#welcome-screen {
+    justify-content: center;
+    gap: var(--space-lg);
+    background: linear-gradient(135deg, #a855f7, #ec4899, #f97316, #a855f7);
+    background-size: 400% 400%;
+    animation: gradientCycle 6s ease infinite;
+    min-height: 100vh;
+    max-width: 100%;
+    padding: var(--space-xl);
+}
+
+.welcome-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    color: var(--white);
+    text-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+    animation: bounceIn 0.8s ease-out;
+}
+
+.welcome-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    color: rgba(255,255,255,0.95);
+    animation: bounceIn 1s ease-out 0.2s both;
+}
+
+.welcome-btn {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    padding: var(--space-md) var(--space-2xl);
+    border: none;
+    border-radius: var(--radius-pill);
+    background: var(--white);
+    color: var(--purple);
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: bounceIn 1.2s ease-out 0.4s both;
+}
+
+.welcome-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+}
+
+.welcome-btn:active {
+    transform: scale(0.98);
+}
+
+/* ==========================================================================
+   HEADER & STAR COUNTER
+   ========================================================================== */
+.app-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) 0;
+    margin-bottom: var(--space-md);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+}
+
+.app-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    color: var(--text-dark);
+}
+
+.star-counter {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: var(--gold-bg);
+    border: 2px solid var(--gold);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--gold);
+    animation: pulseGlow 2s infinite;
+}
+
+.star-counter .star-icon { font-size: 1.4rem; }
+
+/* ==========================================================================
+   MAIN MENU
+   ========================================================================== */
+.menu-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+}
+
+.game-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    width: 100%;
+}
+
+.game-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg) var(--space-xl);
+    border-radius: var(--radius-md);
+    color: var(--white);
+    cursor: pointer;
+    min-height: 100px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    direction: rtl;
+}
+
+.game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+.game-card:active {
+    transform: translateY(-1px);
+}
+
+.game-card.purple { background: var(--grad-purple); }
+.game-card.orange { background: var(--grad-orange); }
+.game-card.blue { background: var(--grad-blue); }
+.game-card.pink { background: var(--grad-pink); }
+
+.game-card .card-emoji {
+    font-size: 2.5rem;
+    min-width: 50px;
+    text-align: center;
+}
+
+.game-card .card-text { flex: 1; }
+
+.game-card .card-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.game-card .card-desc {
+    font-size: clamp(0.85rem, 2.8vw, 1rem);
+    opacity: 0.9;
+}
+
+/* ==========================================================================
+   GAME SCREEN
+   ========================================================================== */
+.game-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.back-btn {
+    background: none;
+    border: 2px solid var(--text-muted);
+    border-radius: var(--radius-pill);
+    padding: var(--space-sm) var(--space-md);
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    border-color: var(--purple);
+    color: var(--purple);
+}
+
+.game-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    flex: 1;
+}
+
+/* Progress bar */
+.progress-container {
+    width: 100%;
+    height: 16px;
+    background: #e5e7eb;
+    border-radius: var(--radius-pill);
+    margin-bottom: var(--space-lg);
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: var(--radius-pill);
+    background: var(--grad-rainbow);
+    background-size: 200% 100%;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.round-indicator {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-md);
+}
+
+/* Question area */
+.question-area {
+    width: 100%;
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.question-emoji {
+    font-size: clamp(3rem, 10vw, 5rem);
+    margin-bottom: var(--space-md);
+    animation: popIn 0.4s ease-out;
+}
+
+.question-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 4.5vw, 2rem);
+    color: var(--text-dark);
+    margin-bottom: var(--space-sm);
+}
+
+.speaker-btn {
+    background: var(--grad-blue);
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: var(--white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.speaker-btn:hover { transform: scale(1.1); }
+.speaker-btn:active { transform: scale(0.95); }
+
+.speaker-btn.large {
+    width: 80px;
+    height: 80px;
+    font-size: 2.2rem;
+}
+
+/* Answer grid (2x2) */
+.answer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    width: 100%;
+}
+
+.answer-btn {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 3.5vw, 1.3rem);
+    padding: var(--space-md) var(--space-lg);
+    border: 3px solid #e5e7eb;
+    border-radius: var(--radius-md);
+    background: var(--white);
+    color: var(--text-dark);
+    cursor: pointer;
+    min-height: 70px;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    direction: ltr;
+}
+
+.answer-btn:hover {
+    border-color: var(--purple);
+    transform: scale(1.02);
+}
+
+.answer-btn:active { transform: scale(0.98); }
+
+.answer-btn.correct {
+    background: #dcfce7;
+    border-color: var(--green);
+    color: var(--green-dark);
+}
+
+.answer-btn.wrong {
+    background: #fee2e2;
+    border-color: var(--red);
+    animation: shake 0.5s ease-in-out;
+}
+
+.answer-btn.show-correct {
+    background: #dcfce7;
+    border-color: var(--green);
+    color: var(--green-dark);
+}
+
+.answer-btn.disabled {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.answer-btn .btn-emoji { font-size: 1.8rem; }
+
+/* ==========================================================================
+   SENTENCE SCRAMBLE (GAME 2)
+   ========================================================================== */
+.sentence-display {
+    font-family: var(--font-body);
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    color: var(--text-dark);
+    margin-bottom: var(--space-md);
+    padding: var(--space-md);
+    background: var(--white);
+    border-radius: var(--radius-md);
+    width: 100%;
+    text-align: center;
+}
+
+.drop-zone {
+    width: 100%;
+    min-height: 70px;
+    border: 3px dashed #c4b5fd;
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    justify-content: center;
+    align-items: center;
+    direction: ltr;
+    background: rgba(168, 85, 247, 0.05);
+    transition: all 0.3s;
+}
+
+.drop-zone.has-words {
+    border-color: var(--purple);
+    background: rgba(168, 85, 247, 0.08);
+}
+
+.drop-zone-placeholder {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.word-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    justify-content: center;
+    width: 100%;
+    direction: ltr;
+}
+
+.word-chip {
+    font-family: var(--font-display);
+    font-size: clamp(0.95rem, 3vw, 1.15rem);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--purple);
+    background: var(--white);
+    color: var(--purple-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.word-chip:hover {
+    background: var(--purple);
+    color: var(--white);
+    transform: scale(1.05);
+}
+
+.word-chip.placed {
+    background: var(--purple);
+    color: var(--white);
+}
+
+.word-chip.in-zone {
+    background: var(--purple);
+    color: var(--white);
+    border-color: var(--purple-dark);
+}
+
+.check-btn {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 3.5vw, 1.3rem);
+    padding: var(--space-md) var(--space-2xl);
+    border: none;
+    border-radius: var(--radius-pill);
+    background: var(--grad-green);
+    color: var(--white);
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: var(--space-md);
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.check-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.check-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.correct-sentence {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 3.2vw, 1.2rem);
+    color: var(--green-dark);
+    background: #dcfce7;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    width: 100%;
+    text-align: center;
+    direction: ltr;
+    margin-top: var(--space-md);
+    animation: popIn 0.3s ease-out;
+}
+
+/* ==========================================================================
+   TRUE OR FALSE (GAME 4)
+   ========================================================================== */
+.tf-card {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: var(--space-lg);
+}
+
+.tf-english {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+    color: var(--text-dark);
+    direction: ltr;
+    margin-bottom: var(--space-md);
+}
+
+.tf-hebrew {
+    font-size: clamp(1rem, 3.2vw, 1.2rem);
+    color: var(--text-muted);
+    margin-bottom: var(--space-md);
+}
+
+.tf-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    width: 100%;
+}
+
+.tf-btn {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
+    padding: var(--space-lg);
+    border: 3px solid #e5e7eb;
+    border-radius: var(--radius-md);
+    background: var(--white);
+    cursor: pointer;
+    min-height: 80px;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.tf-btn.yes {
+    color: var(--green-dark);
+}
+
+.tf-btn.yes:hover {
+    border-color: var(--green);
+    background: #f0fdf4;
+}
+
+.tf-btn.no {
+    color: var(--red-dark);
+}
+
+.tf-btn.no:hover {
+    border-color: var(--red);
+    background: #fef2f2;
+}
+
+.tf-btn.correct {
+    background: #dcfce7;
+    border-color: var(--green);
+}
+
+.tf-btn.wrong {
+    background: #fee2e2;
+    border-color: var(--red);
+    animation: shake 0.5s ease-in-out;
+}
+
+.tf-btn.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* ==========================================================================
+   GAME COMPLETE SCREEN
+   ========================================================================== */
+#complete-screen {
+    justify-content: center;
+    gap: var(--space-lg);
+    text-align: center;
+}
+
+.complete-emoji {
+    font-size: 5rem;
+    animation: bounceIn 0.6s ease-out;
+}
+
+.complete-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    color: var(--text-dark);
+    animation: bounceIn 0.8s ease-out;
+}
+
+.complete-score {
+    font-family: var(--font-body);
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    color: var(--text-muted);
+}
+
+.complete-stars {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 4.5vw, 2rem);
+    color: var(--gold);
+    animation: pulseGlow 2s infinite;
+    background: var(--gold-bg);
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--gold);
+}
+
+.complete-buttons {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.complete-btn {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 3.5vw, 1.2rem);
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: var(--white);
+}
+
+.complete-btn:hover {
+    transform: scale(1.05);
+}
+
+.complete-btn.replay {
+    background: var(--grad-purple);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+}
+
+.complete-btn.menu {
+    background: var(--grad-orange);
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+/* ==========================================================================
+   MASCOT
+   ========================================================================== */
+.mascot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 2.5rem;
+    animation: float 3s ease-in-out infinite;
+    cursor: pointer;
+    z-index: 100;
+    filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.3));
+    transition: transform 0.2s;
+}
+
+.mascot:hover { transform: scale(1.2); }
+.mascot.wiggle { animation: wiggle 0.6s ease-in-out, float 3s ease-in-out infinite; }
+
+/* ==========================================================================
+   MILESTONE OVERLAY
+   ========================================================================== */
+.milestone-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(4px);
+}
+
+.milestone-overlay.active {
+    display: flex;
+}
+
+.milestone-content {
+    text-align: center;
+    animation: bounceIn 0.6s ease-out;
+}
+
+.milestone-emoji {
+    font-size: 4rem;
+    margin-bottom: var(--space-md);
+}
+
+.milestone-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 5vw, 2.5rem);
+    color: var(--white);
+    text-shadow: 2px 4px 8px rgba(0,0,0,0.3);
+}
+
+.milestone-sub {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.9);
+    margin-top: var(--space-sm);
+}
+
+/* Emoji parade */
+.parade-emoji {
+    position: fixed;
+    font-size: 3rem;
+    z-index: 201;
+    animation: emojiParade 2.5s ease-out forwards;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   CONFETTI
+   ========================================================================== */
+.confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 150;
+    overflow: hidden;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -20px;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall 2.5s linear forwards;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 480px) {
+    .screen { padding: var(--space-md); }
+    .game-card { padding: var(--space-md) var(--space-lg); min-height: 80px; }
+    .answer-btn { min-height: 60px; padding: var(--space-sm) var(--space-md); }
+    .tf-btn { min-height: 70px; padding: var(--space-md); }
+}
+    </style>
+</head>
+<body>
+
+<!-- =====================================================================
+     MASCOT
+     ====================================================================== -->
+<div class="mascot" id="mascot" title="!אני הכוכב שלך">⭐</div>
+
+<!-- =====================================================================
+     MILESTONE OVERLAY
+     ====================================================================== -->
+<div class="milestone-overlay" id="milestone-overlay">
+    <div class="milestone-content">
+        <div class="milestone-emoji" id="milestone-emoji">🎉</div>
+        <div class="milestone-text" id="milestone-text">!כל הכבוד אריאל</div>
+        <div class="milestone-sub" id="milestone-sub"></div>
+    </div>
+</div>
+
+<!-- =====================================================================
+     CONFETTI CONTAINER
+     ====================================================================== -->
+<div class="confetti-container" id="confetti-container"></div>
+
+<!-- =====================================================================
+     WELCOME SCREEN
+     ====================================================================== -->
+<div class="screen active" id="welcome-screen">
+    <div class="welcome-title">!שלום אריאל 👋</div>
+    <div class="welcome-subtitle">בואי ללמוד אנגלית 🎉</div>
+    <button class="welcome-btn" id="welcome-btn" onclick="goToMenu()">!יאללה בואי ▶️</button>
+</div>
+
+<!-- =====================================================================
+     MAIN MENU
+     ====================================================================== -->
+<div class="screen" id="menu-screen">
+    <div class="app-header">
+        <div class="app-title">🌟 English Fun</div>
+        <div class="star-counter">
+            <span class="star-icon">⭐</span>
+            <span id="star-count">0</span>
+        </div>
+    </div>
+
+    <div class="menu-subtitle">?בחרי משחק, אריאל 🎮</div>
+
+    <div class="game-cards">
+        <div class="game-card purple slide-up" style="animation-delay: 0.1s" onclick="startGame(1)">
+            <div class="card-emoji">🔤</div>
+            <div class="card-text">
+                <div class="card-title">?מה המילה</div>
+                <div class="card-desc">התאימי את המילה באנגלית</div>
+            </div>
+        </div>
+        <div class="game-card orange slide-up" style="animation-delay: 0.2s" onclick="startGame(2)">
+            <div class="card-emoji">📝</div>
+            <div class="card-text">
+                <div class="card-title">תרגמי את המשפט</div>
+                <div class="card-desc">סדרי את המילים בסדר הנכון</div>
+            </div>
+        </div>
+        <div class="game-card blue slide-up" style="animation-delay: 0.3s" onclick="startGame(3)">
+            <div class="card-emoji">👂</div>
+            <div class="card-text">
+                <div class="card-title">האזיני ובחרי</div>
+                <div class="card-desc">שמעי את המילה ובחרי תמונה</div>
+            </div>
+        </div>
+        <div class="game-card pink slide-up" style="animation-delay: 0.4s" onclick="startGame(4)">
+            <div class="card-emoji">🤔</div>
+            <div class="card-text">
+                <div class="card-title">?כן או לא</div>
+                <div class="card-desc">?האם המשפט נכון</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =====================================================================
+     GAME SCREEN (shared container for all 4 games)
+     ====================================================================== -->
+<div class="screen" id="game-screen">
+    <div class="app-header">
+        <div class="app-title">🌟 English Fun</div>
+        <div class="star-counter">
+            <span class="star-icon">⭐</span>
+            <span id="game-star-count">0</span>
+        </div>
+    </div>
+
+    <div class="game-header">
+        <button class="back-btn" onclick="goToMenu()">→ חזרה</button>
+        <div class="game-title" id="game-title"></div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <div class="round-indicator" id="round-indicator"></div>
+
+    <!-- Game content injected here -->
+    <div id="game-content" style="width: 100%;"></div>
+</div>
+
+<!-- =====================================================================
+     GAME COMPLETE SCREEN
+     ====================================================================== -->
+<div class="screen" id="complete-screen">
+    <div class="complete-emoji">🎉</div>
+    <div class="complete-title">!כל הכבוד אריאל</div>
+    <div class="complete-score" id="complete-score"></div>
+    <div class="complete-stars" id="complete-total-stars"></div>
+    <div class="complete-buttons">
+        <button class="complete-btn replay" id="replay-btn">🔄 שחקי שוב</button>
+        <button class="complete-btn menu" onclick="goToMenu()">🏠 תפריט ראשי</button>
+    </div>
+</div>
+
+<script>
+/* ==========================================================================
+   VOCABULARY DATA
+   ========================================================================== */
+const vocabulary = [
+    // Clothes
+    { english: 'coat', hebrew: 'מעיל', emoji: '🧥', category: 'clothes' },
+    { english: 'boots', hebrew: 'מגפיים', emoji: '👢', category: 'clothes' },
+    { english: 'dress', hebrew: 'שמלה', emoji: '👗', category: 'clothes' },
+    { english: 'shirt', hebrew: 'חולצה', emoji: '👕', category: 'clothes' },
+    { english: 'pants', hebrew: 'מכנסיים', emoji: '👖', category: 'clothes' },
+    { english: 'shoes', hebrew: 'נעליים', emoji: '👟', category: 'clothes' },
+    { english: 'socks', hebrew: 'גרביים', emoji: '🧦', category: 'clothes' },
+    // Seasons
+    { english: 'winter', hebrew: 'חורף', emoji: '❄️', category: 'seasons' },
+    { english: 'spring', hebrew: 'אביב', emoji: '🌸', category: 'seasons' },
+    { english: 'summer', hebrew: 'קיץ', emoji: '☀️', category: 'seasons' },
+    { english: 'autumn', hebrew: 'סתיו', emoji: '🍂', category: 'seasons' },
+    // Weather
+    { english: 'warm', hebrew: 'חם', emoji: '🌡️', category: 'weather' },
+    { english: 'cold', hebrew: 'קר', emoji: '🥶', category: 'weather' },
+    { english: 'sunny', hebrew: 'שמשי', emoji: '🌞', category: 'weather' },
+    { english: 'beautiful', hebrew: 'יפה', emoji: '✨', category: 'weather' },
+    // Nature
+    { english: 'cloud', hebrew: 'ענן', emoji: '☁️', category: 'nature' },
+    { english: 'snow', hebrew: 'שלג', emoji: '🌨️', category: 'nature' },
+    { english: 'sky', hebrew: 'שמיים', emoji: '🌤️', category: 'nature' },
+    { english: 'sun', hebrew: 'שמש', emoji: '☀️', category: 'nature' },
+    { english: 'tree', hebrew: 'עץ', emoji: '🌳', category: 'nature' },
+    { english: 'park', hebrew: 'פארק', emoji: '🏞️', category: 'nature' },
+    { english: 'pool', hebrew: 'בריכה', emoji: '🏊', category: 'nature' },
+    // Actions
+    { english: 'eat', hebrew: 'לאכול', emoji: '🍽️', category: 'actions' },
+    { english: 'sleep', hebrew: 'לישון', emoji: '😴', category: 'actions' },
+    { english: 'climb', hebrew: 'לטפס', emoji: '🧗', category: 'actions' },
+    { english: 'stand', hebrew: 'לעמוד', emoji: '🧍', category: 'actions' },
+    { english: 'play', hebrew: 'לשחק', emoji: '🎮', category: 'actions' },
+    { english: 'read a book', hebrew: 'לקרוא ספר', emoji: '📖', category: 'actions' },
+    { english: 'play football', hebrew: 'לשחק כדורגל', emoji: '⚽', category: 'actions' },
+    // People
+    { english: 'children', hebrew: 'ילדים', emoji: '👧👦', category: 'people' },
+    { english: 'mother', hebrew: 'אמא', emoji: '👩', category: 'people' },
+    { english: 'father', hebrew: 'אבא', emoji: '👨', category: 'people' },
+];
+
+const scrambleSentences = [
+    { english: 'She is wearing a blue dress', hebrew: 'היא לובשת שמלה כחולה' },
+    { english: 'It is cold in winter', hebrew: 'קר בחורף' },
+    { english: 'The sky is sunny today', hebrew: 'השמיים שמשיים היום' },
+    { english: 'I can play basketball', hebrew: 'אני יכולה לשחק כדורסל' },
+    { english: "I can't fly a kite", hebrew: 'אני לא יכולה להעיף עפיפון' },
+    { english: 'There is a cloud in the sky', hebrew: 'יש ענן בשמיים' },
+    { english: 'He is wearing black boots', hebrew: 'הוא נועל מגפיים שחורות' },
+    { english: 'I want ice cream', hebrew: 'אני רוצה גלידה' },
+];
+
+const trueFalseSentences = [
+    { english: 'A coat is warm', hebrew: 'מעיל הוא חם', answer: true },
+    { english: 'We wear boots in summer', hebrew: 'אנחנו נועלים מגפיים בקיץ', answer: false },
+    { english: 'The sun is cold', hebrew: 'השמש קרה', answer: false },
+    { english: 'Children play in the park', hebrew: 'ילדים משחקים בפארק', answer: true },
+    { english: 'Snow is white', hebrew: 'שלג הוא לבן', answer: true },
+    { english: 'We swim in winter', hebrew: 'אנחנו שוחים בחורף', answer: false },
+    { english: 'Trees are green', hebrew: 'עצים ירוקים', answer: true },
+    { english: 'A dress is a food', hebrew: 'שמלה היא אוכל', answer: false },
+    { english: 'Mother is a person', hebrew: 'אמא היא אדם', answer: true },
+    { english: 'Socks go on your head', hebrew: 'גרביים הולכים על הראש', answer: false },
+];
+
+/* ==========================================================================
+   STATE MANAGEMENT
+   ========================================================================== */
+let state = {
+    totalStars: parseInt(localStorage.getItem('ariel_stars') || '0'),
+    currentGame: 0,
+    currentRound: 0,
+    totalRounds: 0,
+    gameScore: 0,
+    gameData: [],
+    answering: false,      // prevent double-taps
+    scrambleWords: [],      // words placed in drop zone for Game 2
+};
+
+/* ==========================================================================
+   AUDIO SYSTEM (AudioContext)
+   ========================================================================== */
+let audioCtx = null;
+
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}
+
+function playTone(freq, duration, type, startTime) {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.3, startTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(startTime);
+    osc.stop(startTime + duration);
+}
+
+/** Ascending C-E-G chime for correct answers */
+function playCorrect() {
+    initAudio();
+    const now = audioCtx.currentTime;
+    playTone(523.25, 0.15, 'sine', now);        // C5
+    playTone(659.25, 0.15, 'sine', now + 0.1);  // E5
+    playTone(783.99, 0.25, 'sine', now + 0.2);  // G5
+}
+
+/** Low sawtooth buzz for wrong answers */
+function playWrong() {
+    initAudio();
+    const now = audioCtx.currentTime;
+    playTone(150, 0.3, 'sawtooth', now);
+}
+
+/** 4-note celebration melody for milestones */
+function playCelebration() {
+    initAudio();
+    const now = audioCtx.currentTime;
+    playTone(523.25, 0.2, 'sine', now);          // C5
+    playTone(659.25, 0.2, 'sine', now + 0.2);    // E5
+    playTone(783.99, 0.2, 'sine', now + 0.4);    // G5
+    playTone(1046.50, 0.4, 'sine', now + 0.6);   // C6
+}
+
+/* ==========================================================================
+   TEXT-TO-SPEECH (Web Speech API)
+   ========================================================================== */
+function speak(text) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.85;
+    utterance.pitch = 1.1;
+    // Try to pick a good English voice
+    const voices = window.speechSynthesis.getVoices();
+    const englishVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Female'))
+        || voices.find(v => v.lang.startsWith('en-US'))
+        || voices.find(v => v.lang.startsWith('en'));
+    if (englishVoice) utterance.voice = englishVoice;
+    window.speechSynthesis.speak(utterance);
+}
+
+// Pre-load voices
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
+
+/* ==========================================================================
+   UTILITY FUNCTIONS
+   ========================================================================== */
+
+/** Shuffle array in place (Fisher-Yates) */
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+/** Pick n random unique items from array, excluding a specific item */
+function pickRandom(arr, n, exclude) {
+    const filtered = exclude ? arr.filter(item => item !== exclude) : [...arr];
+    shuffle(filtered);
+    return filtered.slice(0, n);
+}
+
+/** Save stars to localStorage */
+function saveStars() {
+    localStorage.setItem('ariel_stars', state.totalStars.toString());
+}
+
+/** Update all star counter displays */
+function updateStarDisplay() {
+    document.getElementById('star-count').textContent = state.totalStars;
+    document.getElementById('game-star-count').textContent = state.totalStars;
+}
+
+/** Update progress bar */
+function updateProgress() {
+    const pct = ((state.currentRound) / state.totalRounds) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('round-indicator').textContent =
+        `${state.currentRound} / ${state.totalRounds}`;
+}
+
+/* ==========================================================================
+   CONFETTI SYSTEM
+   ========================================================================== */
+function spawnConfetti() {
+    const container = document.getElementById('confetti-container');
+    const colors = ['#a855f7', '#f97316', '#eab308', '#ec4899', '#22c55e', '#3b82f6', '#ef4444'];
+    for (let i = 0; i < 30; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = Math.random() * 0.8 + 's';
+        piece.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+        piece.style.width = (6 + Math.random() * 8) + 'px';
+        piece.style.height = (6 + Math.random() * 8) + 'px';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        container.appendChild(piece);
+    }
+    setTimeout(() => { container.innerHTML = ''; }, 3000);
+}
+
+/* ==========================================================================
+   MILESTONE CELEBRATIONS
+   ========================================================================== */
+let lastMilestoneStars = parseInt(localStorage.getItem('ariel_last_milestone') || '0');
+
+function checkMilestone() {
+    // Check every 5 stars
+    const currentMilestone = Math.floor(state.totalStars / 5) * 5;
+    if (currentMilestone > lastMilestoneStars && currentMilestone > 0) {
+        lastMilestoneStars = currentMilestone;
+        localStorage.setItem('ariel_last_milestone', lastMilestoneStars.toString());
+
+        if (state.totalStars >= 10 && currentMilestone % 10 === 0) {
+            showEmojiParade();
+        } else {
+            showMilestone();
+        }
+    }
+}
+
+function showMilestone() {
+    const overlay = document.getElementById('milestone-overlay');
+    document.getElementById('milestone-emoji').textContent = '🎉';
+    document.getElementById('milestone-text').textContent = '!כל הכבוד אריאל';
+    document.getElementById('milestone-sub').textContent = `⭐ ${state.totalStars} כוכבים!`;
+    overlay.classList.add('active');
+    playCelebration();
+    spawnConfetti();
+
+    // Wiggle mascot
+    const mascot = document.getElementById('mascot');
+    mascot.classList.add('wiggle');
+    setTimeout(() => mascot.classList.remove('wiggle'), 600);
+
+    setTimeout(() => { overlay.classList.remove('active'); }, 2500);
+}
+
+function showEmojiParade() {
+    const overlay = document.getElementById('milestone-overlay');
+    document.getElementById('milestone-emoji').textContent = '🏆';
+    document.getElementById('milestone-text').textContent = '!כל הכבוד אריאל';
+    document.getElementById('milestone-sub').textContent = `🌟 ${state.totalStars} כוכבים — מדהים!`;
+    overlay.classList.add('active');
+    playCelebration();
+
+    // Spawn parade emojis
+    const emojis = ['🎊', '🎉', '🏆', '🎉', '🎊', '⭐', '🌟', '💫'];
+    emojis.forEach((emoji, i) => {
+        setTimeout(() => {
+            const el = document.createElement('div');
+            el.className = 'parade-emoji';
+            el.textContent = emoji;
+            el.style.left = (10 + Math.random() * 80) + '%';
+            el.style.animationDelay = (Math.random() * 0.5) + 's';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 3000);
+        }, i * 200);
+    });
+
+    setTimeout(() => { overlay.classList.remove('active'); }, 3000);
+}
+
+/* ==========================================================================
+   SCREEN NAVIGATION
+   ========================================================================== */
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+}
+
+function goToMenu() {
+    showScreen('menu-screen');
+    updateStarDisplay();
+    // Re-trigger slide-up animations
+    document.querySelectorAll('.game-card').forEach((card, i) => {
+        card.style.animation = 'none';
+        card.offsetHeight; // force reflow
+        card.style.animation = `slideUp 0.5s ease-out ${0.1 + i * 0.1}s forwards`;
+    });
+}
+
+// Welcome screen: auto-transition after 3 seconds
+let welcomeTimer = null;
+
+function initWelcome() {
+    welcomeTimer = setTimeout(() => {
+        goToMenu();
+    }, 3000);
+}
+
+// Override: clicking button goes immediately
+function welcomeClick() {
+    if (welcomeTimer) clearTimeout(welcomeTimer);
+    initAudio(); // First user gesture — unlock AudioContext
+    goToMenu();
+}
+
+/* ==========================================================================
+   GAME LAUNCHER
+   ========================================================================== */
+function startGame(gameNum) {
+    initAudio();
+    state.currentGame = gameNum;
+    state.currentRound = 0;
+    state.gameScore = 0;
+    state.answering = false;
+
+    switch (gameNum) {
+        case 1: initGame1(); break;
+        case 2: initGame2(); break;
+        case 3: initGame3(); break;
+        case 4: initGame4(); break;
+    }
+
+    showScreen('game-screen');
+    updateStarDisplay();
+    updateProgress();
+}
+
+/* ==========================================================================
+   GAME 1: WORD MATCH — ?מה המילה
+   ========================================================================== */
+function initGame1() {
+    document.getElementById('game-title').textContent = '?מה המילה 🔤';
+    state.totalRounds = 10;
+    state.gameData = shuffle([...vocabulary]).slice(0, 10);
+    showGame1Round();
+}
+
+function showGame1Round() {
+    if (state.currentRound >= state.totalRounds) {
+        finishGame();
+        return;
+    }
+
+    state.answering = false;
+    const word = state.gameData[state.currentRound];
+    const distractors = pickRandom(vocabulary, 3, word);
+    const options = shuffle([word, ...distractors]);
+
+    const content = document.getElementById('game-content');
+    content.innerHTML = `
+        <div class="question-area pop-in">
+            <div class="question-emoji">${word.emoji}</div>
+            <div class="question-text">${word.hebrew}</div>
+            <button class="speaker-btn" onclick="speak('${word.english}')" title="שמעי">🔊</button>
+        </div>
+        <div class="answer-grid">
+            ${options.map((opt, i) => `
+                <button class="answer-btn" onclick="checkGame1Answer(this, '${opt.english}', '${word.english}')" style="animation: popIn 0.3s ease-out ${i * 0.08}s both">
+                    <span class="btn-emoji">${opt.emoji}</span>
+                    <span class="ltr">${opt.english}</span>
+                </button>
+            `).join('')}
+        </div>
+    `;
+    updateProgress();
+}
+
+function checkGame1Answer(btn, selected, correct) {
+    if (state.answering) return;
+    state.answering = true;
+
+    const buttons = document.querySelectorAll('.answer-btn');
+    buttons.forEach(b => b.classList.add('disabled'));
+
+    if (selected === correct) {
+        btn.classList.add('correct');
+        playCorrect();
+        spawnConfetti();
+        awardStar(1);
+        // Wiggle mascot
+        document.getElementById('mascot').classList.add('wiggle');
+        setTimeout(() => document.getElementById('mascot').classList.remove('wiggle'), 600);
+    } else {
+        btn.classList.add('wrong');
+        playWrong();
+        // Show correct answer
+        buttons.forEach(b => {
+            if (b.querySelector('.ltr').textContent === correct) {
+                b.classList.add('show-correct');
+            }
+        });
+    }
+
+    speak(correct);
+    state.currentRound++;
+
+    setTimeout(() => {
+        showGame1Round();
+    }, 1500);
+}
+
+/* ==========================================================================
+   GAME 2: SENTENCE SCRAMBLE — תרגמי את המשפט
+   ========================================================================== */
+function initGame2() {
+    document.getElementById('game-title').textContent = 'תרגמי את המשפט 📝';
+    state.totalRounds = 6;
+    state.gameData = shuffle([...scrambleSentences]).slice(0, 6);
+    showGame2Round();
+}
+
+function showGame2Round() {
+    if (state.currentRound >= state.totalRounds) {
+        finishGame();
+        return;
+    }
+
+    state.answering = false;
+    state.scrambleWords = [];
+    const sentence = state.gameData[state.currentRound];
+    const words = sentence.english.split(' ');
+    const shuffledWords = shuffle([...words]);
+
+    const content = document.getElementById('game-content');
+    content.innerHTML = `
+        <div class="question-area pop-in">
+            <div class="sentence-display">${sentence.hebrew}</div>
+            <button class="speaker-btn" onclick="speak('${sentence.english}')" title="שמעי">🔊</button>
+        </div>
+        <div class="drop-zone" id="drop-zone">
+            <span class="drop-zone-placeholder" id="dz-placeholder">...לחצי על מילים כדי לבנות משפט</span>
+        </div>
+        <div class="word-chips" id="word-chips">
+            ${shuffledWords.map((w, i) => `
+                <button class="word-chip" data-word="${w}" data-index="${i}"
+                    onclick="addWordToZone(this)" style="animation: popIn 0.3s ease-out ${i * 0.06}s both">
+                    ${w}
+                </button>
+            `).join('')}
+        </div>
+        <button class="check-btn" id="check-sentence-btn" onclick="checkGame2Answer()" disabled>בדקי ✓</button>
+        <div id="sentence-feedback"></div>
+    `;
+    updateProgress();
+}
+
+function addWordToZone(chip) {
+    if (state.answering) return;
+    const word = chip.dataset.word;
+
+    if (chip.classList.contains('placed')) {
+        // Remove from drop zone
+        chip.classList.remove('placed');
+        state.scrambleWords = state.scrambleWords.filter(w => w.el !== chip);
+        renderDropZone();
+    } else {
+        // Add to drop zone
+        chip.classList.add('placed');
+        state.scrambleWords.push({ word, el: chip });
+        renderDropZone();
+    }
+
+    // Enable/disable check button
+    const checkBtn = document.getElementById('check-sentence-btn');
+    checkBtn.disabled = state.scrambleWords.length === 0;
+}
+
+function removeWordFromZone(index) {
+    if (state.answering) return;
+    const removed = state.scrambleWords.splice(index, 1)[0];
+    if (removed && removed.el) {
+        removed.el.classList.remove('placed');
+    }
+    renderDropZone();
+    document.getElementById('check-sentence-btn').disabled = state.scrambleWords.length === 0;
+}
+
+function renderDropZone() {
+    const zone = document.getElementById('drop-zone');
+    const placeholder = document.getElementById('dz-placeholder');
+
+    if (state.scrambleWords.length === 0) {
+        placeholder.style.display = 'inline';
+        zone.classList.remove('has-words');
+        // Remove any word elements in zone
+        zone.querySelectorAll('.word-chip.in-zone').forEach(el => el.remove());
+        return;
+    }
+
+    placeholder.style.display = 'none';
+    zone.classList.add('has-words');
+
+    // Clear old zone words
+    zone.querySelectorAll('.word-chip.in-zone').forEach(el => el.remove());
+
+    // Render placed words in zone
+    state.scrambleWords.forEach((item, i) => {
+        const wordEl = document.createElement('button');
+        wordEl.className = 'word-chip in-zone';
+        wordEl.textContent = item.word;
+        wordEl.onclick = () => removeWordFromZone(i);
+        zone.appendChild(wordEl);
+    });
+}
+
+function checkGame2Answer() {
+    if (state.answering) return;
+    state.answering = true;
+
+    const sentence = state.gameData[state.currentRound];
+    const correctWords = sentence.english.split(' ');
+    const userWords = state.scrambleWords.map(w => w.word);
+    const isCorrect = userWords.join(' ').toLowerCase() === correctWords.join(' ').toLowerCase();
+
+    const feedback = document.getElementById('sentence-feedback');
+    document.getElementById('check-sentence-btn').disabled = true;
+
+    if (isCorrect) {
+        playCorrect();
+        spawnConfetti();
+        awardStar(2);
+        feedback.innerHTML = `<div class="correct-sentence">✅ !מצוין</div>`;
+        document.getElementById('mascot').classList.add('wiggle');
+        setTimeout(() => document.getElementById('mascot').classList.remove('wiggle'), 600);
+    } else {
+        playWrong();
+        feedback.innerHTML = `<div class="correct-sentence">❌ התשובה הנכונה: ${sentence.english}</div>`;
+    }
+
+    speak(sentence.english);
+    state.currentRound++;
+
+    setTimeout(() => {
+        showGame2Round();
+    }, 2500);
+}
+
+/* ==========================================================================
+   GAME 3: LISTEN & CHOOSE — האזיני ובחרי
+   ========================================================================== */
+function initGame3() {
+    document.getElementById('game-title').textContent = 'האזיני ובחרי 👂';
+    state.totalRounds = 10;
+    state.gameData = shuffle([...vocabulary]).slice(0, 10);
+    showGame3Round();
+}
+
+function showGame3Round() {
+    if (state.currentRound >= state.totalRounds) {
+        finishGame();
+        return;
+    }
+
+    state.answering = false;
+    const word = state.gameData[state.currentRound];
+    const distractors = pickRandom(vocabulary, 3, word);
+    const options = shuffle([word, ...distractors]);
+
+    const content = document.getElementById('game-content');
+    content.innerHTML = `
+        <div class="question-area pop-in">
+            <div class="question-text">?מה המילה ששמעת</div>
+            <button class="speaker-btn large" onclick="speak('${word.english}')" title="שמעי שוב">🔊</button>
+        </div>
+        <div class="answer-grid">
+            ${options.map((opt, i) => `
+                <button class="answer-btn" onclick="checkGame3Answer(this, '${opt.english}', '${word.english}')" style="animation: popIn 0.3s ease-out ${i * 0.08}s both">
+                    <span class="btn-emoji">${opt.emoji}</span>
+                    <span class="ltr">${opt.english}</span>
+                </button>
+            `).join('')}
+        </div>
+    `;
+    updateProgress();
+
+    // Auto-speak the word after a brief delay
+    setTimeout(() => speak(word.english), 500);
+}
+
+function checkGame3Answer(btn, selected, correct) {
+    if (state.answering) return;
+    state.answering = true;
+
+    const buttons = document.querySelectorAll('.answer-btn');
+    buttons.forEach(b => b.classList.add('disabled'));
+
+    if (selected === correct) {
+        btn.classList.add('correct');
+        playCorrect();
+        spawnConfetti();
+        awardStar(1);
+        document.getElementById('mascot').classList.add('wiggle');
+        setTimeout(() => document.getElementById('mascot').classList.remove('wiggle'), 600);
+    } else {
+        btn.classList.add('wrong');
+        playWrong();
+        buttons.forEach(b => {
+            if (b.querySelector('.ltr').textContent === correct) {
+                b.classList.add('show-correct');
+            }
+        });
+    }
+
+    speak(correct);
+    state.currentRound++;
+
+    setTimeout(() => {
+        showGame3Round();
+    }, 1500);
+}
+
+/* ==========================================================================
+   GAME 4: TRUE OR FALSE — ?כן או לא
+   ========================================================================== */
+function initGame4() {
+    document.getElementById('game-title').textContent = '?כן או לא 🤔';
+    state.totalRounds = 8;
+    state.gameData = shuffle([...trueFalseSentences]).slice(0, 8);
+    showGame4Round();
+}
+
+function showGame4Round() {
+    if (state.currentRound >= state.totalRounds) {
+        finishGame();
+        return;
+    }
+
+    state.answering = false;
+    const item = state.gameData[state.currentRound];
+
+    const content = document.getElementById('game-content');
+    content.innerHTML = `
+        <div class="question-area pop-in">
+            <div class="tf-card">
+                <div class="tf-english">${item.english}</div>
+                <div class="tf-hebrew">${item.hebrew}</div>
+                <button class="speaker-btn" onclick="speak('${item.english}')" title="שמעי">🔊</button>
+            </div>
+        </div>
+        <div class="tf-buttons">
+            <button class="tf-btn yes" onclick="checkGame4Answer(this, true, ${item.answer})">✅ כן</button>
+            <button class="tf-btn no" onclick="checkGame4Answer(this, false, ${item.answer})">❌ לא</button>
+        </div>
+    `;
+    updateProgress();
+}
+
+function checkGame4Answer(btn, selected, correct) {
+    if (state.answering) return;
+    state.answering = true;
+
+    const buttons = document.querySelectorAll('.tf-btn');
+    buttons.forEach(b => b.classList.add('disabled'));
+
+    if (selected === correct) {
+        btn.classList.add('correct');
+        playCorrect();
+        spawnConfetti();
+        awardStar(1);
+        document.getElementById('mascot').classList.add('wiggle');
+        setTimeout(() => document.getElementById('mascot').classList.remove('wiggle'), 600);
+    } else {
+        btn.classList.add('wrong');
+        playWrong();
+        // Highlight the correct one
+        buttons.forEach(b => {
+            const isYes = b.classList.contains('yes');
+            if ((correct && isYes) || (!correct && !isYes)) {
+                b.classList.add('correct');
+            }
+        });
+    }
+
+    state.currentRound++;
+
+    setTimeout(() => {
+        showGame4Round();
+    }, 1500);
+}
+
+/* ==========================================================================
+   AWARD STARS & FINISH GAME
+   ========================================================================== */
+function awardStar(count) {
+    state.gameScore += count;
+    state.totalStars += count;
+    saveStars();
+    updateStarDisplay();
+    checkMilestone();
+}
+
+function finishGame() {
+    const maxScores = { 1: 10, 2: 12, 3: 10, 4: 8 };
+    const max = maxScores[state.currentGame] || 10;
+
+    document.getElementById('complete-score').textContent =
+        `${state.gameScore} / ${max} ⭐ הרווחת`;
+    document.getElementById('complete-total-stars').textContent =
+        `⭐ ${state.totalStars} :סה"כ כוכבים`;
+
+    // Set replay button
+    const replayBtn = document.getElementById('replay-btn');
+    const gameNum = state.currentGame;
+    replayBtn.onclick = () => startGame(gameNum);
+
+    showScreen('complete-screen');
+    spawnConfetti();
+    playCelebration();
+}
+
+/* ==========================================================================
+   INITIALIZATION
+   ========================================================================== */
+window.addEventListener('DOMContentLoaded', () => {
+    updateStarDisplay();
+    initWelcome();
+
+    // Wire welcome button
+    document.getElementById('welcome-btn').onclick = welcomeClick;
+});
+</script>
+</body>
+</html>

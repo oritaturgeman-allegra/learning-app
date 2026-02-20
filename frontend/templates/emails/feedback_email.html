@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Feedback</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background-color: #fcfbf8;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 600px; width: 100%; background-color: #f7f4ef; border-radius: 16px; border: 1px solid #e6e0d8;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px; text-align: center;">
+                            <h1 style="margin: 0; color: #2e2e2e; font-size: 24px; font-weight: 600;">
+                                {% if user_name %}Feedback from {{ user_name }}{% else %}New User Feedback{% endif %}
+                            </h1>
+                            <p style="margin: 10px 0 0; color: #7a9ab8; font-size: 14px;">
+                                Your Newsletter, Your Way
+                            </p>
+                        </td>
+                    </tr>
+                    {% if user_name or user_email %}
+                    <!-- User Info -->
+                    <tr>
+                        <td style="padding: 0 40px 10px;">
+                            <div style="background-color: #eef3f8; border: 1px solid #d4dfea; border-radius: 10px; padding: 14px 18px;">
+                                {% if user_name %}
+                                <p style="margin: 0 0 4px; color: #555555; font-size: 14px;">
+                                    <strong style="color: #444;">Name:</strong> {{ user_name }}
+                                </p>
+                                {% endif %}
+                                {% if user_email %}
+                                <p style="margin: 0; color: #555555; font-size: 14px;">
+                                    <strong style="color: #444;">Email:</strong> <a href="mailto:{{ user_email }}" style="color: #7a9ab8; text-decoration: none;">{{ user_email }}</a>
+                                </p>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 20px 40px;">
+                            <div style="background-color: white; border: 1px solid #e6e0d8; border-radius: 12px; padding: 20px;">
+                                <p style="margin: 0 0 10px; color: #888888; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    Feedback Message:
+                                </p>
+                                <p style="margin: 0; color: #555555; font-size: 16px; line-height: 1.6; white-space: pre-wrap;">{{ feedback_text }}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Attachments Note -->
+                    <tr>
+                        <td style="padding: 0 40px 20px;">
+                            <p style="margin: 0; color: #888888; font-size: 13px; font-style: italic;">
+                                Note: Any attached images or videos are included in this email.
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 30px 40px; border-top: 1px solid #e6e0d8; text-align: center;">
+                            <p style="margin: 0; color: #888888; font-size: 12px;">
+                                This feedback was submitted through the Leave Feedback feature.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

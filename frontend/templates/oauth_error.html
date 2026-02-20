@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Your Newsletter, Your Way</title>
+    <link rel="icon" type="image/svg+xml" href="/static/images/newsletter-logo-v3.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/base.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/layout.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/buttons.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/modals.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/accessibility.css?v={{ version }}">
+</head>
+<body>
+    <div class="auth-modal-overlay show">
+        <div class="auth-modal">
+            <div class="auth-modal-header">
+                <div class="verification-icon error">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </div>
+                <h2>{{ title }}</h2>
+                <p>{{ message }}</p>
+            </div>
+            <a href="/" class="auth-submit-btn" style="display: block; text-align: center; text-decoration: none; background: #d9a090;">Go to Homepage</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+    <!-- Feedback Modal -->
+    <div class="auth-modal-overlay" id="feedback-modal">
+        <div class="auth-modal feedback-modal" role="dialog" aria-modal="true" aria-labelledby="feedback-modal-title">
+            <button class="auth-modal-close" onclick="closeModal('feedback-modal')" aria-label="Close dialog">&times;</button>
+            <div class="feedback-modal-header">
+                <h2 id="feedback-modal-title">
+                    <img src="/static/images/newsletter-logo-v3.svg" alt="" class="feedback-header-logo" aria-hidden="true">
+                    Leave Feedback
+                </h2>
+            </div>
+            <form class="auth-form" id="feedback-form" onsubmit="handleFeedbackSubmit(event)">
+                <div class="feedback-error" id="feedback-error" role="alert" aria-live="assertive"></div>
+                <div class="auth-form-group">
+                    <textarea
+                        id="feedback-text"
+                        class="feedback-textarea"
+                        placeholder="This is my first app and I'd love your feedback! Feel free to Share anything! What you like, what could be better, feature ideas, design thoughts, or just say hi..."
+                        rows="6"
+                        required
+                        aria-required="true"
+                        aria-label="Your feedback"
+                        aria-describedby="feedback-error"
+                    ></textarea>
+                </div>
+                <div class="feedback-attachments" id="feedback-attachments">
+                    <!-- File previews will be inserted here -->
+                </div>
+                <div class="feedback-actions">
+                    <label class="feedback-upload-btn" tabindex="0" role="button" aria-label="Upload images or videos">
+                        <input
+                            type="file"
+                            id="feedback-files"
+                            multiple
+                            accept="image/*,video/*"
+                            onchange="handleFeedbackFileSelect(event)"
+                            class="sr-only"
+                        >
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Upload</span>
+                    </label>
+                    <button type="submit" class="feedback-submit-btn" id="feedback-submit-btn">
+                        <span class="btn-spinner" aria-hidden="true"></span>
+                        <span class="btn-text">Send</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>

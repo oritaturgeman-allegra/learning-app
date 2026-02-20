@@ -1,0 +1,19 @@
+# Development dependencies
+# Include all production dependencies
+-r requirements.txt
+
+# === TESTING ===
+pytest>=7.4.0,<8.0.0            # Testing framework
+pytest-cov>=4.1.0,<5.0.0        # Coverage reporting
+pytest-mock>=3.12.0,<4.0.0      # Mocking support
+pytest-asyncio>=0.23.0,<1.0.0   # Async test support
+
+# === CODE QUALITY ===
+black>=24.0.0,<25.0.0           # Code formatting
+ruff>=0.1.0,<1.0.0              # Fast linter (replaces flake8, isort)
+mypy>=1.8.0,<2.0.0              # Type checking
+pre-commit>=3.6.0,<4.0.0        # Pre-commit hooks
+
+# === TYPE STUBS ===
+types-requests                   # Type stubs for requests
+types-cachetools                 # Type stubs for cachetools

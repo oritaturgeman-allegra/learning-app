@@ -1,0 +1,21 @@
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header class="header" role="banner">
+        <div class="header-inner">
+            <nav class="header-row" aria-label="Main navigation">
+                <div class="header-left">
+                    <img src="/static/images/newsletter-logo-v3.svg" alt="Your Newsletter, Your Way - Home" class="header-logo">
+                    <div class="header-title">
+                        <h1>Your Newsletter</h1>
+                        <span class="header-subtitle">Your Way</span>
+                    </div>
+                </div>
+                <div class="header-right" id="header-right">
+                    <button class="feedback-link" type="button" onclick="openModal('feedback-modal')">Leave Feedback</button>
+                    {% if authenticated %}
+                    <span class="header-divider"></span>
+                    <!-- User greeting will be inserted by JS -->
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+    </header>
