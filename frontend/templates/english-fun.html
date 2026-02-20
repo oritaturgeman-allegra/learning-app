@@ -294,8 +294,17 @@ body {
     padding: var(--space-md) var(--space-lg);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     justify-content: center;
-    gap: var(--space-lg);
     z-index: 20;
+}
+
+#menu-screen .header-right {
+    position: absolute;
+    right: var(--space-lg);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
 }
 
 .menu-subtitle {
@@ -304,16 +313,7 @@ body {
     color: var(--text-muted);
     margin-top: 70px;
     margin-bottom: var(--space-md);
-    width: 100%;
     text-align: center;
-    position: relative;
-}
-
-.menu-subtitle .shuffle-btn {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
 }
 
 .shuffle-btn {
@@ -843,6 +843,133 @@ body {
 }
 
 /* ==========================================================================
+   SESSION COMPLETE POPUP
+   ========================================================================== */
+.session-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-lg);
+}
+
+.session-overlay.active {
+    display: flex;
+}
+
+.session-popup {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl) var(--space-xl);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    animation: popIn 0.5s ease-out;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.session-popup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--grad-rainbow);
+}
+
+.session-trophy {
+    font-size: 5rem;
+    margin-bottom: var(--space-md);
+    animation: bounceIn 0.6s ease-out 0.2s both;
+}
+
+.session-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    color: var(--text-dark);
+    margin-bottom: var(--space-sm);
+    animation: bounceIn 0.6s ease-out 0.4s both;
+}
+
+.session-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+    animation: bounceIn 0.6s ease-out 0.5s both;
+}
+
+.session-score {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 3rem);
+    color: var(--gold);
+    margin-bottom: var(--space-sm);
+    animation: bounceIn 0.6s ease-out 0.6s both;
+}
+
+.session-score-label {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+}
+
+.session-close-btn {
+    background: var(--grad-welcome);
+    color: white;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: var(--space-md) var(--space-xl);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    animation: bounceIn 0.6s ease-out 0.8s both;
+}
+
+.session-close-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Fireworks phase: hide popup card, show only fireworks */
+.session-overlay.fireworks-phase .session-popup {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.session-overlay .session-popup {
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.firework-spark {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: fireworkBurst 0.8s ease-out forwards;
+    pointer-events: none;
+    z-index: 1001;
+}
+
+@keyframes fireworkBurst {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--dx), var(--dy)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
    MASCOT
    ========================================================================== */
 .mascot {
@@ -993,15 +1120,17 @@ body {
      ====================================================================== -->
 <div class="screen" id="menu-screen">
     <div class="app-header">
-        <div class="star-counter">
-            <span class="star-icon">⭐</span>
-            <span id="star-count">0</span>
-        </div>
         <div class="app-title">🌟 English Fun</div>
+        <div class="header-right">
+            <div class="star-counter">
+                <span class="star-icon">⭐</span>
+                <span id="star-count">0</span>
+            </div>
+            <button class="shuffle-btn" onclick="shuffleQuestions()" title="ערבבי שאלות חדשות">🔀</button>
+        </div>
     </div>
 
     <div class="menu-subtitle">
-        <button class="shuffle-btn" onclick="shuffleQuestions()" title="ערבבי שאלות חדשות">🔀</button>
         🎮 בחרי משחק, אריאל
     </div>
 
@@ -1074,6 +1203,18 @@ body {
     <div class="complete-buttons">
         <button class="complete-btn replay" id="replay-btn">🔄 שחקי שוב</button>
         <button class="complete-btn menu" onclick="goToMenu()">🏠 תפריט ראשי</button>
+    </div>
+</div>
+
+<!-- Session Complete Popup (all 4 games done) -->
+<div class="session-overlay" id="session-overlay">
+    <div class="session-popup">
+        <div class="session-trophy">🏆</div>
+        <div class="session-title">!כל הכבוד, את אלופה</div>
+        <div class="session-subtitle">!סיימת את כל 4 המשחקים</div>
+        <div class="session-score" id="session-score">0 ⭐</div>
+        <div class="session-score-label">כוכבים באימון הזה</div>
+        <button class="session-close-btn" onclick="closeSessionPopup()">🌟 יאללה, עוד פעם</button>
     </div>
 </div>
 
@@ -1212,6 +1353,8 @@ let state = {
     answering: false,      // prevent double-taps
     scrambleWords: [],      // words placed in drop zone for Game 2
     wordResults: [],        // per-word results for API tracking
+    sessionGames: new Set(),  // games completed this session (1-4)
+    sessionStars: 0,          // stars earned this session
 };
 
 /* ==========================================================================
@@ -1508,6 +1651,52 @@ function goToMenu() {
         card.offsetHeight; // force reflow
         card.style.animation = `slideUp 0.5s ease-out ${0.1 + i * 0.1}s forwards`;
     });
+}
+
+function showSessionPopup() {
+    document.getElementById('session-score').textContent = `${state.sessionStars} ⭐`;
+    // Fireworks burst first, then popup fades in
+    const overlay = document.getElementById('session-overlay');
+    overlay.classList.add('active', 'fireworks-phase');
+    spawnFireworks();
+    playCelebration();
+    // After fireworks, reveal the popup card
+    setTimeout(() => {
+        overlay.classList.remove('fireworks-phase');
+        spawnConfetti();
+    }, 1200);
+}
+
+function spawnFireworks() {
+    const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899', '#f43f5e', '#14b8a6'];
+    const overlay = document.getElementById('session-overlay');
+    for (let burst = 0; burst < 12; burst++) {
+        setTimeout(() => {
+            const cx = 5 + Math.random() * 90;
+            const cy = 5 + Math.random() * 90;
+            const sparkCount = 16 + Math.floor(Math.random() * 8);
+            for (let i = 0; i < sparkCount; i++) {
+                const angle = (i * (360 / sparkCount) + Math.random() * 15) * Math.PI / 180;
+                const dist = 80 + Math.random() * 120;
+                const spark = document.createElement('div');
+                spark.className = 'firework-spark';
+                spark.style.left = cx + '%';
+                spark.style.top = cy + '%';
+                spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+                spark.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+                spark.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+                overlay.appendChild(spark);
+                setTimeout(() => spark.remove(), 1000);
+            }
+        }, burst * 150);
+    }
+}
+
+function closeSessionPopup() {
+    document.getElementById('session-overlay').classList.remove('active');
+    // Reset session for another round
+    state.sessionGames = new Set();
+    state.sessionStars = 0;
 }
 
 // Welcome screen: wait for button click
@@ -1938,6 +2127,10 @@ function finishGame() {
     const maxScores = { 1: 10, 2: 12, 3: 10, 4: 8 };
     const max = maxScores[state.currentGame] || 10;
 
+    // Track session progress
+    state.sessionGames.add(state.currentGame);
+    state.sessionStars += state.gameScore;
+
     document.getElementById('complete-score').textContent =
         `${state.gameScore} / ${max} ⭐ הרווחת`;
     document.getElementById('complete-total-stars').textContent =
@@ -1957,6 +2150,11 @@ function finishGame() {
     showScreen('complete-screen');
     spawnConfetti();
     playCelebration();
+
+    // If all 4 games completed — show session celebration after a moment
+    if (state.sessionGames.size === 4) {
+        setTimeout(() => showSessionPopup(), 2500);
+    }
 }
 
 /* ==========================================================================
