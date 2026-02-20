@@ -1,8 +1,8 @@
 """
-Sentry error monitoring configuration for Capital Market Newsletter.
+Sentry error monitoring configuration.
 
-Initializes Sentry SDK with FastAPI integration, data scrubbing,
-and release tracking. No-op when SENTRY_DSN is not configured.
+Initializes Sentry SDK with data scrubbing and release tracking.
+No-op when SENTRY_DSN is not configured.
 """
 
 import logging

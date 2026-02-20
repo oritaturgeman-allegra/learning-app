@@ -4,7 +4,7 @@ Gamified English learning for kids — fun, colorful, interactive.
 
 ## Project Overview
 
-A TinyTap-inspired web app that teaches English vocabulary to Hebrew-speaking children through 4 mini-games: word matching, sentence building, listening comprehension, and true/false. Features star rewards, confetti animations, sound feedback, and persistent progress.
+A web app that teaches English vocabulary to Hebrew-speaking children through 4 mini-games: word matching, sentence building, listening comprehension, and true/false. Features star rewards, confetti animations, sound feedback, and persistent progress.
 
 **Built for:** Ariel, 4th grade, Jet 2 textbook — Unit 2 vocabulary (clothes, seasons, weather, nature, actions, people).
 
@@ -12,6 +12,7 @@ A TinyTap-inspired web app that teaches English vocabulary to Hebrew-speaking ch
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v1.2.0   | 02/20 | Chore: Stripped newsletter code — clean, minimal learning app codebase                   |
 | v1.1.0   | 02/20 | Feature: Backend + DB integration — progress saves across sessions, weak word tracking   |
 | v1.0.0   | 02/20 | Feature: Ariel's English Adventure — 4 learning games with rewards and animations        |
 
