@@ -298,15 +298,55 @@ body {
     z-index: 20;
 }
 
-#menu-screen .game-cards {
-    margin-top: 60px;
-}
-
 .menu-subtitle {
     font-family: var(--font-body);
     font-size: clamp(1.1rem, 3.5vw, 1.4rem);
     color: var(--text-muted);
-    margin-bottom: var(--space-lg);
+    margin-top: 70px;
+    margin-bottom: var(--space-md);
+    width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+.menu-subtitle .shuffle-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.shuffle-btn {
+    background: #fce4ec;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background 0.2s ease, box-shadow 0.2s ease;
+    color: var(--text-muted);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.shuffle-btn:hover, .shuffle-btn:active {
+    background: white;
+    border-color: var(--purple);
+    color: var(--purple);
+    box-shadow: 0 2px 10px rgba(168, 85, 247, 0.25);
+}
+
+.shuffle-btn.spinning {
+    animation: spin 0.6s ease-in-out;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .game-cards {
@@ -339,10 +379,10 @@ body {
     transform: translateY(-1px);
 }
 
-.game-card.purple { background: #c4b5fd; }
-.game-card.orange { background: #fdba74; }
-.game-card.blue { background: #7dd3fc; }
-.game-card.pink { background: #f9a8d4; }
+.game-card-word-match { background: #c4b5fd; }
+.game-card-sentence-builder { background: #fdba74; }
+.game-card-listen-choose { background: #7dd3fc; }
+.game-card-true-false { background: #f9a8d4; }
 
 .game-card .card-emoji {
     font-size: 2.5rem;
@@ -960,31 +1000,34 @@ body {
         <div class="app-title">🌟 English Fun</div>
     </div>
 
-    <div class="menu-subtitle">🎮 בחרי משחק, אריאל</div>
+    <div class="menu-subtitle">
+        <button class="shuffle-btn" onclick="shuffleQuestions()" title="ערבבי שאלות חדשות">🔀</button>
+        🎮 בחרי משחק, אריאל
+    </div>
 
     <div class="game-cards">
-        <div class="game-card purple slide-up" style="animation-delay: 0.1s" onclick="startGame(1)">
+        <div class="game-card game-card-word-match slide-up" style="animation-delay: 0.1s" onclick="startGame(1)">
             <div class="card-emoji">🔤</div>
             <div class="card-text">
                 <div class="card-title">מה המילה?</div>
                 <div class="card-desc">התאימי את המילה באנגלית</div>
             </div>
         </div>
-        <div class="game-card orange slide-up" style="animation-delay: 0.2s" onclick="startGame(2)">
+        <div class="game-card game-card-sentence-builder slide-up" style="animation-delay: 0.2s" onclick="startGame(2)">
             <div class="card-emoji">📝</div>
             <div class="card-text">
                 <div class="card-title">תרגמי את המשפט</div>
                 <div class="card-desc">סדרי את המילים בסדר הנכון</div>
             </div>
         </div>
-        <div class="game-card blue slide-up" style="animation-delay: 0.3s" onclick="startGame(3)">
-            <div class="card-emoji">👂</div>
+        <div class="game-card game-card-listen-choose slide-up" style="animation-delay: 0.3s" onclick="startGame(3)">
+            <div class="card-emoji">🔊</div>
             <div class="card-text">
                 <div class="card-title">האזיני ובחרי</div>
                 <div class="card-desc">שמעי את המילה ובחרי תמונה</div>
             </div>
         </div>
-        <div class="game-card pink slide-up" style="animation-delay: 0.4s" onclick="startGame(4)">
+        <div class="game-card game-card-true-false slide-up" style="animation-delay: 0.4s" onclick="startGame(4)">
             <div class="card-emoji">🤔</div>
             <div class="card-text">
                 <div class="card-title">כן או לא?</div>
@@ -1036,72 +1079,125 @@ body {
 
 <script>
 /* ==========================================================================
-   VOCABULARY DATA
+   VOCABULARY DATA — Organized by textbook unit
    ========================================================================== */
-const vocabulary = [
-    // Clothes
-    { english: 'coat', hebrew: 'מעיל', emoji: '🧥', category: 'clothes' },
-    { english: 'boots', hebrew: 'מגפיים', emoji: '👢', category: 'clothes' },
-    { english: 'dress', hebrew: 'שמלה', emoji: '👗', category: 'clothes' },
-    { english: 'shirt', hebrew: 'חולצה', emoji: '👕', category: 'clothes' },
-    { english: 'pants', hebrew: 'מכנסיים', emoji: '👖', category: 'clothes' },
-    { english: 'shoes', hebrew: 'נעליים', emoji: '👟', category: 'clothes' },
-    { english: 'socks', hebrew: 'גרביים', emoji: '🧦', category: 'clothes' },
-    // Seasons
-    { english: 'winter', hebrew: 'חורף', emoji: '❄️', category: 'seasons' },
-    { english: 'spring', hebrew: 'אביב', emoji: '🌸', category: 'seasons' },
-    { english: 'summer', hebrew: 'קיץ', emoji: '☀️', category: 'seasons' },
-    { english: 'autumn', hebrew: 'סתיו', emoji: '🍂', category: 'seasons' },
-    // Weather
-    { english: 'warm', hebrew: 'חם', emoji: '🌡️', category: 'weather' },
-    { english: 'cold', hebrew: 'קר', emoji: '🥶', category: 'weather' },
-    { english: 'sunny', hebrew: 'שמשי', emoji: '🌞', category: 'weather' },
-    { english: 'beautiful', hebrew: 'יפה', emoji: '✨', category: 'weather' },
-    // Nature
-    { english: 'cloud', hebrew: 'ענן', emoji: '☁️', category: 'nature' },
-    { english: 'snow', hebrew: 'שלג', emoji: '🌨️', category: 'nature' },
-    { english: 'sky', hebrew: 'שמיים', emoji: '🌤️', category: 'nature' },
-    { english: 'sun', hebrew: 'שמש', emoji: '☀️', category: 'nature' },
-    { english: 'tree', hebrew: 'עץ', emoji: '🌳', category: 'nature' },
-    { english: 'park', hebrew: 'פארק', emoji: '🏞️', category: 'nature' },
-    { english: 'pool', hebrew: 'בריכה', emoji: '🏊', category: 'nature' },
-    // Actions
-    { english: 'eat', hebrew: 'לאכול', emoji: '🍽️', category: 'actions' },
-    { english: 'sleep', hebrew: 'לישון', emoji: '😴', category: 'actions' },
-    { english: 'climb', hebrew: 'לטפס', emoji: '🧗', category: 'actions' },
-    { english: 'stand', hebrew: 'לעמוד', emoji: '🧍', category: 'actions' },
-    { english: 'play', hebrew: 'לשחק', emoji: '🎮', category: 'actions' },
-    { english: 'read a book', hebrew: 'לקרוא ספר', emoji: '📖', category: 'actions' },
-    { english: 'play football', hebrew: 'לשחק כדורגל', emoji: '⚽', category: 'actions' },
-    // People
-    { english: 'children', hebrew: 'ילדים', emoji: '👧👦', category: 'people' },
-    { english: 'mother', hebrew: 'אמא', emoji: '👩', category: 'people' },
-    { english: 'father', hebrew: 'אבא', emoji: '👨', category: 'people' },
-];
+const UNITS = {
+    'jet2-unit2': {
+        name: 'Jet 2: Unit 2',
+        nameHebrew: 'יחידה 2',
 
-const scrambleSentences = [
-    { english: 'She is wearing a blue dress', hebrew: 'היא לובשת שמלה כחולה' },
-    { english: 'It is cold in winter', hebrew: 'קר בחורף' },
-    { english: 'The sky is sunny today', hebrew: 'השמיים שמשיים היום' },
-    { english: 'I can play basketball', hebrew: 'אני יכולה לשחק כדורסל' },
-    { english: "I can't fly a kite", hebrew: 'אני לא יכולה להעיף עפיפון' },
-    { english: 'There is a cloud in the sky', hebrew: 'יש ענן בשמיים' },
-    { english: 'He is wearing black boots', hebrew: 'הוא נועל מגפיים שחורות' },
-    { english: 'I want ice cream', hebrew: 'אני רוצה גלידה' },
-];
+        vocabulary: [
+            // --- Clothes ---
+            { english: 'coat', hebrew: 'מעיל', emoji: '🧥', category: 'clothes' },
+            { english: 'boots', hebrew: 'מגפיים', emoji: '👢', category: 'clothes' },
+            { english: 'dress', hebrew: 'שמלה', emoji: '👗', category: 'clothes' },
+            { english: 'shirt', hebrew: 'חולצה', emoji: '👕', category: 'clothes' },
+            { english: 'pants', hebrew: 'מכנסיים', emoji: '👖', category: 'clothes' },
+            { english: 'shoes', hebrew: 'נעליים', emoji: '👟', category: 'clothes' },
+            { english: 'socks', hebrew: 'גרביים', emoji: '🧦', category: 'clothes' },
+            // --- Seasons ---
+            { english: 'winter', hebrew: 'חורף', emoji: '❄️', category: 'seasons' },
+            { english: 'spring', hebrew: 'אביב', emoji: '🌸', category: 'seasons' },
+            { english: 'summer', hebrew: 'קיץ', emoji: '☀️', category: 'seasons' },
+            { english: 'autumn', hebrew: 'סתיו', emoji: '🍂', category: 'seasons' },
+            // --- Weather ---
+            { english: 'warm', hebrew: 'חם', emoji: '🌡️', category: 'weather' },
+            { english: 'cold', hebrew: 'קר', emoji: '🥶', category: 'weather' },
+            { english: 'sunny', hebrew: 'שמשי', emoji: '🌞', category: 'weather' },
+            { english: 'beautiful', hebrew: 'יפה', emoji: '✨', category: 'weather' },
+            // --- Nature ---
+            { english: 'cloud', hebrew: 'ענן', emoji: '☁️', category: 'nature' },
+            { english: 'snow', hebrew: 'שלג', emoji: '🌨️', category: 'nature' },
+            { english: 'sky', hebrew: 'שמיים', emoji: '🌤️', category: 'nature' },
+            { english: 'sun', hebrew: 'שמש', emoji: '☀️', category: 'nature' },
+            { english: 'tree', hebrew: 'עץ', emoji: '🌳', category: 'nature' },
+            { english: 'park', hebrew: 'פארק', emoji: '🏞️', category: 'nature' },
+            { english: 'pool', hebrew: 'בריכה', emoji: '🏊', category: 'nature' },
+            // --- Actions ---
+            { english: 'eat', hebrew: 'לאכול', emoji: '🍽️', category: 'actions' },
+            { english: 'sleep', hebrew: 'לישון', emoji: '😴', category: 'actions' },
+            { english: 'climb', hebrew: 'לטפס', emoji: '🧗', category: 'actions' },
+            { english: 'stand', hebrew: 'לעמוד', emoji: '🧍', category: 'actions' },
+            { english: 'play', hebrew: 'לשחק', emoji: '🎮', category: 'actions' },
+            { english: 'read a book', hebrew: 'לקרוא ספר', emoji: '📖', category: 'actions' },
+            { english: 'play football', hebrew: 'לשחק כדורגל', emoji: '⚽', category: 'actions' },
+            { english: 'come', hebrew: 'לבוא', emoji: '🚶', category: 'actions' },
+            { english: 'fly a kite', hebrew: 'להעיף עפיפון', emoji: '🪁', category: 'actions' },
+            { english: 'make', hebrew: 'להכין', emoji: '🔨', category: 'actions' },
+            { english: 'wear', hebrew: 'ללבוש', emoji: '👔', category: 'actions' },
+            // --- People ---
+            { english: 'children', hebrew: 'ילדים', emoji: '👧👦', category: 'people' },
+            { english: 'mother', hebrew: 'אמא', emoji: '👩', category: 'people' },
+            { english: 'father', hebrew: 'אבא', emoji: '👨', category: 'people' },
+            { english: 'they', hebrew: 'הם', emoji: '👥', category: 'people' },
+            { english: 'we', hebrew: 'אנחנו', emoji: '👫', category: 'people' },
+            { english: 'who', hebrew: 'מי', emoji: '❓', category: 'people' },
+            // --- Body ---
+            { english: 'eyes', hebrew: 'עיניים', emoji: '👀', category: 'body' },
+            { english: 'mouth', hebrew: 'פה', emoji: '👄', category: 'body' },
+            { english: 'nose', hebrew: 'אף', emoji: '👃', category: 'body' },
+            // --- Food ---
+            { english: 'ice cream', hebrew: 'גלידה', emoji: '🍦', category: 'food' },
+            // --- Places ---
+            { english: 'home', hebrew: 'בית', emoji: '🏠', category: 'places' },
+            { english: 'store', hebrew: 'חנות', emoji: '🏪', category: 'places' },
+            { english: 'near', hebrew: 'קרוב', emoji: '📍', category: 'places' },
+            // --- Descriptions ---
+            { english: 'funny', hebrew: 'מצחיק', emoji: '😂', category: 'descriptions' },
+            { english: 'old', hebrew: 'ישן', emoji: '👴', category: 'descriptions' },
+            { english: 'okay', hebrew: 'בסדר', emoji: '👌', category: 'descriptions' },
+            { english: 'good for you', hebrew: 'טוב בשבילך', emoji: '👍', category: 'descriptions' },
+            { english: 'too', hebrew: 'גם', emoji: '➕', category: 'descriptions' },
+            // --- Things ---
+            { english: 'basketball', hebrew: 'כדורסל', emoji: '🏀', category: 'things' },
+            { english: 'game', hebrew: 'משחק', emoji: '🎯', category: 'things' },
+            { english: 'picture', hebrew: 'תמונה', emoji: '🖼️', category: 'things' },
+            { english: 'wall', hebrew: 'קיר', emoji: '🧱', category: 'things' },
+        ],
 
-const trueFalseSentences = [
-    { english: 'A coat is warm', hebrew: 'מעיל הוא חם', answer: true },
-    { english: 'We wear boots in summer', hebrew: 'אנחנו נועלים מגפיים בקיץ', answer: false },
-    { english: 'The sun is cold', hebrew: 'השמש קרה', answer: false },
-    { english: 'Children play in the park', hebrew: 'ילדים משחקים בפארק', answer: true },
-    { english: 'Snow is white', hebrew: 'שלג הוא לבן', answer: true },
-    { english: 'We swim in winter', hebrew: 'אנחנו שוחים בחורף', answer: false },
-    { english: 'Trees are green', hebrew: 'עצים ירוקים', answer: true },
-    { english: 'A dress is a food', hebrew: 'שמלה היא אוכל', answer: false },
-    { english: 'Mother is a person', hebrew: 'אמא היא אדם', answer: true },
-    { english: 'Socks go on your head', hebrew: 'גרביים הולכים על הראש', answer: false },
-];
+        scrambleSentences: [
+            { english: 'She is wearing a blue dress', hebrew: 'היא לובשת שמלה כחולה' },
+            { english: 'It is cold in winter', hebrew: 'קר בחורף' },
+            { english: 'The sky is sunny today', hebrew: 'השמיים שמשיים היום' },
+            { english: 'I can play basketball', hebrew: 'אני יכולה לשחק כדורסל' },
+            { english: "I can't fly a kite", hebrew: 'אני לא יכולה להעיף עפיפון' },
+            { english: 'There is a cloud in the sky', hebrew: 'יש ענן בשמיים' },
+            { english: 'He is wearing black boots', hebrew: 'הוא נועל מגפיים שחורות' },
+            { english: 'I want ice cream', hebrew: 'אני רוצה גלידה' },
+            { english: 'They play a funny game', hebrew: 'הם משחקים משחק מצחיק' },
+            { english: 'Come to my home', hebrew: 'בואי לבית שלי' },
+            { english: 'She has beautiful eyes', hebrew: 'יש לה עיניים יפות' },
+            { english: 'The store is near the park', hebrew: 'החנות קרובה לפארק' },
+            { english: 'We make a picture', hebrew: 'אנחנו מכינים תמונה' },
+            { english: 'Who is that old man', hebrew: 'מי האיש הזקן הזה' },
+        ],
+
+        trueFalseSentences: [
+            { english: 'A coat is warm', hebrew: 'מעיל הוא חם', answer: true },
+            { english: 'We wear boots in summer', hebrew: 'אנחנו נועלים מגפיים בקיץ', answer: false },
+            { english: 'The sun is cold', hebrew: 'השמש קרה', answer: false },
+            { english: 'Children play in the park', hebrew: 'ילדים משחקים בפארק', answer: true },
+            { english: 'Snow is white', hebrew: 'שלג הוא לבן', answer: true },
+            { english: 'We swim in winter', hebrew: 'אנחנו שוחים בחורף', answer: false },
+            { english: 'Trees are green', hebrew: 'עצים ירוקים', answer: true },
+            { english: 'A dress is a food', hebrew: 'שמלה היא אוכל', answer: false },
+            { english: 'Mother is a person', hebrew: 'אמא היא אדם', answer: true },
+            { english: 'Socks go on your head', hebrew: 'גרביים הולכים על הראש', answer: false },
+            { english: 'Basketball is a game', hebrew: 'כדורסל הוא משחק', answer: true },
+            { english: 'Ice cream is hot', hebrew: 'גלידה חמה', answer: false },
+            { english: 'We have two eyes', hebrew: 'יש לנו שתי עיניים', answer: true },
+            { english: 'A nose is on your foot', hebrew: 'אף נמצא על הרגל', answer: false },
+            { english: 'A store is a place', hebrew: 'חנות היא מקום', answer: true },
+            { english: 'A wall can fly', hebrew: 'קיר יכול לעוף', answer: false },
+        ],
+    },
+};
+
+// Active unit (future: unit selection UI will set this dynamically)
+const ACTIVE_UNIT = UNITS['jet2-unit2'];
+const vocabulary = ACTIVE_UNIT.vocabulary;
+const scrambleSentences = ACTIVE_UNIT.scrambleSentences;
+const trueFalseSentences = ACTIVE_UNIT.trueFalseSentences;
 
 /* ==========================================================================
    STATE MANAGEMENT
@@ -1269,6 +1365,30 @@ function pickRandom(arr, n, exclude) {
     return filtered.slice(0, n);
 }
 
+/** Pick n items from array, prioritizing items not used in the previous session */
+function freshShuffle(arr, n, gameKey) {
+    const storageKey = `ariel_recent_${gameKey}`;
+    const recent = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    const fresh = arr.filter(item => !recent.includes(item.english));
+    const stale = arr.filter(item => recent.includes(item.english));
+    shuffle(fresh);
+    shuffle(stale);
+    const picked = [...fresh, ...stale].slice(0, n);
+    shuffle(picked);
+    localStorage.setItem(storageKey, JSON.stringify(picked.map(item => item.english)));
+    return picked;
+}
+
+/** Shuffle button handler — clears recent history so all questions feel new */
+function shuffleQuestions() {
+    const btn = document.querySelector('.shuffle-btn');
+    btn.classList.add('spinning');
+    setTimeout(() => btn.classList.remove('spinning'), 600);
+    ['game1', 'game2', 'game3', 'game4'].forEach(k =>
+        localStorage.removeItem(`ariel_recent_${k}`)
+    );
+}
+
 /** Save stars to localStorage */
 function saveStars() {
     localStorage.setItem('ariel_stars', state.totalStars.toString());
@@ -1425,7 +1545,7 @@ function startGame(gameNum) {
 function initGame1() {
     document.getElementById('game-title').textContent = 'מה המילה? 🔤';
     state.totalRounds = 10;
-    state.gameData = shuffle([...vocabulary]).slice(0, 10);
+    state.gameData = freshShuffle(vocabulary, 10, 'game1');
     showGame1Round();
 }
 
@@ -1507,7 +1627,7 @@ function checkGame1Answer(btn, selected, correct) {
 function initGame2() {
     document.getElementById('game-title').textContent = 'תרגמי את המשפט 📝';
     state.totalRounds = 6;
-    state.gameData = shuffle([...scrambleSentences]).slice(0, 6);
+    state.gameData = freshShuffle(scrambleSentences, 6, 'game2');
     showGame2Round();
 }
 
@@ -1650,7 +1770,7 @@ function checkGame2Answer() {
 function initGame3() {
     document.getElementById('game-title').textContent = 'האזיני ובחרי 👂';
     state.totalRounds = 10;
-    state.gameData = shuffle([...vocabulary]).slice(0, 10);
+    state.gameData = freshShuffle(vocabulary, 10, 'game3');
     showGame3Round();
 }
 
@@ -1732,7 +1852,7 @@ function checkGame3Answer(btn, selected, correct) {
 function initGame4() {
     document.getElementById('game-title').textContent = 'כן או לא? 🤔';
     state.totalRounds = 8;
-    state.gameData = shuffle([...trueFalseSentences]).slice(0, 8);
+    state.gameData = freshShuffle(trueFalseSentences, 8, 'game4');
     showGame4Round();
 }
 
