@@ -412,22 +412,31 @@ body {
     font-family: var(--font-display);
     font-size: 0.95rem;
     font-weight: 500;
-    color: var(--text-dark);
-    background: rgba(255, 255, 255, 0.75);
-    border: 1.5px solid rgba(236, 72, 153, 0.15);
+    color: #7c3aed;
+    background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+    border: 1.5px solid rgba(124, 58, 237, 0.2);
     border-radius: 20px;
     padding: 6px 14px;
-    transition: all 0.4s ease;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(124, 58, 237, 0.1);
 }
 
 .word-chip-tracker.practiced {
-    background: rgba(164, 184, 148, 0.3);
-    border-color: rgba(164, 184, 148, 0.4);
-    color: var(--text-muted);
+    color: white;
+    background: linear-gradient(135deg, #93c5b8, #7db8a8);
+    border-color: rgba(125, 184, 168, 0.3);
+    box-shadow: 0 2px 8px rgba(125, 184, 168, 0.25);
     text-decoration: line-through;
-    opacity: 0.6;
-    transform: scale(0.93);
+    transform: scale(0.92);
+    animation: chipDone 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes chipDone {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.15) rotate(-3deg); }
+    70% { transform: scale(0.88) rotate(2deg); }
+    100% { transform: scale(0.92) rotate(0deg); }
 }
 
 /* Hide word tracker on small screens */
@@ -1533,7 +1542,7 @@ let state = {
     answering: false,      // prevent double-taps
     scrambleWords: [],      // words placed in drop zone for Game 2
     wordResults: [],        // per-word results for API tracking
-    sessionGames: new Set(),  // games completed this session (1-4)
+    sessionGames: new Set(JSON.parse(localStorage.getItem('ariel_session_games') || '[]')),  // games completed this session (1-4)
     sessionStars: 0,          // stars earned this session
     practicedWords: new Set(), // vocabulary words practiced this session
 };
@@ -1842,6 +1851,11 @@ function goToMenu() {
     updateStarDisplay();
     buildWordTracker();
     loadPracticedWords();
+    // Restore session checkmarks from localStorage
+    state.sessionGames.forEach(gameNum => {
+        const card = document.getElementById(`game-card-${gameNum}`);
+        if (card) card.classList.add('completed');
+    });
     // Re-trigger slide-up animations
     document.querySelectorAll('.game-card').forEach((card, i) => {
         card.style.animation = 'none';
@@ -1893,6 +1907,7 @@ function closeSessionPopup() {
     document.getElementById('session-overlay').classList.remove('active');
     // Reset session for another round
     state.sessionGames = new Set();
+    localStorage.removeItem('ariel_session_games');
     state.sessionStars = 0;
     resetWordTracker();
     // Re-enable all game cards
@@ -2457,6 +2472,7 @@ function finishGame() {
 
     // Track session progress + mark card as completed
     state.sessionGames.add(state.currentGame);
+    localStorage.setItem('ariel_session_games', JSON.stringify([...state.sessionGames]));
     state.sessionStars += state.gameScore;
     markPracticedWords();
     const completedCard = document.getElementById(`game-card-${state.currentGame}`);

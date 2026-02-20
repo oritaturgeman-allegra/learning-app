@@ -12,9 +12,9 @@ A web app that teaches English vocabulary to Hebrew-speaking children through 4 
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v1.6.3   | 02/20 | UX: Word chip makeover — purple/lavender unpracticed, sage green practiced + bounce anim  |
 | v1.6.2   | 02/20 | Feature: Practiced words persist in DB — progress survives page refresh                  |
 | v1.6.1   | 02/20 | UX: Word chips — pill-shaped vocabulary tracker with practiced/unpracticed states         |
-| v1.6.0   | 02/20 | Feature: Word tracker sidebar — see all 55 words, practiced ones get crossed out          |
 | v1.5.1   | 02/20 | UX: Green checkmark badge on completed game cards with pop animation                     |
 | v1.5.0   | 02/20 | Feature: Subject tabs — menu ready for English + future Math support                     |
 | v1.4.2   | 02/20 | UX: Session celebration — fireworks + trophy popup after completing all 4 games           |
