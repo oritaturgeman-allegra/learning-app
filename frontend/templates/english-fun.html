@@ -367,6 +367,86 @@ body {
     animation: tabShake 0.4s ease;
 }
 
+/* Word tracker — fixed sidebar on the left, aligned to game cards */
+.word-tracker {
+    position: fixed;
+    left: var(--space-2xl);
+    width: 460px;
+    overflow: visible;
+    background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%);
+    border-radius: var(--radius-lg);
+    border: 1.5px solid rgba(236, 72, 153, 0.15);
+    box-shadow: 0 4px 20px rgba(236, 72, 153, 0.1);
+    padding: var(--space-lg);
+    z-index: 15;
+    direction: ltr;
+}
+
+.word-tracker-header {
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+    direction: rtl;
+}
+
+.word-tracker-count {
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+    direction: rtl;
+}
+
+.word-tracker-list {
+    column-count: 3;
+    column-gap: var(--space-lg);
+}
+
+.word-item {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    padding: 3px var(--space-xs);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    break-inside: avoid;
+    line-height: 1.5;
+}
+
+.word-item.practiced {
+    text-decoration: line-through;
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+/* Scrollbar styling for word tracker */
+.word-tracker::-webkit-scrollbar {
+    width: 4px;
+}
+
+.word-tracker::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.word-tracker::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 2px;
+}
+
+/* Hide word tracker on small screens */
+@media (max-width: 1100px) {
+    .word-tracker {
+        display: none;
+    }
+}
+
 .menu-subtitle {
     font-family: var(--font-body);
     font-size: clamp(1.1rem, 3.5vw, 1.4rem);
@@ -1234,6 +1314,12 @@ body {
         <button class="subject-tab disabled" onclick="switchSubject('math')">🔢 חשבון <span class="tab-lock">🔒</span></button>
     </div>
 
+    <div class="word-tracker" id="word-tracker">
+        <div class="word-tracker-header">📖 המילים שלי</div>
+        <div class="word-tracker-count" id="word-tracker-count"></div>
+        <div class="word-tracker-list" id="word-tracker-list"></div>
+    </div>
+
     <div class="menu-subtitle">
         🎮 בחרי משחק, אריאל
     </div>
@@ -1459,6 +1545,7 @@ let state = {
     wordResults: [],        // per-word results for API tracking
     sessionGames: new Set(),  // games completed this session (1-4)
     sessionStars: 0,          // stars earned this session
+    practicedWords: new Set(), // vocabulary words practiced this session
 };
 
 /* ==========================================================================
@@ -1763,6 +1850,7 @@ function switchSubject(subject) {
 function goToMenu() {
     showScreen('menu-screen');
     updateStarDisplay();
+    buildWordTracker();
     // Re-trigger slide-up animations
     document.querySelectorAll('.game-card').forEach((card, i) => {
         card.style.animation = 'none';
@@ -1815,6 +1903,7 @@ function closeSessionPopup() {
     // Reset session for another round
     state.sessionGames = new Set();
     state.sessionStars = 0;
+    resetWordTracker();
     // Re-enable all game cards
     for (let i = 1; i <= 4; i++) {
         const card = document.getElementById(`game-card-${i}`);
@@ -1826,6 +1915,107 @@ function closeSessionPopup() {
 function welcomeClick() {
     initAudio(); // First user gesture — unlock AudioContext
     goToMenu();
+}
+
+/* ==========================================================================
+   WORD TRACKER — vocabulary progress sidebar
+   ========================================================================== */
+
+/** Build the word tracker list and align to game cards */
+function buildWordTracker() {
+    const list = document.getElementById('word-tracker-list');
+    const tracker = document.getElementById('word-tracker');
+    if (!list || !tracker) return;
+
+    const sorted = [...vocabulary].sort((a, b) => a.english.localeCompare(b.english));
+    list.innerHTML = sorted.map(w =>
+        `<div class="word-item" data-word="${w.english}">${w.english}</div>`
+    ).join('');
+
+    // Re-apply practiced state
+    document.querySelectorAll('.word-item').forEach(el => {
+        if (state.practicedWords.has(el.dataset.word.toLowerCase())) {
+            el.classList.add('practiced');
+        }
+    });
+
+    updateWordTrackerCount();
+
+    // Align tracker position to game cards after animation settles
+    setTimeout(() => positionWordTracker(), 600);
+}
+
+/** Position word tracker aligned with game cards */
+function positionWordTracker() {
+    const tracker = document.getElementById('word-tracker');
+    const firstCard = document.getElementById('game-card-1');
+    const lastCard = document.getElementById('game-card-4');
+    if (!tracker || !firstCard || !lastCard) return;
+
+    const topY = firstCard.getBoundingClientRect().top;
+    const bottomY = lastCard.getBoundingClientRect().bottom;
+    const height = bottomY - topY;
+
+    tracker.style.top = topY + 'px';
+    // Let height grow naturally to fit all words — remove any forced height
+    tracker.style.height = 'auto';
+    tracker.style.minHeight = height + 'px';
+}
+
+/** Mark words as practiced after a game finishes */
+function markPracticedWords() {
+    const game = state.currentGame;
+    let words = [];
+
+    if (game === 1 || game === 3) {
+        // Games 1 & 3 use vocabulary items directly
+        words = state.gameData.map(item => item.english.toLowerCase());
+    } else if (game === 2) {
+        // Game 2 uses sentences — match words from vocabulary that appear in the sentences
+        const sentenceWords = state.gameData
+            .flatMap(s => s.english.toLowerCase().split(' '));
+        words = vocabulary
+            .filter(v => sentenceWords.includes(v.english.toLowerCase()) ||
+                         v.english.toLowerCase().split(' ').every(part => sentenceWords.includes(part)))
+            .map(v => v.english.toLowerCase());
+    } else if (game === 4) {
+        // Game 4 uses true/false sentences — same approach
+        const sentenceWords = state.gameData
+            .flatMap(s => s.english.toLowerCase().split(' '));
+        words = vocabulary
+            .filter(v => sentenceWords.includes(v.english.toLowerCase()) ||
+                         v.english.toLowerCase().split(' ').every(part => sentenceWords.includes(part)))
+            .map(v => v.english.toLowerCase());
+    }
+
+    // Add to practiced set
+    words.forEach(w => state.practicedWords.add(w));
+
+    // Update UI
+    document.querySelectorAll('.word-item').forEach(el => {
+        if (state.practicedWords.has(el.dataset.word.toLowerCase())) {
+            el.classList.add('practiced');
+        }
+    });
+
+    updateWordTrackerCount();
+}
+
+/** Update the remaining word count display */
+function updateWordTrackerCount() {
+    const countEl = document.getElementById('word-tracker-count');
+    if (!countEl) return;
+    const remaining = vocabulary.length - state.practicedWords.size;
+    countEl.textContent = `${remaining}/${vocabulary.length} נשארו`;
+}
+
+/** Reset word tracker for a new session */
+function resetWordTracker() {
+    state.practicedWords = new Set();
+    document.querySelectorAll('.word-item').forEach(el => {
+        el.classList.remove('practiced');
+    });
+    updateWordTrackerCount();
 }
 
 /* ==========================================================================
@@ -2254,6 +2444,7 @@ function finishGame() {
     // Track session progress + mark card as completed
     state.sessionGames.add(state.currentGame);
     state.sessionStars += state.gameScore;
+    markPracticedWords();
     const completedCard = document.getElementById(`game-card-${state.currentGame}`);
     if (completedCard) completedCard.classList.add('completed');
 
@@ -2294,6 +2485,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Wire welcome button
     document.getElementById('welcome-btn').onclick = welcomeClick;
+
+    // Reposition word tracker on resize
+    window.addEventListener('resize', () => positionWordTracker());
 });
 </script>
 
