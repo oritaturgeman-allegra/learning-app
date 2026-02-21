@@ -32,6 +32,8 @@ Gamified English learning web app for a 9.5-year-old Israeli girl. Teaches vocab
 | GET | `/health` | Health check |
 | POST | `/api/game/result` | Save a game result (score + per-word accuracy) |
 | GET | `/api/game/progress` | Get total stars, accuracy by game, weak words |
+| GET | `/api/game/practiced-words` | Get practiced words since last reset |
+| POST | `/api/game/reset` | Reset practiced words for fresh round (stars preserved) |
 
 ## Conventions
 
@@ -56,6 +58,7 @@ Gamified English learning web app for a 9.5-year-old Israeli girl. Teaches vocab
 ## Gotchas
 
 - **Hebrew:** RTL on container, LTR on English content elements
+- **Hebrew + emoji/punctuation:** In RTL context, put emoji BEFORE Hebrew text in source (`⭐ טקסט` not `טקסט ⭐`), and put `!` AFTER Hebrew text in source (`!יאללה` → wrong, `יאללה!` → correct). The browser renders RTL right-to-left, so source-first = visual-right.
 - **AudioContext:** Requires user gesture to initialize (welcome button handles this)
 - **Web Speech API:** Not available on all browsers — app works without it
 - **Google Fonts:** System font fallbacks if CDN unavailable offline

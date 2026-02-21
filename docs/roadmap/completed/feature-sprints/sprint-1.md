@@ -1,4 +1,4 @@
-# Sprint 1: Feb 20, 2026
+# Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
 Ship **v1.0.0 → v1.6.3** — Build a complete gamified English learning app with 4 mini-games, persistent progress tracking, and a polished kid-friendly UI.
@@ -97,10 +97,19 @@ Purple/lavender unpracticed chips, muted sage green practiced state with bounce 
 
 ---
 
+### 13. Reset Button — Fresh Practice Round (v1.7.0)
+Reset button replaces shuffle — start a new practice round while keeping lifetime stars and game history.
+- New `app_state` table with `reset_at` timestamp for filtering practiced words
+- `POST /api/game/reset` endpoint
+- Confirmation dialog in Hebrew before reset
+- 7 new tests (5 unit + 2 integration, 36 total)
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v1.6.3 (12 releases)
-**Features Completed:** 12 (7 features, 3 UX polish, 1 content expansion, 1 chore)
+**Versions Shipped:** v1.0.0 → v1.7.0 (13 releases)
+**Features Completed:** 13 (8 features, 3 UX polish, 1 content expansion, 1 chore)
 **Test Coverage:** 14 unit tests, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
@@ -114,4 +123,5 @@ Purple/lavender unpracticed chips, muted sage green practiced state with bounce 
 ---
 
 **Sprint Start:** February 20, 2026
-**Sprint End:** February 20, 2026
+**Sprint End:** March 5, 2026
+**Next Sprint Planning:** March 6, 2026

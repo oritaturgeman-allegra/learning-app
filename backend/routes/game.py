@@ -96,7 +96,7 @@ async def get_progress() -> Dict[str, Any]:
 @router.get("/practiced-words")
 async def get_practiced_words() -> Dict[str, Any]:
     """
-    Get all unique vocabulary words ever practiced across all games.
+    Get unique vocabulary words practiced since the last reset.
 
     Returns a sorted list of word strings derived from game result history.
     """
@@ -109,4 +109,24 @@ async def get_practiced_words() -> Dict[str, Any]:
         }
     except GameError as e:
         logger.error(f"Failed to get practiced words: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/reset")
+async def reset_practiced_words() -> Dict[str, Any]:
+    """
+    Reset practiced words for a fresh practice round.
+
+    Sets a reset_at timestamp so only future games count toward
+    the word tracker. Stars and game history are preserved.
+    """
+    try:
+        game_service = get_game_service()
+        reset_at = game_service.reset_practiced_words()
+        return {
+            "success": True,
+            "data": {"reset_at": reset_at},
+        }
+    except GameError as e:
+        logger.error(f"Failed to reset practiced words: {e}")
         raise HTTPException(status_code=500, detail=str(e))

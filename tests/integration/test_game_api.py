@@ -4,9 +4,12 @@ Integration tests for the game API endpoints.
 Tests the full request/response cycle through FastAPI's TestClient.
 """
 
+import time
+
 import pytest
 from fastapi.testclient import TestClient
 
+from backend.models.app_state import AppState
 from backend.models.base import init_db, session_scope
 from backend.models.game_result import GameResult
 from backend.web_app import app
@@ -18,6 +21,7 @@ def clean_db():
     init_db()
     with session_scope() as session:
         session.query(GameResult).delete()
+        session.query(AppState).delete()
     yield
 
 
@@ -247,3 +251,56 @@ class TestFullGameFlow:
         assert len(words) == 10
         assert words[0] == "boots"  # alphabetically first
         assert words[-1] == "winter"  # alphabetically last
+
+
+class TestResetAPI:
+    """Tests for POST /api/game/reset."""
+
+    def test_reset_returns_success(self, client):
+        """Reset endpoint returns success with reset_at timestamp."""
+        response = client.post("/api/game/reset")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["success"] is True
+        assert "reset_at" in data["data"]
+
+    def test_full_reset_flow(self, client):
+        """Play → reset → practiced words empty → play again → new words appear."""
+        # 1. Play a game
+        client.post("/api/game/result", json={
+            "game_type": "word_match",
+            "score": 8,
+            "max_score": 10,
+            "word_results": [
+                {"word": "coat", "correct": True, "category": "clothes"},
+                {"word": "boots", "correct": True, "category": "clothes"},
+            ],
+        })
+        words = client.get("/api/game/practiced-words").json()["data"]["practiced_words"]
+        assert len(words) == 2
+
+        # 2. Reset
+        reset_response = client.post("/api/game/reset")
+        assert reset_response.status_code == 200
+
+        # 3. Practiced words should be empty
+        words = client.get("/api/game/practiced-words").json()["data"]["practiced_words"]
+        assert words == []
+
+        # 4. Stars should be preserved
+        progress = client.get("/api/game/progress").json()["data"]
+        assert progress["total_stars"] == 8
+
+        # 5. Play again — new words appear
+        time.sleep(0.05)
+        client.post("/api/game/result", json={
+            "game_type": "listen_choose",
+            "score": 7,
+            "max_score": 10,
+            "word_results": [
+                {"word": "dress", "correct": True, "category": "clothes"},
+            ],
+        })
+        words = client.get("/api/game/practiced-words").json()["data"]["practiced_words"]
+        assert words == ["dress"]
+        assert "coat" not in words

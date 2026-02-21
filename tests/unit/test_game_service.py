@@ -2,9 +2,12 @@
 Tests for the game service — save results and progress tracking.
 """
 
+import time
+
 import pytest
 
 from backend.exceptions import GameError
+from backend.models.app_state import AppState
 from backend.models.base import init_db, session_scope
 from backend.models.game_result import GameResult
 from backend.services.game_service import GameService
@@ -12,11 +15,12 @@ from backend.services.game_service import GameService
 
 @pytest.fixture
 def game_service():
-    """Create a fresh GameService with clean game_results table."""
+    """Create a fresh GameService with clean tables."""
     init_db()
     # Clean up any leftover data from previous tests
     with session_scope() as session:
         session.query(GameResult).delete()
+        session.query(AppState).delete()
     return GameService()
 
 
@@ -225,3 +229,88 @@ class TestGetPracticedWords:
 
         words = game_service.get_practiced_words()
         assert words == ["autumn", "coat", "summer"]
+
+
+class TestResetPracticedWords:
+    """Tests for GameService.reset_practiced_words()."""
+
+    def test_reset_sets_timestamp(self, game_service):
+        """Reset creates a reset_at entry in app_state."""
+        reset_at = game_service.reset_practiced_words()
+        assert reset_at is not None
+        # Verify it's a valid ISO timestamp
+        from datetime import datetime
+        parsed = datetime.fromisoformat(reset_at)
+        assert parsed is not None
+
+    def test_practiced_words_empty_after_reset(self, game_service):
+        """Words played before reset don't appear in practiced words."""
+        game_service.save_game_result(
+            game_type="word_match",
+            score=8,
+            max_score=10,
+            word_results=[
+                {"word": "coat", "correct": True, "category": "clothes"},
+                {"word": "boots", "correct": False, "category": "clothes"},
+            ],
+        )
+        assert len(game_service.get_practiced_words()) == 2
+
+        game_service.reset_practiced_words()
+
+        words = game_service.get_practiced_words()
+        assert words == []
+
+    def test_stars_unchanged_after_reset(self, game_service):
+        """Total stars from get_progress() stay the same after reset."""
+        game_service.save_game_result(
+            game_type="word_match",
+            score=8,
+            max_score=10,
+            word_results=[],
+        )
+        stars_before = game_service.get_progress()["total_stars"]
+
+        game_service.reset_practiced_words()
+
+        stars_after = game_service.get_progress()["total_stars"]
+        assert stars_after == stars_before == 8
+
+    def test_game_results_preserved_after_reset(self, game_service):
+        """All GameResult records remain in DB after reset."""
+        game_service.save_game_result(
+            game_type="word_match",
+            score=8,
+            max_score=10,
+            word_results=[{"word": "coat", "correct": True, "category": "clothes"}],
+        )
+
+        game_service.reset_practiced_words()
+
+        with session_scope() as session:
+            count = session.query(GameResult).count()
+        assert count == 1
+
+    def test_new_words_after_reset_appear(self, game_service):
+        """Words from games played after reset are returned."""
+        game_service.save_game_result(
+            game_type="word_match",
+            score=5,
+            max_score=10,
+            word_results=[{"word": "coat", "correct": True, "category": "clothes"}],
+        )
+
+        game_service.reset_practiced_words()
+        # Small delay to ensure played_at > reset_at
+        time.sleep(0.05)
+
+        game_service.save_game_result(
+            game_type="listen_choose",
+            score=7,
+            max_score=10,
+            word_results=[{"word": "dress", "correct": True, "category": "clothes"}],
+        )
+
+        words = game_service.get_practiced_words()
+        assert words == ["dress"]
+        assert "coat" not in words

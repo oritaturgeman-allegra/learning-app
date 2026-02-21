@@ -4,12 +4,14 @@ Game service for tracking learning progress and game results.
 
 import json
 import logging
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 
 from backend.exceptions import GameError
+from backend.models.app_state import AppState
 from backend.models.base import init_db, session_scope
 from backend.models.game_result import GameResult
 
@@ -182,11 +184,58 @@ class GameService:
         except SQLAlchemyError as e:
             raise GameError("get_progress", str(e))
 
+    def _get_reset_at(self, session: Any) -> Optional[datetime]:
+        """
+        Get the current reset_at timestamp from app_state.
+
+        Args:
+            session: Active SQLAlchemy session
+
+        Returns:
+            The reset_at datetime, or None if never reset
+        """
+        row = session.query(AppState).filter(AppState.key == "reset_at").first()
+        if row:
+            return datetime.fromisoformat(row.value)
+        return None
+
+    def reset_practiced_words(self) -> str:
+        """
+        Start a fresh practice round by setting reset_at to now.
+
+        Words practiced before this timestamp will no longer appear
+        in get_practiced_words(). Stars and game history are preserved.
+
+        Returns:
+            The reset_at ISO timestamp string
+
+        Raises:
+            GameError: If reset fails
+        """
+        try:
+            with session_scope() as session:
+                now = datetime.now(timezone.utc)
+                now_iso = now.isoformat()
+
+                row = session.query(AppState).filter(AppState.key == "reset_at").first()
+                if row:
+                    row.value = now_iso
+                    row.updated_at = now
+                else:
+                    session.add(AppState(key="reset_at", value=now_iso, updated_at=now))
+
+                logger.info(f"Practice round reset at {now_iso}")
+                return now_iso
+
+        except SQLAlchemyError as e:
+            raise GameError("reset_practiced_words", str(e))
+
     def get_practiced_words(self, user_id: Optional[int] = None) -> List[str]:
         """
-        Get all unique vocabulary words ever practiced across all games.
+        Get unique vocabulary words practiced since the last reset.
 
-        Extracts words from the word_results JSON column of all game results.
+        Extracts words from the word_results JSON column of game results
+        played after the most recent reset_at timestamp.
 
         Args:
             user_id: Optional user ID filter
@@ -196,9 +245,13 @@ class GameService:
         """
         try:
             with session_scope() as session:
+                reset_at = self._get_reset_at(session)
+
                 query = session.query(GameResult.word_results)
                 if user_id is not None:
                     query = query.filter(GameResult.user_id == user_id)
+                if reset_at is not None:
+                    query = query.filter(GameResult.played_at > reset_at)
 
                 rows = query.all()
 

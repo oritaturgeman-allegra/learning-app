@@ -1,4 +1,4 @@
-# Sprint 2: Feb 21 - Mar 5, 2026
+# Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
 **Smart Practice Sessions** — Guarantee full vocabulary coverage in one session + add reset button for fresh practice rounds.
@@ -31,18 +31,18 @@ Learning Completeness — Every session should practice all 55 words, and Ariel 
 - All game history (accuracy trends, weak words)
 
 **Implementation:**
-- [ ] Create `app_state` table with `reset_at` timestamp column
-- [ ] Add `reset_practiced_words()` method to GameService — sets `reset_at` to now
-- [ ] Update `get_practiced_words()` to filter `game_results.played_at > reset_at`
-- [ ] Add `POST /api/game/reset` endpoint
-- [ ] Replace shuffle button with reset button in UI (Hebrew: "התחלה מחדש")
-- [ ] Add confirmation dialog before reset ("?להתחיל מחדש")
-- [ ] Clear session checkmarks (localStorage) on reset
-- [ ] Reload word tracker after reset
-- [ ] Add unit tests for reset behavior
-- [ ] Add test: stars unchanged after reset
-- [ ] Add test: practiced words empty after reset
-- [ ] Add test: old game results still in DB after reset
+- [x] Create `app_state` table with `reset_at` timestamp column
+- [x] Add `reset_practiced_words()` method to GameService — sets `reset_at` to now
+- [x] Update `get_practiced_words()` to filter `game_results.played_at > reset_at`
+- [x] Add `POST /api/game/reset` endpoint
+- [x] Replace shuffle button with reset button in UI (Hebrew: "התחלה מחדש")
+- [x] Add confirmation dialog before reset ("?להתחיל מחדש")
+- [x] Clear session checkmarks (localStorage) on reset
+- [x] Reload word tracker after reset
+- [x] Add unit tests for reset behavior
+- [x] Add test: stars unchanged after reset
+- [x] Add test: practiced words empty after reset
+- [x] Add test: old game results still in DB after reset
 
 **Estimated Effort:** Half day
 
@@ -95,12 +95,13 @@ Learning Completeness — Every session should practice all 55 words, and Ariel 
 ## Success Criteria
 
 Sprint is successful if:
-- [ ] Reset button works — word tracker resets, stars stay, history preserved
+- [x] Reset button works — word tracker resets, stars stay, history preserved
 - [ ] After playing all 4 games, all 55 words are practiced (0 remaining)
 - [ ] Tests pass for both features
 - [ ] Version bumped and README updated
 
 ---
 
-**Sprint Start:** February 21, 2026
+**Sprint Start:** February 20, 2026
 **Sprint End:** March 5, 2026
+**Next Sprint Planning:** March 6, 2026
