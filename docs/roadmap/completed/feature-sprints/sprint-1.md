@@ -221,10 +221,18 @@ Tuned math problem difficulty to kid-friendly ranges and fixed game card jump on
 
 ---
 
+### 27. Home Button Navigation (v2.9.0)
+Home button (🏠) in the sticky header on session picker and game menu screens — navigates back to `/learning` (subject picker).
+- Appears on both English and Math templates
+- Pill-shaped button matching existing header style
+- Not shown on subject picker (already there) or during gameplay (prevents accidental navigation)
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.8.1 (26 releases)
-**Features Completed:** 26 (18 features, 3 UX polish, 1 content expansion, 1 chore, 3 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.9.0 (27 releases)
+**Features Completed:** 27 (19 features, 3 UX polish, 1 content expansion, 1 chore, 3 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

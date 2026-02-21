@@ -269,6 +269,35 @@ body {
     gap: var(--space-md);
 }
 
+.header-left {
+    position: absolute;
+    left: var(--space-lg);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.home-btn {
+    background: none;
+    border: 2px solid rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius-pill);
+    padding: 6px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    height: 38px;
+}
+
+.home-btn:hover {
+    border-color: var(--purple);
+    color: var(--purple);
+}
+
 .session-picker-header {
     text-align: center;
     margin-bottom: var(--space-xl);
@@ -1931,6 +1960,9 @@ body {
      ====================================================================== -->
 <div class="screen {% if initial_screen == 'session-picker' %}active{% endif %}" id="session-picker-screen">
     <div class="app-header">
+        <div class="header-left">
+            <a class="home-btn" href="/learning" title="חזרה לבחירת נושא">🏠</a>
+        </div>
         <div class="header-right">
             <div class="star-counter">
                 <span class="star-icon">⭐</span>
@@ -1969,6 +2001,9 @@ body {
      ====================================================================== -->
 <div class="screen {% if initial_screen == 'menu' %}active{% endif %}" id="menu-screen">
     <div class="app-header">
+        <div class="header-left">
+            <a class="home-btn" href="/learning" title="חזרה לבחירת נושא">🏠</a>
+        </div>
         <div class="header-right">
             <div class="star-counter">
                 <span class="star-icon">⭐</span>
