@@ -1570,6 +1570,12 @@ const UNITS = {
             { english: 'The store is near the park', hebrew: 'החנות קרובה לפארק' },
             { english: 'We make a picture', hebrew: 'אנחנו מכינים תמונה' },
             { english: 'Who is that old man', hebrew: 'מי האיש הזקן הזה' },
+            { english: 'Father has a new shirt', hebrew: 'לאבא יש חולצה חדשה' },
+            { english: 'My pants are too big', hebrew: 'המכנסיים שלי גדולות מדי' },
+            { english: 'I read a book at home', hebrew: 'אני קוראת ספר בבית' },
+            { english: 'They play football in the park', hebrew: 'הם משחקים כדורגל בפארק' },
+            { english: 'Children eat ice cream in spring', hebrew: 'ילדים אוכלים גלידה באביב' },
+            { english: 'I can climb a tree', hebrew: 'אני יכולה לטפס על עץ' },
         ],
 
         trueFalseSentences: [
@@ -1589,6 +1595,12 @@ const UNITS = {
             { english: 'A nose is on your foot', hebrew: 'אף נמצא על הרגל', answer: false },
             { english: 'A store is a place', hebrew: 'חנות היא מקום', answer: true },
             { english: 'A wall can fly', hebrew: 'קיר יכול לעוף', answer: false },
+            { english: 'Shoes go on your feet', hebrew: 'נעליים הולכות על הרגליים', answer: true },
+            { english: 'A mouth is on your hand', hebrew: 'פה נמצא על היד', answer: false },
+            { english: 'You stand on your nose', hebrew: 'עומדים על האף', answer: false },
+            { english: 'We sleep in autumn', hebrew: 'אנחנו ישנים בסתיו', answer: true },
+            { english: 'The pool is good for you', hebrew: 'הבריכה טובה בשבילך', answer: true },
+            { english: 'The game is okay', hebrew: 'המשחק בסדר', answer: true },
         ],
     },
 };
@@ -1615,6 +1627,7 @@ let state = {
     sessionGames: new Set(JSON.parse(localStorage.getItem('ariel_session_games') || '[]')),  // games completed this session (1-4)
     sessionStars: 0,          // stars earned this session
     practicedWords: new Set(), // vocabulary words practiced this session
+    sessionPlan: null,         // planned word/sentence sets for full vocabulary coverage
 };
 
 /* ==========================================================================
@@ -1768,18 +1781,142 @@ function pickRandom(arr, n, exclude) {
     return filtered.slice(0, n);
 }
 
-/** Pick n items from array, prioritizing items not used in the previous session */
-function freshShuffle(arr, n, gameKey) {
-    const storageKey = `ariel_recent_${gameKey}`;
-    const recent = JSON.parse(localStorage.getItem(storageKey) || '[]');
-    const fresh = arr.filter(item => !recent.includes(item.english));
-    const stale = arr.filter(item => recent.includes(item.english));
-    shuffle(fresh);
-    shuffle(stale);
-    const picked = [...fresh, ...stale].slice(0, n);
-    shuffle(picked);
-    localStorage.setItem(storageKey, JSON.stringify(picked.map(item => item.english)));
-    return picked;
+/** Build coverage map: which vocab words appear in which sentences */
+function buildCoverageMap() {
+    const map = new Map();
+    vocabulary.forEach(v => map.set(v.english.toLowerCase(), { g2: [], g4: [] }));
+
+    function matchWords(sentence, gameKey) {
+        const sentenceWords = sentence.english.toLowerCase().split(' ');
+        vocabulary.forEach(v => {
+            const word = v.english.toLowerCase();
+            const matched = sentenceWords.includes(word) ||
+                word.split(' ').every(part => sentenceWords.includes(part));
+            if (matched) {
+                map.get(word)[gameKey].push(sentence);
+            }
+        });
+    }
+
+    scrambleSentences.forEach(s => matchWords(s, 'g2'));
+    trueFalseSentences.forEach(s => matchWords(s, 'g4'));
+    return map;
+}
+
+/** Count how many uncovered words a sentence covers */
+function sentenceCoverage(sentence, uncovered) {
+    const sentenceWords = sentence.english.toLowerCase().split(' ');
+    let count = 0;
+    uncovered.forEach(word => {
+        const matched = sentenceWords.includes(word) ||
+            word.split(' ').every(part => sentenceWords.includes(part));
+        if (matched) count++;
+    });
+    return count;
+}
+
+/** Get vocab words covered by a sentence */
+function getWordsInSentence(sentence) {
+    const sentenceWords = sentence.english.toLowerCase().split(' ');
+    return vocabulary
+        .filter(v => {
+            const word = v.english.toLowerCase();
+            return sentenceWords.includes(word) ||
+                word.split(' ').every(part => sentenceWords.includes(part));
+        })
+        .map(v => v.english.toLowerCase());
+}
+
+/** Plan a session: allocate all 55 words across 4 games for full coverage */
+function planSession() {
+    const uncovered = new Set(vocabulary.map(v => v.english.toLowerCase()));
+
+    // Greedy pick 6 scramble sentences maximizing coverage
+    const g2Available = [...scrambleSentences];
+    const g2Selected = [];
+    for (let i = 0; i < 6; i++) {
+        // Score each available sentence by uncovered words it covers
+        let bestIdx = 0;
+        let bestScore = -1;
+        g2Available.forEach((s, idx) => {
+            const score = sentenceCoverage(s, uncovered);
+            if (score > bestScore) {
+                bestScore = score;
+                bestIdx = idx;
+            }
+        });
+        const picked = g2Available.splice(bestIdx, 1)[0];
+        g2Selected.push(picked);
+        getWordsInSentence(picked).forEach(w => uncovered.delete(w));
+    }
+
+    // Greedy pick 8 true/false sentences maximizing remaining coverage
+    const g4Available = [...trueFalseSentences];
+    const g4Selected = [];
+    for (let i = 0; i < 8; i++) {
+        let bestIdx = 0;
+        let bestScore = -1;
+        g4Available.forEach((s, idx) => {
+            const score = sentenceCoverage(s, uncovered);
+            if (score > bestScore) {
+                bestScore = score;
+                bestIdx = idx;
+            }
+        });
+        const picked = g4Available.splice(bestIdx, 1)[0];
+        g4Selected.push(picked);
+        getWordsInSentence(picked).forEach(w => uncovered.delete(w));
+    }
+
+    // Remaining uncovered words go to Games 1 & 3 as direct vocabulary
+    const remainingVocab = [...uncovered]
+        .map(w => vocabulary.find(v => v.english.toLowerCase() === w))
+        .filter(Boolean);
+    shuffle(remainingVocab);
+
+    // Split evenly between Game 1 and Game 3
+    const half = Math.ceil(remainingVocab.length / 2);
+    const g1Words = remainingVocab.slice(0, half);
+    const g3Words = remainingVocab.slice(half);
+
+    shuffle(g1Words);
+    shuffle(g2Selected);
+    shuffle(g3Words);
+    shuffle(g4Selected);
+
+    const plan = {
+        game1Words: g1Words,
+        game2Sentences: g2Selected,
+        game3Words: g3Words,
+        game4Sentences: g4Selected,
+    };
+
+    validateSessionPlan(plan);
+    state.sessionPlan = plan;
+}
+
+/** Validate that a session plan covers all 55 vocabulary words */
+function validateSessionPlan(plan) {
+    const covered = new Set();
+
+    // Games 1 & 3: direct vocabulary
+    plan.game1Words.forEach(v => covered.add(v.english.toLowerCase()));
+    plan.game3Words.forEach(v => covered.add(v.english.toLowerCase()));
+
+    // Games 2 & 4: extract vocab from sentences
+    [...plan.game2Sentences, ...plan.game4Sentences].forEach(s => {
+        getWordsInSentence(s).forEach(w => covered.add(w));
+    });
+
+    const allWords = vocabulary.map(v => v.english.toLowerCase());
+    const missing = allWords.filter(w => !covered.has(w));
+
+    if (missing.length > 0) {
+        console.warn('Session plan missing words:', missing);
+    } else {
+        console.log('Session plan: all 55 words covered!');
+    }
+    return missing;
 }
 
 /** Show reset confirmation dialog */
@@ -1808,10 +1945,6 @@ async function executeReset() {
     state.sessionGames = new Set();
     localStorage.removeItem('ariel_session_games');
     state.sessionStars = 0;
-    // Clear recent question history
-    ['game1', 'game2', 'game3', 'game4'].forEach(k =>
-        localStorage.removeItem(`ariel_recent_${k}`)
-    );
     // Re-enable all game cards
     for (let i = 1; i <= 4; i++) {
         const card = document.getElementById(`game-card-${i}`);
@@ -1820,6 +1953,9 @@ async function executeReset() {
     // Reset word tracker
     state.practicedWords = new Set();
     buildWordTracker();
+    // Re-plan session for fresh coverage
+    state.sessionPlan = null;
+    planSession();
 
     setTimeout(() => btn.classList.remove('spinning'), 600);
 }
@@ -1953,6 +2089,8 @@ function goToMenu() {
     updateStarDisplay();
     buildWordTracker();
     loadPracticedWords();
+    // Plan session for full vocabulary coverage (only once per session)
+    if (!state.sessionPlan) planSession();
     // Restore session checkmarks from localStorage
     state.sessionGames.forEach(gameNum => {
         const card = document.getElementById(`game-card-${gameNum}`);
@@ -2017,6 +2155,9 @@ function closeSessionPopup() {
         const card = document.getElementById(`game-card-${i}`);
         if (card) card.classList.remove('completed');
     }
+    // Re-plan session for fresh coverage
+    state.sessionPlan = null;
+    planSession();
 }
 
 // Welcome screen: wait for button click
@@ -2177,8 +2318,8 @@ function startGame(gameNum) {
    ========================================================================== */
 function initGame1() {
     document.getElementById('game-title').textContent = 'מה המילה? 🔤';
-    state.totalRounds = 10;
-    state.gameData = freshShuffle(vocabulary, 10, 'game1');
+    state.gameData = shuffle([...state.sessionPlan.game1Words]);
+    state.totalRounds = state.gameData.length;
     showGame1Round();
 }
 
@@ -2260,7 +2401,7 @@ function checkGame1Answer(btn, selected, correct) {
 function initGame2() {
     document.getElementById('game-title').textContent = 'תרגמי את המשפט 📝';
     state.totalRounds = 6;
-    state.gameData = freshShuffle(scrambleSentences, 6, 'game2');
+    state.gameData = shuffle([...state.sessionPlan.game2Sentences]);
     showGame2Round();
 }
 
@@ -2402,8 +2543,8 @@ function checkGame2Answer() {
    ========================================================================== */
 function initGame3() {
     document.getElementById('game-title').textContent = 'האזיני ובחרי 🔊';
-    state.totalRounds = 10;
-    state.gameData = freshShuffle(vocabulary, 10, 'game3');
+    state.gameData = shuffle([...state.sessionPlan.game3Words]);
+    state.totalRounds = state.gameData.length;
     showGame3Round();
 }
 
@@ -2486,7 +2627,7 @@ function checkGame3Answer(btn, selected, correct) {
 function initGame4() {
     document.getElementById('game-title').textContent = 'כן או לא? 🤔';
     state.totalRounds = 8;
-    state.gameData = freshShuffle(trueFalseSentences, 8, 'game4');
+    state.gameData = shuffle([...state.sessionPlan.game4Sentences]);
     showGame4Round();
 }
 
@@ -2569,8 +2710,8 @@ function awardStar(count) {
 }
 
 function finishGame() {
-    const maxScores = { 1: 10, 2: 12, 3: 10, 4: 8 };
-    const max = maxScores[state.currentGame] || 10;
+    const starsPerCorrect = { 1: 1, 2: 2, 3: 1, 4: 1 };
+    const max = state.totalRounds * (starsPerCorrect[state.currentGame] || 1);
 
     // Track session progress + mark card as completed
     state.sessionGames.add(state.currentGame);

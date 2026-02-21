@@ -106,14 +106,23 @@ Reset button replaces shuffle — start a new practice round while keeping lifet
 
 ---
 
+### 14. Full Vocabulary Coverage (v1.8.0)
+Session Word Planner guarantees all 55 words are practiced when all 4 games are completed.
+- Greedy set-cover algorithm allocates words across games on session start
+- 12 new sentences added (6 scramble + 6 T/F) covering 17 previously orphaned words
+- Games 1 & 3 have flexible round counts to absorb remaining uncovered words
+- `freshShuffle()` removed — replaced by `planSession()`, `buildCoverageMap()`, `validateSessionPlan()`
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v1.7.0 (13 releases)
-**Features Completed:** 13 (8 features, 3 UX polish, 1 content expansion, 1 chore)
+**Versions Shipped:** v1.0.0 → v1.8.0 (14 releases)
+**Features Completed:** 14 (9 features, 3 UX polish, 1 content expansion, 1 chore)
 **Test Coverage:** 14 unit tests, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
-- 55 vocabulary words from Jet 2 Unit 2
+- 55 vocabulary words from Jet 2 Unit 2 — full coverage guaranteed per session
 - Persistent progress tracking in SQLite
 - Word tracker sidebar with practiced/unpracticed chip states
 - Session celebration with fireworks after all 4 games
