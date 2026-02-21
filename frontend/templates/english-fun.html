@@ -1948,13 +1948,12 @@ body {
     <div class="session-picker-header session-picker-header-{{ subject|default('english') }}">
         <h1 class="session-picker-title bounce-in">📚 {% if subject == 'math' %}חשבון{% else %}אנגלית{% endif %}</h1>
     </div>
-    <div class="session-cards-list">
+    <div class="session-cards-list session-cards-list-{{ subject|default('english') }}">
         {% for session in sessions|default([]) %}
         <div class="session-card session-card-{{ session.slug }} slide-up" style="animation-delay: {{ 0.1 + loop.index0 * 0.15 }}s" {% if not session.locked %}onclick="selectSession('{{ session.slug }}')"{% endif %}>
             <div class="session-card-emoji">{{ session.emoji }}</div>
             <div class="session-card-info">
-                {% if subject != 'math' %}<div class="session-card-name">{{ session.name }}</div>{% endif %}
-                <div class="session-card-name-he">{{ session.name_he }}</div>
+                {% if subject == 'math' %}<div class="session-card-name-he">{{ session.name_he }}</div>{% else %}<div class="session-card-name">{{ session.name }}</div>{% endif %}
                 <div class="session-card-progress" id="progress-{{ session.slug }}">
                     <span class="session-stars-badge">⭐ <span class="session-star-count">0</span></span>
                 </div>
