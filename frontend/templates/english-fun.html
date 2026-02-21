@@ -1946,7 +1946,7 @@ body {
     </div>
 
     <div class="session-picker-header session-picker-header-{{ subject|default('english') }}">
-        <h1 class="session-picker-title bounce-in">📚 {% if subject == 'math' %}חשבון{% else %}אנגלית{% endif %}</h1>
+        <h1 class="session-picker-title bounce-in">{% if subject == 'math' %}🔢 חשבון{% else %}🇺🇸 אנגלית{% endif %}</h1>
     </div>
     <div class="session-cards-list session-cards-list-{{ subject|default('english') }}">
         {% for session in sessions|default([]) %}
