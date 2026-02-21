@@ -1,94 +1,85 @@
-# Sprint 1: Feb 20 - Mar 5, 2026
+# Sprint 2: Feb 21 - Mar 5, 2026
 
 ## Sprint Goal
-**Production Launch** - Deploy the application to production, then enhance with content discovery features.
+**Smart Practice Sessions** — Guarantee full vocabulary coverage in one session + add reset button for fresh practice rounds.
 
 ## Sprint Theme
-Infrastructure First - Get to production mid-sprint, then ship new features as live updates.
-
----
-
-## Timeline
-
-| Week | Focus | Milestone |
-|------|-------|-----------|
-| **Week 1** (Feb 6-12) | Infrastructure | 🚀 **Production Deploy by Feb 12** |
-| **Week 2** (Feb 13-19) | Features | Ship filtering features to production |
+Learning Completeness — Every session should practice all 55 words, and Ariel can start fresh anytime while keeping her lifetime stars.
 
 ---
 
 ## Tasks
 
-### 🚀 WEEK 1: INFRASTRUCTURE (Feb 6-12)
-
-**Goal:** Deploy to production by end of Week 1
-
----
-
-### 📦 WEEK 2: FEATURES (Feb 13-19)
-
-**Goal:** Ship content discovery features to production
-
----
-
-#### 3. Keyword Filtering 🔍
+### 1. Reset Button — Fresh Practice Round 🔄
 **Priority:** High
-**Why:** Users want to focus on specific topics. First feature shipped to production!
-**Carryover:** No (new feature)
-**Target:** Feb 13-15
+**Why:** After Ariel finishes practicing, she needs a way to start a new round the next day without losing her lifetime stars and history.
+
+**Behavior:**
+- Adds a `reset_at` timestamp (new `app_state` table or column)
+- `get_practiced_words()` only returns words from games played AFTER `reset_at`
+- Word tracker resets to all 55 purple/unpracticed chips
+- Session checkmarks clear (localStorage)
+- Stars keep accumulating (lifetime achievement — never goes down)
+- All game_results stay in DB for historical analysis
+
+**What resets:**
+- Word tracker (all chips back to purple)
+- Session checkmarks (4 unchecked game cards)
+
+**What stays:**
+- Total stars (lifetime)
+- All game history (accuracy trends, weak words)
 
 **Implementation:**
-- [ ] Add search input with chip-based filter UI above news carousel
-- [ ] Implement client-side filtering with 300ms debounce
-- [ ] Support multiple keywords (comma-separated → chips)
-- [ ] Filter applies across articles (US, Israel, AI, Crypto categories)
-- [ ] Highlight matching keywords in article titles/text
-- [ ] Save keywords to localStorage for persistence
-- [ ] Add clear/remove functionality for individual chips
-- [ ] Empty state: "No articles match '[keyword]'"
+- [ ] Create `app_state` table with `reset_at` timestamp column
+- [ ] Add `reset_practiced_words()` method to GameService — sets `reset_at` to now
+- [ ] Update `get_practiced_words()` to filter `game_results.played_at > reset_at`
+- [ ] Add `POST /api/game/reset` endpoint
+- [ ] Replace shuffle button with reset button in UI (Hebrew: "התחלה מחדש")
+- [ ] Add confirmation dialog before reset ("?להתחיל מחדש")
+- [ ] Clear session checkmarks (localStorage) on reset
+- [ ] Reload word tracker after reset
+- [ ] Add unit tests for reset behavior
+- [ ] Add test: stars unchanged after reset
+- [ ] Add test: practiced words empty after reset
+- [ ] Add test: old game results still in DB after reset
 
-**Technical Notes:**
-- Extend existing `renderArticles()` function to filter by keyword
-- Reuse existing `.filter-toggle` + `.topic-chip` CSS patterns
-- `aria-live="polite"` for accessibility
-
-**Estimated Effort:** 2-3 days
+**Estimated Effort:** Half day
 
 ---
 
-#### 4. Source Navigation & Expanded Content 📰
+### 2. Full Vocabulary Coverage in One Session 📚
 **Priority:** High
-**Why:** Current 5-article limit is too restrictive. Users want more content.
-**Carryover:** No (new feature)
-**Target:** Feb 16-19
+**Why:** After completing all 4 games, ALL 55 words should be practiced. Currently games pick random subsets and can overlap, leaving words unpracticed.
+
+**Current problem:**
+- Game 1 (Word Match): picks 10 random words from 55
+- Game 2 (Sentence Scramble): picks 6 random sentences from 14
+- Game 3 (Listen & Choose): picks 10 random words from 55
+- Game 4 (True/False): picks 8 random sentences from 16
+- Games pick independently → words overlap → not all 55 get covered
+
+**Solution — Session Word Planner:**
+- On session start, divide all 55 words across the 4 games
+- Each game gets a guaranteed set of words to cover
+- Games 1 & 3 use words directly (10 + 10 = 20 words)
+- Games 2 & 4 use sentences — each sentence covers multiple vocab words (~15-20 words each)
+- Planner ensures remaining ~15 words are covered by sentence selection in Games 2 & 4
+- May need to add more sentences to ensure full coverage
 
 **Implementation:**
-- [ ] Add source filter chips within each carousel slide header
-- [ ] Populate source list dynamically from `sources_metadata`
-- [ ] Implement client-side filtering by source
-- [ ] Add "Show More" accordion button (show first 5, expand for rest)
-- [ ] Show article count per source: "Yahoo Finance (8)"
-- [ ] "All Sources" selected by default
-- [ ] Save source preferences to localStorage
+- [ ] Audit which vocab words appear in which sentences (Games 2 & 4)
+- [ ] Create coverage map: word → which sentences contain it
+- [ ] Build `planSession()` function that allocates words across games
+- [ ] Update `initGame1()` to use planned word set instead of random pick
+- [ ] Update `initGame2()` to use planned sentence set
+- [ ] Update `initGame3()` to use planned word set
+- [ ] Update `initGame4()` to use planned sentence set
+- [ ] Add more sentences if needed to cover all 55 words
+- [ ] Verify: after all 4 games, word tracker shows 0 remaining
+- [ ] Test with full playthrough
 
-**Backend Change:**
-- [ ] Increase `max_count` in `quality_metrics_service.py` from 5 to 8-10 articles
-
-**Estimated Effort:** 3-4 days
-
----
-
-## Deferred to Backlog
-
-The following Sprint 5 tasks were moved to backlog (not blocking launch):
-- User Analytics & Event Tracking
-- Account Deletion (GDPR)
-- Playwright E2E Tests
-- Data Export (GDPR)
-- Stripe Payment Integration
-- Performance Monitoring
-
-See `docs/roadmap/backlog.md` for details.
+**Estimated Effort:** 1 day
 
 ---
 
@@ -96,57 +87,20 @@ See `docs/roadmap/backlog.md` for details.
 
 | Task | Depends On | Blocks |
 |------|------------|--------|
-| ~~Environment Config~~ | ~~None~~ | ~~Supabase, Deployment~~ ✅ |
-| ~~Supabase Migration~~ | ~~Env Config~~ | ~~Deployment~~ ✅ |
-| ~~Production Deployment~~ | ~~Env Config + Supabase~~ | ~~Week 2 features~~ ✅ |
-| Keyword Filtering | ~~Production~~ ✅ | None |
-| Source Navigation | ~~Production~~ ✅ | None |
-
----
-
-## Risks & Mitigations
-
-| Risk | Impact | Likelihood | Mitigation |
-|------|--------|------------|------------|
-| ~~Supabase migration issues~~ | ~~High~~ | ~~Medium~~ | ~~Completed ✅~~ |
-| ~~Deployment blockers~~ | ~~High~~ | ~~Low~~ | ~~Deployed to Railway ✅~~ |
-| Week 1 delays | Medium | Medium | Features can slip to Sprint 7 if needed |
+| Reset Button | None | None |
+| Full Coverage | None (but easier to test with Reset) | None |
 
 ---
 
 ## Success Criteria
 
 Sprint is successful if:
-- [x] Podcast caching optimization (~97% cost reduction) ✅
-- [x] **Production deployment live** ✅ Railway (v1.51.0)
-- [x] Environment configuration documented with `.env.example` ✅
-- [x] Supabase database operational ✅
-- [x] AI Analytics Service - Daily feed provider analysis + email reports (v1.50.0) ✅
-- [x] CI/CD pipeline working ✅ v1.51.0
-- [ ] Keyword filtering shipped to production
-- [ ] Source filtering shipped to production
-- [x] Test coverage maintained at 60%+ ✅ (68%)
+- [ ] Reset button works — word tracker resets, stars stay, history preserved
+- [ ] After playing all 4 games, all 55 words are practiced (0 remaining)
+- [ ] Tests pass for both features
+- [ ] Version bumped and README updated
 
 ---
 
-## Launch Checklist ✅ (Completed Feb 17)
-
-**Before Deploy:**
-- [x] All env vars configured in hosting platform ✅
-- [x] Supabase database migrated and tested ✅
-- [x] SSL certificate ready ✅ (Railway auto-SSL)
-- [x] Health check endpoint working ✅
-- [x] Persistent volume for `audio_cache/` ✅
-
-**After Deploy:**
-- [x] Verify app loads correctly ✅
-- [x] Test auth flow (Google OAuth) ✅ v1.51.1
-- [x] Test newsletter generation ✅
-- [x] Test podcast generation (verify cache works) ✅ v1.51.2 ffmpeg fix
-- [x] Monitor Sentry for errors ✅ Active and monitored
-
----
-
-**Sprint Start:** February 20, 2026
+**Sprint Start:** February 21, 2026
 **Sprint End:** March 5, 2026
-**Next Sprint Planning:** March 6, 2026
