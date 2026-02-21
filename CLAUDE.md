@@ -29,7 +29,8 @@ Gamified English learning web app for a Gen Alpha Israeli girl (4th grade). Teac
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/` | Serve the landing page |
-| GET | `/learning` | Serve the session picker screen |
+| GET | `/learning` | Serve the subject picker screen |
+| GET | `/learning/{subject}` | Serve the session picker for a subject |
 | GET | `/learning/{subject}/{session_slug}` | Serve the game menu for a session |
 | GET | `/learning/{session_slug}` | Redirect to `/learning/english/{session_slug}` (backward compat) |
 | GET | `/health` | Health check |

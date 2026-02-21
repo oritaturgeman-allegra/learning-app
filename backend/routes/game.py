@@ -34,6 +34,7 @@ class SaveGameResultRequest(BaseModel):
     score: int = Field(..., ge=0)
     max_score: int = Field(..., gt=0)
     word_results: List[WordResult] = Field(default_factory=list)
+    session_slug: Optional[str] = None
 
 
 class ProgressResponse(BaseModel):
@@ -65,6 +66,7 @@ async def save_game_result(request: SaveGameResultRequest) -> Dict[str, Any]:
             score=request.score,
             max_score=request.max_score,
             word_results=[w.model_dump() for w in request.word_results],
+            session_slug=request.session_slug,
         )
         return {
             "success": True,

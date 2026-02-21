@@ -1,7 +1,7 @@
 # Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
-Ship **v1.0.0 → v2.3.0** — Build a complete gamified English learning app with 4 mini-games, persistent progress tracking, and a polished kid-friendly UI.
+Ship **v1.0.0 → v2.5.0** — Build a complete gamified English learning app with 4 mini-games, persistent progress tracking, and a polished kid-friendly UI.
 
 ## Sprint Theme
 Foundation & Polish — Core game engine, vocabulary content, star rewards, word tracker, and visual delight for a Gen Alpha learner.
@@ -167,10 +167,37 @@ Multi-subject URL structure — `/learning/english/jet2-unit2` replaces `/learni
 
 ---
 
+### 21. Subject Picker Screen (v2.4.0)
+New subject picker at `/learning` — choose English or Math before picking a unit. Stepped navigation flow: subject → sessions → game menu.
+- New `subject-picker-screen` with large subject cards (English clickable, Math locked with shake)
+- `/learning` now serves subject picker, `/learning/{subject}` serves session picker
+- Back arrow on session picker to return to subject picker
+- Updated popstate handler for 4-level URL navigation
+
+---
+
+### 22. Math Subject + Subject Tabs Everywhere (v2.5.0)
+Math is now a real subject with its own session picker at `/learning/math`. Subject tabs on session picker and game menu for quick switching.
+- `SESSIONS_BY_SUBJECT` dict in defaults.py — sessions keyed by subject
+- Math session "כפל וחילוק" with locked card (coming soon)
+- Subject tabs on session-picker-screen and menu-screen for quick navigation
+- `switchSubject()` now navigates to `/learning/{subject}` from any screen
+
+---
+
+### 23. Per-Session Star Tracking (v2.6.0)
+Each session card now shows its own star count — stars earned in English stay on English, math stays at zero until math games arrive.
+- `session_slug` column added to GameResult model
+- `stars_by_session` dict in progress API response
+- Frontend sends `session_slug` with every game result save
+- Session picker cards display per-session stars (not global total)
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.3.0 (20 releases)
-**Features Completed:** 20 (13 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.6.0 (23 releases)
+**Features Completed:** 23 (16 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
 **Test Coverage:** 63 tests, 81% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

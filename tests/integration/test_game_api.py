@@ -57,12 +57,25 @@ class TestSaveGameResultAPI:
                 {"word": "coat", "correct": True, "category": "clothes"},
                 {"word": "boots", "correct": False, "category": "clothes"},
             ],
+            "session_slug": "jet2-unit2",
         })
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
         assert data["data"]["game_type"] == "word_match"
         assert data["data"]["score"] == 8
+        assert data["data"]["session_slug"] == "jet2-unit2"
+
+    def test_save_result_without_session_slug(self, client):
+        """session_slug is optional — omitting it still works."""
+        response = client.post("/api/game/result", json={
+            "game_type": "word_match",
+            "score": 5,
+            "max_score": 10,
+            "word_results": [],
+        })
+        assert response.status_code == 200
+        assert response.json()["data"]["session_slug"] is None
 
     def test_save_all_game_types(self, client):
         """All four game types are accepted."""
@@ -114,6 +127,7 @@ class TestProgressAPI:
         assert data["success"] is True
         assert data["data"]["total_stars"] == 0
         assert data["data"]["games_played"] == 0
+        assert data["data"]["stars_by_session"] == {}
 
     def test_progress_after_game(self, client):
         """Progress reflects saved game results."""
@@ -132,6 +146,27 @@ class TestProgressAPI:
         assert data["total_stars"] == 8
         assert data["games_played"] == 1
         assert "word_match" in data["accuracy_by_game"]
+
+    def test_stars_by_session(self, client):
+        """Progress returns per-session star breakdown."""
+        client.post("/api/game/result", json={
+            "game_type": "word_match",
+            "score": 8,
+            "max_score": 10,
+            "word_results": [],
+            "session_slug": "jet2-unit2",
+        })
+        client.post("/api/game/result", json={
+            "game_type": "sentence_scramble",
+            "score": 4,
+            "max_score": 6,
+            "word_results": [],
+            "session_slug": "jet2-unit2",
+        })
+
+        data = client.get("/api/game/progress").json()["data"]
+        assert data["total_stars"] == 12
+        assert data["stars_by_session"]["jet2-unit2"] == 12
 
 
 class TestPracticedWordsAPI:
@@ -315,11 +350,25 @@ class TestPageRoutes:
         assert response.status_code == 200
         assert 'id="welcome-screen"' in response.text
 
-    def test_learning_returns_session_picker(self, client):
-        """GET /learning returns the session picker screen."""
+    def test_learning_returns_subject_picker(self, client):
+        """GET /learning returns the subject picker screen."""
         response = client.get("/learning")
         assert response.status_code == 200
+        assert 'id="subject-picker-screen"' in response.text
+
+    def test_learning_english_returns_session_picker(self, client):
+        """GET /learning/english returns the session picker with English sessions."""
+        response = client.get("/learning/english")
+        assert response.status_code == 200
         assert 'id="session-picker-screen"' in response.text
+        assert "Jet 2: Unit 2" in response.text
+
+    def test_learning_math_returns_session_picker(self, client):
+        """GET /learning/math returns the session picker with math sessions."""
+        response = client.get("/learning/math")
+        assert response.status_code == 200
+        assert 'id="session-picker-screen"' in response.text
+        assert "כפל וחילוק" in response.text
 
     def test_learning_session_returns_menu(self, client):
         """GET /learning/english/jet2-unit2 returns the game menu."""

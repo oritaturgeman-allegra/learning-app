@@ -54,6 +54,7 @@ class GameService:
         max_score: int,
         word_results: List[Dict[str, Any]],
         user_id: Optional[int] = None,
+        session_slug: Optional[str] = None,
     ) -> GameResult:
         """
         Save a completed game result to the database.
@@ -87,6 +88,7 @@ class GameService:
                     max_score=max_score,
                     accuracy=accuracy,
                     word_results=json.dumps(word_results, ensure_ascii=False),
+                    session_slug=session_slug,
                     user_id=user_id,
                 )
                 session.add(result)
@@ -126,6 +128,7 @@ class GameService:
                         "total_stars": 0,
                         "games_played": 0,
                         "accuracy_by_game": {},
+                        "stars_by_session": {},
                         "weak_words": [],
                         "recent_games": [],
                         "earned_rewards": [],
@@ -173,6 +176,12 @@ class GameService:
                             })
                 weak_words.sort(key=lambda w: w["accuracy"])
 
+                # Stars by session slug
+                stars_by_session: Dict[str, int] = {}
+                for r in results:
+                    slug = r.session_slug or "unknown"
+                    stars_by_session[slug] = stars_by_session.get(slug, 0) + r.score
+
                 # Recent games (last 10)
                 recent_games = [r.to_dict() for r in results[:10]]
 
@@ -185,6 +194,7 @@ class GameService:
                     "total_stars": total_stars,
                     "games_played": len(results),
                     "accuracy_by_game": accuracy_by_game,
+                    "stars_by_session": stars_by_session,
                     "weak_words": weak_words[:10],
                     "recent_games": recent_games,
                     "earned_rewards": earned_rewards,

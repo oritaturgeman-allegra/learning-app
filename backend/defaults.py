@@ -5,34 +5,42 @@ Static defaults and constants for Ariel Learning App.
 from typing import Any, Dict, List
 
 # App version (single source of truth)
-APP_VERSION = "2.3.0"
+APP_VERSION = "2.6.0"
 
 # Recent changelog entries (shown in "What's New" popup)
 APP_CHANGELOG: List[Dict[str, str]] = [
     {
-        "version": "2.3.0",
-        "text": "Getting ready for math! New subject-based URLs — English lives at /learning/english/ now",
+        "version": "2.6.0",
+        "text": "הכוכבים שלך לכל נושא! כל יחידה מציגה כמה כוכבים צברת בה",
     },
     {
-        "version": "2.2.0",
-        "text": "Choose your learning session! New session picker screen — pick a unit and jump straight to the games",
+        "version": "2.5.0",
+        "text": "חשבון is here! Switch between English and Math from any screen — Math games coming soon",
     },
     {
-        "version": "2.1.0",
-        "text": "Refresh without losing your place! The game menu now has its own page — no more starting over",
+        "version": "2.4.0",
+        "text": "Pick your subject first! New subject picker screen — choose English or Math then pick your unit",
     },
 ]
 
-# Available learning sessions (units)
-SESSIONS: List[Dict[str, str]] = [
-    {"slug": "jet2-unit2", "name": "Jet 2: Unit 2", "name_he": "ג׳ט 2: יחידה 2", "emoji": "📘"},
-]
+# Available learning sessions (units), keyed by subject
+SESSIONS_BY_SUBJECT: Dict[str, List[Dict[str, Any]]] = {
+    "english": [
+        {"slug": "jet2-unit2", "name": "Jet 2: Unit 2", "name_he": "ג׳ט 2: יחידה 2", "emoji": "📘"},
+    ],
+    "math": [
+        {"slug": "multiply-divide", "name": "Multiply & Divide", "name_he": "כפל וחילוק", "emoji": "✖️", "locked": True},
+    ],
+}
+
+# Flat list of all sessions (for backward compat)
+SESSIONS: List[Dict[str, Any]] = [s for sessions in SESSIONS_BY_SUBJECT.values() for s in sessions]
 
 # Valid session slugs for route validation
 VALID_SESSION_SLUGS: set = {s["slug"] for s in SESSIONS}
 
 # Valid subjects for route validation
-VALID_SUBJECTS: set = {"english"}
+VALID_SUBJECTS: set = set(SESSIONS_BY_SUBJECT.keys())
 
 # Collectible reward tiers — unlocked at star milestones
 REWARD_TIERS: List[Dict[str, Any]] = [

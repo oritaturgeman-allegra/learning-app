@@ -234,6 +234,7 @@ body {
 /* ==========================================================================
    SESSION PICKER
    ========================================================================== */
+#subject-picker-screen,
 #session-picker-screen {
     justify-content: flex-start;
     padding-top: 100px;
@@ -244,6 +245,7 @@ body {
     animation: gradientCycle 8s ease infinite;
 }
 
+#subject-picker-screen .app-header,
 #session-picker-screen .app-header {
     position: fixed;
     top: 0;
@@ -256,6 +258,7 @@ body {
     z-index: 20;
 }
 
+#subject-picker-screen .header-right,
 #session-picker-screen .header-right {
     position: absolute;
     right: var(--space-lg);
@@ -269,6 +272,10 @@ body {
 .session-picker-header {
     text-align: center;
     margin-bottom: var(--space-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
 }
 
 .session-picker-title {
@@ -334,7 +341,7 @@ body {
 
 .session-card-name-he {
     font-family: var(--font-body);
-    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
     color: var(--text-muted);
     margin-bottom: var(--space-sm);
 }
@@ -511,6 +518,58 @@ body {
 
 .subject-tab.shake {
     animation: tabShake 0.4s ease;
+}
+
+/* Subject cards — large clickable cards on the subject picker screen */
+.subject-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    width: 100%;
+    max-width: 400px;
+    padding: 0 var(--space-md);
+}
+
+.subject-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-xl) var(--space-2xl);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    cursor: pointer;
+    min-height: 100px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.12);
+    border: 2px solid transparent;
+    direction: rtl;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.subject-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(168, 85, 247, 0.2);
+    border-color: var(--purple);
+}
+
+.subject-card:active {
+    transform: translateY(-1px);
+}
+
+.subject-card-emoji {
+    font-size: 2.5rem;
+}
+
+.subject-card-name {
+    flex: 1;
+}
+
+.subject-card-lock {
+    font-size: 1.2rem;
+    opacity: 0.6;
 }
 
 /* Word tracker — fixed sidebar on the left, aligned to game cards */
@@ -1838,6 +1897,36 @@ body {
 </div>
 
 <!-- =====================================================================
+     SUBJECT PICKER
+     ====================================================================== -->
+<div class="screen {% if initial_screen == 'subject-picker' %}active{% endif %}" id="subject-picker-screen">
+    <div class="app-header">
+        <div class="header-right">
+            <div class="star-counter">
+                <span class="star-icon">⭐</span>
+                <span id="subject-star-count">0</span>
+            </div>
+            <button class="trophy-btn" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="subject-trophy-count">0/6</span></button>
+        </div>
+    </div>
+
+    <div class="session-picker-header session-picker-header-subjects">
+        <h1 class="session-picker-title bounce-in">📚 מה לומדים היום?</h1>
+    </div>
+
+    <div class="subject-cards-list">
+        <button class="subject-card slide-up" style="animation-delay: 0.1s" onclick="switchSubject('english')">
+            <span class="subject-card-emoji">🇺🇸</span>
+            <span class="subject-card-name">אנגלית</span>
+        </button>
+        <button class="subject-card slide-up" style="animation-delay: 0.25s" onclick="switchSubject('math')">
+            <span class="subject-card-emoji">🔢</span>
+            <span class="subject-card-name">חשבון</span>
+        </button>
+    </div>
+</div>
+
+<!-- =====================================================================
      SESSION PICKER
      ====================================================================== -->
 <div class="screen {% if initial_screen == 'session-picker' %}active{% endif %}" id="session-picker-screen">
@@ -1851,20 +1940,20 @@ body {
         </div>
     </div>
 
-    <div class="subject-tabs" id="subject-tabs">
-        <button class="subject-tab active" onclick="switchSubject('english')">🇺🇸 אנגלית</button>
-        <button class="subject-tab disabled" onclick="switchSubject('math')">🔢 חשבון <span class="tab-lock">🔒</span></button>
+    <div class="subject-tabs">
+        <button class="subject-tab {% if subject == 'english' %}active{% endif %}" onclick="switchSubject('english')">🇺🇸 אנגלית</button>
+        <button class="subject-tab {% if subject == 'math' %}active{% endif %}" onclick="switchSubject('math')">🔢 חשבון</button>
     </div>
 
-    <div class="session-picker-header">
-        <h1 class="session-picker-title bounce-in">📚 מה לומדים היום?</h1>
+    <div class="session-picker-header session-picker-header-{{ subject|default('english') }}">
+        <h1 class="session-picker-title bounce-in">📚 {% if subject == 'math' %}חשבון{% else %}אנגלית{% endif %}</h1>
     </div>
     <div class="session-cards-list">
         {% for session in sessions|default([]) %}
-        <div class="session-card session-card-{{ session.slug }} slide-up" style="animation-delay: {{ 0.1 + loop.index0 * 0.15 }}s" onclick="selectSession('{{ session.slug }}')">
+        <div class="session-card session-card-{{ session.slug }} slide-up" style="animation-delay: {{ 0.1 + loop.index0 * 0.15 }}s" {% if not session.locked %}onclick="selectSession('{{ session.slug }}')"{% endif %}>
             <div class="session-card-emoji">{{ session.emoji }}</div>
             <div class="session-card-info">
-                <div class="session-card-name">{{ session.name }}</div>
+                {% if subject != 'math' %}<div class="session-card-name">{{ session.name }}</div>{% endif %}
                 <div class="session-card-name-he">{{ session.name_he }}</div>
                 <div class="session-card-progress" id="progress-{{ session.slug }}">
                     <span class="session-stars-badge">⭐ <span class="session-star-count">0</span></span>
@@ -1889,6 +1978,11 @@ body {
             <button class="trophy-btn" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="menu-trophy-count">0/6</span></button>
             <button class="reset-btn" onclick="confirmReset()" title="התחלה מחדש">🔄</button>
         </div>
+    </div>
+
+    <div class="subject-tabs">
+        <button class="subject-tab {% if subject == 'english' %}active{% endif %}" onclick="switchSubject('english')">🇺🇸 אנגלית</button>
+        <button class="subject-tab {% if subject == 'math' %}active{% endif %}" onclick="switchSubject('math')">🔢 חשבון</button>
     </div>
 
     <div class="word-tracker" id="word-tracker">
@@ -2229,6 +2323,7 @@ async function saveGameResult(gameType, score, maxScore, wordResults) {
                 score: score,
                 max_score: maxScore,
                 word_results: wordResults,
+                session_slug: SESSION_SLUG || null,
             }),
         });
     } catch (e) {
@@ -2529,6 +2624,7 @@ function saveStars() {
 
 /** Update all star counter displays */
 function updateStarDisplay() {
+    document.getElementById('subject-star-count').textContent = state.totalStars;
     document.getElementById('star-count').textContent = state.totalStars;
     document.getElementById('menu-star-count').textContent = state.totalStars;
     document.getElementById('game-star-count').textContent = state.totalStars;
@@ -2646,7 +2742,7 @@ function saveEarnedRewards(earned) {
 function updateTrophyCount() {
     const earned = getEarnedRewards();
     const text = `${earned.length}/${REWARD_TIERS.length}`;
-    ['trophy-count', 'menu-trophy-count', 'game-trophy-count'].forEach(id => {
+    ['subject-trophy-count', 'trophy-count', 'menu-trophy-count', 'game-trophy-count'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.textContent = text;
     });
@@ -2762,33 +2858,36 @@ window.addEventListener('popstate', () => {
     const parts = path.split('/').filter(Boolean); // e.g. ['learning', 'english', 'jet2-unit2']
     if (parts.length >= 3 && parts[0] === 'learning') {
         showScreen('menu-screen');
-    } else if (path === '/learning') {
+    } else if (parts.length === 2 && parts[0] === 'learning') {
+        // /learning/english — session picker for a subject
         showScreen('session-picker-screen');
         loadSessionPickerProgress();
+    } else if (path === '/learning') {
+        showScreen('subject-picker-screen');
     } else {
         showScreen('welcome-screen');
     }
 });
 
 function switchSubject(subject) {
-    if (subject === 'math') {
-        // Shake the disabled tab as feedback
-        const mathTab = document.querySelector('.subject-tab.disabled');
-        mathTab.classList.remove('shake');
-        mathTab.offsetHeight; // force reflow
-        mathTab.classList.add('shake');
-        return;
-    }
-    // Future: switch active tab + show different game cards
-    document.querySelectorAll('.subject-tab').forEach(t => t.classList.remove('active'));
-    document.querySelector(`[onclick="switchSubject('${subject}')"]`).classList.add('active');
+    // Navigate to the subject's session picker
+    window.location.href = '/learning/' + subject + '/';
 }
 
-/** Navigate to session picker screen */
-function goToSessionPicker() {
-    showScreen('session-picker-screen');
+/** Navigate to subject picker screen */
+function goToSubjectPicker() {
+    showScreen('subject-picker-screen');
     if (window.location.pathname !== '/learning') {
         history.pushState(null, '', '/learning');
+    }
+}
+
+/** Navigate to session picker screen for the current subject */
+function goToSessionPicker() {
+    const subjectPath = '/learning/' + SUBJECT;
+    showScreen('session-picker-screen');
+    if (window.location.pathname !== subjectPath) {
+        history.pushState(null, '', subjectPath);
     }
     loadSessionPickerProgress();
 }
@@ -2800,25 +2899,27 @@ function selectSession(slug) {
     window.location.href = '/learning/' + SUBJECT + '/' + slug;
 }
 
-/** Load star count onto session picker cards */
+/** Load per-session star counts onto session picker cards */
 async function loadSessionPickerProgress() {
     try {
         const res = await fetch(`${API_BASE}/progress`);
         if (res.ok) {
             const data = await res.json();
             if (data.success) {
-                const stars = data.data.total_stars;
-                document.querySelectorAll('.session-star-count').forEach(el => {
-                    el.textContent = stars;
+                const starsBySession = data.data.stars_by_session || {};
+                document.querySelectorAll('.session-card').forEach(card => {
+                    const slugMatch = card.className.match(/session-card-(\S+)/);
+                    if (slugMatch) {
+                        const slug = slugMatch[1];
+                        const count = starsBySession[slug] || 0;
+                        const el = card.querySelector('.session-star-count');
+                        if (el) el.textContent = count;
+                    }
                 });
             }
         }
     } catch (e) {
-        // API unavailable — show localStorage fallback
-        const stars = localStorage.getItem('ariel_stars') || '0';
-        document.querySelectorAll('.session-star-count').forEach(el => {
-            el.textContent = stars;
-        });
+        // API unavailable — leave at 0
     }
 }
 
@@ -2894,7 +2995,7 @@ function closeSessionPopup() {
 // Welcome screen: wait for button click
 function welcomeClick() {
     initAudio(); // First user gesture — unlock AudioContext
-    goToSessionPicker();
+    goToSubjectPicker();
 }
 
 /* ==========================================================================
@@ -3508,7 +3609,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // If loaded on /learning (session picker), show star progress
+    // If loaded on /learning/{subject} (session picker), show star progress
     if (document.getElementById('session-picker-screen').classList.contains('active')) {
         loadSessionPickerProgress();
     }

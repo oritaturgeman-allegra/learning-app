@@ -17,6 +17,7 @@ from backend.defaults import (
     APP_VERSION,
     REWARD_TIERS,
     SESSIONS,
+    SESSIONS_BY_SUBJECT,
     VALID_SESSION_SLUGS,
     VALID_SUBJECTS,
 )
@@ -124,7 +125,7 @@ async def index(request: Request) -> HTMLResponse:
 
 @app.get("/learning", response_class=HTMLResponse)
 async def learning(request: Request) -> HTMLResponse:
-    """Serve the session picker screen."""
+    """Serve the subject picker screen."""
     return templates.TemplateResponse(
         "english-fun.html",
         {
@@ -132,7 +133,7 @@ async def learning(request: Request) -> HTMLResponse:
             "version": APP_VERSION,
             "reward_tiers": REWARD_TIERS,
             "sessions": SESSIONS,
-            "initial_screen": "session-picker",
+            "initial_screen": "subject-picker",
         },
     )
 
@@ -158,11 +159,23 @@ async def learning_session(request: Request, subject: str, session_slug: str) ->
     )
 
 
-@app.get("/learning/{session_slug}")
-async def learning_session_redirect(request: Request, session_slug: str) -> RedirectResponse:
-    """Redirect old URLs to new subject-scoped URLs for backward compatibility."""
-    if session_slug in VALID_SESSION_SLUGS:
-        return RedirectResponse(url=f"/learning/english/{session_slug}", status_code=301)
+@app.get("/learning/{subject_or_slug}", response_class=HTMLResponse)
+async def learning_subject_or_redirect(request: Request, subject_or_slug: str) -> HTMLResponse:
+    """Serve session picker for a subject, or redirect old session slug URLs."""
+    if subject_or_slug in VALID_SUBJECTS:
+        return templates.TemplateResponse(
+            "english-fun.html",
+            {
+                "request": request,
+                "version": APP_VERSION,
+                "reward_tiers": REWARD_TIERS,
+                "sessions": SESSIONS_BY_SUBJECT.get(subject_or_slug, []),
+                "subject": subject_or_slug,
+                "initial_screen": "session-picker",
+            },
+        )
+    if subject_or_slug in VALID_SESSION_SLUGS:
+        return RedirectResponse(url=f"/learning/english/{subject_or_slug}", status_code=301)
     raise HTTPException(status_code=404, detail="Not found")
 
 

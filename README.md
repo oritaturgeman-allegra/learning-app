@@ -12,12 +12,12 @@ A web app that teaches English vocabulary to Hebrew-speaking children through 4 
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v2.5.0   | 02/21 | Feature: Math subject + subject tabs on all screens — switch between English and Math     |
+| v2.4.0   | 02/21 | Feature: Subject picker screen — choose English or Math before picking a unit              |
 | v2.3.0   | 02/21 | Feature: Subject-based URL routing — `/learning/english/jet2-unit2` prepares for math     |
 | v2.2.0   | 02/21 | Feature: Session picker screen — choose a learning unit before jumping into games         |
 | v2.1.0   | 02/21 | Feature: URL routing — `/learning` page persists on refresh, no more losing your place   |
 | v2.0.0   | 02/21 | Fix: Word tracker now tracks all vocab from sentences — no missing words after refresh    |
-| v1.9.1   | 02/21 | Fix: Reward card popup — simpler reveal animation, auto-dismiss after 5s                  |
-| v1.9.0   | 02/21 | Feature: Collectible reward cards — 6 cards to unlock at star milestones + gallery        |
 
 ---
 
