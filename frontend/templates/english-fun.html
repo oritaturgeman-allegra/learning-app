@@ -1800,7 +1800,7 @@ body {
         <div class="session-subtitle">!סיימת את כל 4 המשחקים</div>
         <div class="session-score" id="session-score">0 ⭐</div>
         <div class="session-score-label">כוכבים באימון הזה</div>
-        <button class="session-close-btn" onclick="closeSessionPopup()">🌟 יאללה, עוד פעם</button>
+        <button class="session-close-btn" onclick="closeSessionPopup()">🌟 יאללה!</button>
     </div>
 </div>
 
@@ -2645,19 +2645,8 @@ function spawnFireworks() {
 
 function closeSessionPopup() {
     document.getElementById('session-overlay').classList.remove('active');
-    // Reset session for another round
-    state.sessionGames = new Set();
-    localStorage.removeItem('ariel_session_games');
-    state.sessionStars = 0;
-    resetWordTracker();
-    // Re-enable all game cards
-    for (let i = 1; i <= 4; i++) {
-        const card = document.getElementById(`game-card-${i}`);
-        if (card) card.classList.remove('completed');
-    }
-    // Re-plan session for fresh coverage
-    state.sessionPlan = null;
-    planSession();
+    // Just go back to menu — user can manually reset via 🔄 when ready
+    goToMenu();
 }
 
 // Welcome screen: wait for button click
@@ -3023,11 +3012,13 @@ function checkGame2Answer() {
         feedback.innerHTML = `<div class="correct-sentence">❌ התשובה הנכונה: ${sentence.english}</div>`;
     }
 
-    // Track sentence result
-    state.wordResults.push({
-        word: sentence.english,
-        correct: isCorrect,
-        category: 'sentence',
+    // Track individual vocabulary words from this sentence
+    getWordsInSentence(sentence).forEach(w => {
+        state.wordResults.push({
+            word: w,
+            correct: isCorrect,
+            category: 'sentence',
+        });
     });
 
     speak(sentence.english);
@@ -3183,13 +3174,17 @@ function checkGame4Answer(btn, selected, correct) {
         });
     }
 
-    // Track sentence result
+    // Track individual vocabulary words from this sentence
     const item4 = state.gameData[state.currentRound];
-    state.wordResults.push({
-        word: item4 ? item4.english : '',
-        correct: selected === correct,
-        category: 'true_false',
-    });
+    if (item4) {
+        getWordsInSentence(item4).forEach(w => {
+            state.wordResults.push({
+                word: w,
+                correct: selected === correct,
+                category: 'true_false',
+            });
+        });
+    }
 
     state.currentRound++;
 

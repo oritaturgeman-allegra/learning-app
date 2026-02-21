@@ -5,10 +5,14 @@ Static defaults and constants for Ariel's English Adventure.
 from typing import Any, Dict, List
 
 # App version (single source of truth)
-APP_VERSION = "1.9.1"
+APP_VERSION = "2.0.0"
 
 # Recent changelog entries (shown in "What's New" popup)
 APP_CHANGELOG: List[Dict[str, str]] = [
+    {
+        "version": "2.0.0",
+        "text": "Word tracker now remembers ALL your words — even from sentences! No more missing words after refresh",
+    },
     {
         "version": "1.9.0",
         "text": "Collect reward cards as you earn stars! 6 cards to unlock — tap the trophy to see your collection",
@@ -16,10 +20,6 @@ APP_CHANGELOG: List[Dict[str, str]] = [
     {
         "version": "1.8.0",
         "text": "Every word counts! Play all 4 games and practice ALL 55 words — no more gaps!",
-    },
-    {
-        "version": "1.7.0",
-        "text": "Fresh start button — reset your word tracker for a new practice round, your stars stay forever!",
     },
 ]
 

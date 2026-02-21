@@ -133,10 +133,17 @@ Replaced broken 3D card flip with reliable bounce-reveal animation.
 
 ---
 
+### 17. Word Tracker Coverage Fix (v2.0.0)
+Games 2 & 4 now save individual vocabulary words (not sentences) to the backend, so the word tracker correctly persists all practiced words across page refresh.
+- `checkGame2Answer()` and `checkGame4Answer()` extract vocab via `getWordsInSentence()`
+- Session popup "close" button no longer triggers a reset — just returns to menu
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v1.9.1 (16 releases)
-**Features Completed:** 16 (10 features, 3 UX polish, 1 content expansion, 1 chore, 1 bug fix)
+**Versions Shipped:** v1.0.0 → v2.0.0 (17 releases)
+**Features Completed:** 17 (10 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
 **Test Coverage:** 59 tests, 81% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
