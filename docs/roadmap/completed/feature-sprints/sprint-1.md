@@ -194,10 +194,18 @@ Each session card now shows its own star count — stars earned in English stay 
 
 ---
 
+### 24. Math Session Cards (v2.7.0)
+4 chapter-based math session cards replacing the single locked "כפל וחילוק" card, matching Ariel's 4th-grade textbook syllabus.
+- Tens & Hundreds (unlocked), Two-Digit Multiply, Long Division, Primes & Divisibility (locked)
+- Each chapter maps to textbook פרקים א׳–ד׳
+- 2 new integration tests (29 total)
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.6.0 (23 releases)
-**Features Completed:** 23 (16 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.7.0 (24 releases)
+**Features Completed:** 24 (17 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
 **Test Coverage:** 63 tests, 81% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

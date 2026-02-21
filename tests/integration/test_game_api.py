@@ -364,17 +364,32 @@ class TestPageRoutes:
         assert "Jet 2: Unit 2" in response.text
 
     def test_learning_math_returns_session_picker(self, client):
-        """GET /learning/math returns the session picker with math sessions."""
+        """GET /learning/math returns the session picker with 4 chapter cards."""
         response = client.get("/learning/math")
         assert response.status_code == 200
         assert 'id="session-picker-screen"' in response.text
-        assert "כפל וחילוק" in response.text
+        assert "כפל וחילוק בעשרות ובמאות" in response.text
+        assert "כפל דו-ספרתי" in response.text
+        assert "חילוק ארוך" in response.text
+        assert "מספרים ראשוניים" in response.text
 
     def test_learning_session_returns_menu(self, client):
         """GET /learning/english/jet2-unit2 returns the game menu."""
         response = client.get("/learning/english/jet2-unit2")
         assert response.status_code == 200
         assert 'id="menu-screen"' in response.text
+
+    def test_math_session_returns_menu(self, client):
+        """GET /learning/math/math-tens-hundreds returns the game menu."""
+        response = client.get("/learning/math/math-tens-hundreds")
+        assert response.status_code == 200
+        assert 'id="menu-screen"' in response.text
+
+    def test_math_locked_session_is_valid_slug(self, client):
+        """Locked math sessions have valid slugs (return 200, not 404)."""
+        for slug in ["math-two-digit", "math-long-division", "math-primes"]:
+            response = client.get(f"/learning/math/{slug}")
+            assert response.status_code == 200
 
     def test_learning_invalid_subject_returns_404(self, client):
         """GET /learning/invalid-subject/jet2-unit2 returns 404."""

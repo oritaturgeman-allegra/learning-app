@@ -5,10 +5,14 @@ Static defaults and constants for Ariel Learning App.
 from typing import Any, Dict, List
 
 # App version (single source of truth)
-APP_VERSION = "2.6.0"
+APP_VERSION = "2.7.0"
 
 # Recent changelog entries (shown in "What's New" popup)
 APP_CHANGELOG: List[Dict[str, str]] = [
+    {
+        "version": "2.7.0",
+        "text": "4 נושאי חשבון חדשים! כפל וחילוק בעשרות, כפל דו-ספרתי, חילוק ארוך ומספרים ראשוניים",
+    },
     {
         "version": "2.6.0",
         "text": "הכוכבים שלך לכל נושא! כל יחידה מציגה כמה כוכבים צברת בה",
@@ -16,10 +20,6 @@ APP_CHANGELOG: List[Dict[str, str]] = [
     {
         "version": "2.5.0",
         "text": "חשבון is here! Switch between English and Math from any screen — Math games coming soon",
-    },
-    {
-        "version": "2.4.0",
-        "text": "Pick your subject first! New subject picker screen — choose English or Math then pick your unit",
     },
 ]
 
@@ -29,7 +29,10 @@ SESSIONS_BY_SUBJECT: Dict[str, List[Dict[str, Any]]] = {
         {"slug": "jet2-unit2", "name": "Jet 2: Unit 2", "name_he": "ג׳ט 2: יחידה 2", "emoji": "📘"},
     ],
     "math": [
-        {"slug": "multiply-divide", "name": "Multiply & Divide", "name_he": "כפל וחילוק", "emoji": "✖️", "locked": True},
+        {"slug": "math-tens-hundreds", "name": "Tens & Hundreds", "name_he": "כפל וחילוק בעשרות ובמאות", "emoji": "🔟"},
+        {"slug": "math-two-digit", "name": "Two-Digit Multiply", "name_he": "כפל דו-ספרתי", "emoji": "✖️", "locked": True},
+        {"slug": "math-long-division", "name": "Long Division", "name_he": "חילוק ארוך", "emoji": "➗", "locked": True},
+        {"slug": "math-primes", "name": "Primes & Divisibility", "name_he": "מספרים ראשוניים", "emoji": "🔢", "locked": True},
     ],
 }
 

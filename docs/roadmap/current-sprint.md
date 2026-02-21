@@ -1,47 +1,140 @@
 # Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
-**Smart Practice Sessions** — Guarantee full vocabulary coverage in one session + add reset button for fresh practice rounds.
+**Math Section Launch** — Build the math game engine and ship Chapter A (כפל וחילוק בעשרות ובמאות) as the first playable math session.
 
 ## Sprint Theme
-Learning Completeness — Every session should practice all 55 words, and Ariel can start fresh anytime while keeping her lifetime stars.
+Subject Expansion — Transform the app from English-only to a multi-subject learning platform with math games tailored to Ariel's 4th-grade syllabus.
 
 ---
 
-## Tasks
+## Math Section Architecture
 
-### 1. Full Vocabulary Coverage in One Session 📚
-**Priority:** High
-**Why:** After completing all 4 games, ALL 55 words should be practiced. Currently games pick random subsets and can overlap, leaving words unpracticed.
+### Session Cards (4 chapters → 4 session cards under Math)
 
-**Current problem:**
-- Game 1 (Word Match): picks 10 random words from 55
-- Game 2 (Sentence Scramble): picks 6 random sentences from 14
-- Game 3 (Listen & Choose): picks 10 random words from 55
-- Game 4 (True/False): picks 8 random sentences from 16
-- Games pick independently → words overlap → not all 55 get covered
+Based on Ariel's math textbook table of contents:
 
-**Solution — Session Word Planner:**
-- On session start, divide all 55 words across the 4 games
-- Each game gets a guaranteed set of words to cover
-- Games 1 & 3 use words directly (10 + 10 = 20 words)
-- Games 2 & 4 use sentences — each sentence covers multiple vocab words (~15-20 words each)
-- Planner ensures remaining ~15 words are covered by sentence selection in Games 2 & 4
-- May need to add more sentences to ensure full coverage
+| # | Session Card | Hebrew Name | Slug | Topics Covered |
+|---|-------------|-------------|------|----------------|
+| 1 | **Tens & Hundreds** | כפל וחילוק בעשרות ובמאות | `math-tens-hundreds` | ×10/100/1000, ÷ by single digit, order of operations, properties of 0 and 1 |
+| 2 | **Two-Digit Multiply** | כפל דו-ספרתי | `math-two-digit` | Multiply by 2-digit numbers, vertical multiplication, powers |
+| 3 | **Long Division** | חילוק ארוך | `math-long-division` | Division by single digit, long division |
+| 4 | **Primes & Divisibility** | מספרים ראשוניים | `math-primes` | Divisibility rules (3, 6, 9), prime/composite numbers, prime factorization |
 
-**Implementation:**
-- [x] Audit which vocab words appear in which sentences (Games 2 & 4)
-- [x] Create coverage map: word → which sentences contain it
-- [x] Build `planSession()` function that allocates words across games
-- [x] Update `initGame1()` to use planned word set instead of random pick
-- [x] Update `initGame2()` to use planned sentence set
-- [x] Update `initGame3()` to use planned word set
-- [x] Update `initGame4()` to use planned sentence set
-- [x] Add more sentences if needed to cover all 55 words (added 12: 6 scramble + 6 T/F)
-- [ ] Verify: after all 4 games, word tracker shows 0 remaining
-- [ ] Test with full playthrough
+**Build order:** Card 1 first (foundational) → unlock cards 2-4 progressively.
+Cards 2-4 launch as locked (coming soon) like the old multiply-divide card.
 
-**Estimated Effort:** 1 day
+### 4 Math Game Types (per session)
+
+Each session card has 4 mini-games, same pattern as English:
+
+| # | Game | Hebrew Name | How It Works | Stars |
+|---|------|-------------|-------------|-------|
+| 1 | **Quick Solve** | פתרי מהר! | Multiple choice — equation + 4 answers, pick the right one | 1/correct, 10 rounds |
+| 2 | **Missing Number** | !מצאי את המספר | Fill-in-the-blank — equation with `_`, pick the missing number | 1/correct, 8 rounds |
+| 3 | **True or False** | ?נכון או לא | Verify — complete equation shown, is it correct? | 1/correct, 10 rounds |
+| 4 | **Bubble Pop** | !פוצצי בועות | Pop bubbles — target number shown, pop expressions that equal it | 1/bubble, 8 rounds |
+
+### Key Design Decisions
+
+**Problem generation:** Math problems are generated algorithmically per session (not a static word bank like English). Each session has a `generateProblem(type, difficulty)` function.
+
+**Israeli math notation:**
+- Multiplication: `×` (not `*`)
+- Division: `:` (not `/`) — Israeli standard (e.g., `42 : 6 = 7`)
+- Parentheses for order of operations: `(4 + 5) × 3`
+
+**Difficulty within a session:** Problems get progressively harder within each game (easier facts first, harder ones later in the round). No explicit difficulty picker — adaptive based on the session's topic scope.
+
+**Progress tracking:** Same `game_results` table with `session_slug`. Each math session card tracks its own stars. `word_results` repurposed as `problem_results`: `{word: "30×4", correct: true, category: "multiply_tens"}`.
+
+**No word tracker for math:** Replace with a "topics mastered" or "accuracy by category" display in the future. Not in Sprint 2.
+
+### Template Architecture
+
+Math games need a **separate template** (`math-fun.html`) or a **shared game engine** in the existing template with subject-conditional rendering. Decision: **separate template** — math game UI is fundamentally different (no word tracker, different game screens, algorithmic problems vs static vocabulary).
+
+---
+
+## Sprint 1 Tasks
+
+### 1. Math Architecture Setup
+**Priority:** High | **Effort:** Small
+
+- [x] Replace single `multiply-divide` session with 4 chapter-based sessions in `defaults.py`
+- [x] Cards 2-4 marked as `locked: True`
+- [x] Card 1 (`math-tens-hundreds`) is unlocked and clickable
+- [x] Update `VALID_SESSION_SLUGS` to include new slugs
+- [x] Session picker at `/learning/math` shows all 4 cards
+
+### 2. Math Template + Game Engine
+**Priority:** High | **Effort:** Large
+
+- [ ] Create `frontend/templates/math-fun.html` (or extend existing template with math mode)
+- [ ] Math game menu screen with 4 game cards (Quick Solve, Missing Number, T/F, Bubble Pop)
+- [ ] Shared header (stars + trophy) consistent with English template
+- [ ] Subject tabs for switching between English and Math
+- [ ] Route `/learning/math/math-tens-hundreds` serves the math template
+
+### 3. Problem Generator — Chapter A
+**Priority:** High | **Effort:** Medium
+
+- [ ] `generateProblem()` function for Chapter A topics:
+  - Multiply by 10, 100, 1,000 (e.g., `7 × 100 = ?`)
+  - Multiply by whole tens/hundreds (e.g., `30 × 4 = ?`, `200 × 5 = ?`)
+  - Divide by single digit (e.g., `450 : 9 = ?`)
+  - Divide by 10, 100, 1,000 (e.g., `3000 : 100 = ?`)
+  - Connection multiply↔divide (e.g., `If 6 × 8 = 48, then 48 : 6 = ?`)
+  - Order of operations (e.g., `3 + 4 × 5 = ?`, `(3 + 4) × 5 = ?`)
+  - Properties of 0 and 1 (e.g., `0 × 847 = ?`, `1 × 56 = ?`)
+- [ ] Distractor generator (near-miss wrong answers for multiple choice)
+- [ ] Round planner — mix of topic categories per game session
+
+### 4. Game 1 — Quick Solve (פתרי מהר!)
+**Priority:** High | **Effort:** Medium
+
+- [ ] Game screen: equation display + 4 answer buttons
+- [ ] 10 rounds, 1 star per correct answer
+- [ ] Correct/wrong animations + sound feedback (reuse existing)
+- [ ] Save result to API with `session_slug: "math-tens-hundreds"`
+- [ ] Hebrew game card on menu: פתרי מהר! with ⚡ emoji
+
+### 5. Game 2 — Missing Number (מצאי את המספר!)
+**Priority:** High | **Effort:** Medium
+
+- [ ] Game screen: equation with blank `_` + number pad (4-6 options)
+- [ ] 8 rounds, 1 star per correct answer
+- [ ] Blank position varies: missing product, missing factor, missing divisor
+- [ ] Show complete equation after answering for reinforcement
+- [ ] Hebrew game card on menu
+
+### 6. Game 3 — True or False (נכון או לא?)
+**Priority:** High | **Effort:** Small
+
+- [ ] Game screen: complete equation + two buttons (נכון / לא נכון)
+- [ ] 10 rounds, 1 star per correct judgment
+- [ ] ~50% true, ~50% false with near-miss errors
+- [ ] If wrong: briefly show the correct answer
+- [ ] Hebrew game card on menu
+
+### 7. Game 4 — Bubble Pop (פוצצי בועות!)
+**Priority:** Medium | **Effort:** Large
+
+- [ ] Game screen: target number at top + 6 floating bubbles with expressions
+- [ ] 8 rounds, 1 star per correct bubble popped
+- [ ] 2-3 correct bubbles per round, 3-4 wrong ones
+- [ ] CSS floating animation for bubbles
+- [ ] Pop animation on tap/click
+- [ ] Hebrew game card on menu
+
+### 8. Integration + Polish
+**Priority:** High | **Effort:** Medium
+
+- [ ] Backend: math sessions save/load progress correctly
+- [ ] Per-session stars work for math cards
+- [ ] Session celebration after completing all 4 math games
+- [ ] Tests for math game result saving
+- [ ] Version bump + changelog + README
 
 ---
 
@@ -49,20 +142,29 @@ Learning Completeness — Every session should practice all 55 words, and Ariel 
 
 | Task | Depends On | Blocks |
 |------|------------|--------|
-| Full Coverage | None | None |
+| Math Architecture Setup | None | All other tasks |
+| Math Template | Architecture Setup | Games 1-4 |
+| Problem Generator | Architecture Setup | Games 1-4 |
+| Game 1 (Quick Solve) | Template + Generator | Integration |
+| Game 2 (Missing Number) | Template + Generator | Integration |
+| Game 3 (True or False) | Template + Generator | Integration |
+| Game 4 (Bubble Pop) | Template + Generator | Integration |
+| Integration + Polish | Games 1-4 | None |
 
 ---
 
 ## Success Criteria
 
 Sprint is successful if:
-- [x] Reset button works — word tracker resets, stars stay, history preserved
-- [ ] After playing all 4 games, all 55 words are practiced (0 remaining)
-- [x] Tests pass for both features (54 tests, 81% coverage)
-- [x] Version bumped and README updated (v1.8.0)
+- [ ] `/learning/math` shows 4 session cards (1 playable, 3 locked)
+- [ ] `/learning/math/math-tens-hundreds` opens math game menu with 4 games
+- [ ] All 4 math games are playable with Chapter A content
+- [ ] Stars earned in math show on the math session card (not on English)
+- [ ] Problems use Israeli notation (× and :)
+- [ ] Tests pass for math game saving/progress
+- [ ] Version bumped and docs updated
 
 ---
 
 **Sprint Start:** February 20, 2026
 **Sprint End:** March 5, 2026
-**Next Sprint Planning:** March 6, 2026
