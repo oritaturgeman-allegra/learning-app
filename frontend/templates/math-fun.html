@@ -1179,28 +1179,28 @@ body {
     </div>
 
     <div class="game-cards">
-        <div class="game-card game-card-quick-solve slide-up" id="game-card-1" style="animation-delay: 0.1s" onclick="startGame(1)">
+        <div class="game-card game-card-quick-solve" id="game-card-1" onclick="startGame(1)">
             <div class="card-emoji">⚡</div>
             <div class="card-text">
                 <div class="card-title">פתרי מהר!</div>
                 <div class="card-desc">בחרי את התשובה הנכונה</div>
             </div>
         </div>
-        <div class="game-card game-card-missing-number slide-up" id="game-card-2" style="animation-delay: 0.2s" onclick="startGame(2)">
+        <div class="game-card game-card-missing-number" id="game-card-2" onclick="startGame(2)">
             <div class="card-emoji">🔍</div>
             <div class="card-text">
                 <div class="card-title">מצאי את המספר!</div>
                 <div class="card-desc">מהו המספר החסר בתרגיל?</div>
             </div>
         </div>
-        <div class="game-card game-card-true-false-math slide-up" id="game-card-3" style="animation-delay: 0.3s" onclick="startGame(3)">
+        <div class="game-card game-card-true-false-math" id="game-card-3" onclick="startGame(3)">
             <div class="card-emoji">✅</div>
             <div class="card-text">
                 <div class="card-title">נכון או לא?</div>
                 <div class="card-desc">האם התרגיל נכון?</div>
             </div>
         </div>
-        <div class="game-card game-card-bubble-pop slide-up" id="game-card-4" style="animation-delay: 0.4s" onclick="startGame(4)">
+        <div class="game-card game-card-bubble-pop" id="game-card-4" onclick="startGame(4)">
             <div class="card-emoji">🫧</div>
             <div class="card-text">
                 <div class="card-title">פוצצי בועות!</div>
@@ -1357,36 +1357,35 @@ function generateProblem() {
 function generateProblemByCategory(category) {
     switch (category) {
         case 'multiply_tens': {
-            // e.g. 30 × 4, 60 × 7, 200 × 3
-            const base = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300][Math.floor(Math.random() * 12)];
-            const factor = 2 + Math.floor(Math.random() * 8); // 2-9
+            // e.g. 30 × 4, 60 × 7 — keep bases friendly (10-90)
+            const base = [10, 20, 30, 40, 50, 60, 70, 80, 90][Math.floor(Math.random() * 9)];
+            const factor = 2 + Math.floor(Math.random() * 7); // 2-8
             const answer = base * factor;
             return { equation: `${base} × ${factor}`, answer, display: `${base} × ${factor} = ?`, category };
         }
         case 'multiply_hundreds': {
-            // e.g. 7 × 100, 5 × 1000
-            const factor = 2 + Math.floor(Math.random() * 8);
-            const multiplier = [100, 1000][Math.floor(Math.random() * 2)];
-            const answer = factor * multiplier;
-            return { equation: `${factor} × ${multiplier}`, answer, display: `${factor} × ${multiplier} = ?`, category };
+            // e.g. 7 × 100, 3 × 100 — keep to ×100 only (×1000 too big)
+            const factor = 2 + Math.floor(Math.random() * 8); // 2-9
+            const answer = factor * 100;
+            return { equation: `${factor} × 100`, answer, display: `${factor} × 100 = ?`, category };
         }
         case 'divide_single': {
-            // e.g. 450 : 9 = 50 — generate from multiplication to ensure clean division
+            // e.g. 120 : 4 = 30 — keep quotients small (10-50)
             const divisor = 2 + Math.floor(Math.random() * 8); // 2-9
-            const quotient = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100][Math.floor(Math.random() * 10)];
+            const quotient = [10, 20, 30, 40, 50][Math.floor(Math.random() * 5)];
             const dividend = divisor * quotient;
             return { equation: `${dividend} : ${divisor}`, answer: quotient, display: `${dividend} : ${divisor} = ?`, category };
         }
         case 'divide_tens': {
-            // e.g. 3000 : 100
+            // e.g. 300 : 10, 500 : 100
             const divisor = [10, 100][Math.floor(Math.random() * 2)];
-            const quotient = (2 + Math.floor(Math.random() * 8)) * (divisor === 10 ? 10 : 1);
+            const quotient = (2 + Math.floor(Math.random() * 7)) * (divisor === 10 ? 10 : 1);
             const dividend = divisor * quotient;
             return { equation: `${dividend} : ${divisor}`, answer: quotient, display: `${dividend} : ${divisor} = ?`, category };
         }
         case 'properties_0_1': {
-            // 0 × n = 0, 1 × n = n, n × 0 = 0, n × 1 = n
-            const n = 2 + Math.floor(Math.random() * 998);
+            // 0 × n = 0, 1 × n = n — keep n small and friendly (2-100)
+            const n = [5, 8, 12, 17, 20, 25, 30, 42, 50, 64, 75, 88, 100][Math.floor(Math.random() * 13)];
             const variant = Math.floor(Math.random() * 4);
             if (variant === 0) return { equation: `0 × ${n}`, answer: 0, display: `0 × ${n} = ?`, category };
             if (variant === 1) return { equation: `${n} × 0`, answer: 0, display: `${n} × 0 = ?`, category };
@@ -1394,16 +1393,14 @@ function generateProblemByCategory(category) {
             return { equation: `${n} × 1`, answer: n, display: `${n} × 1 = ?`, category };
         }
         case 'order_of_operations': {
-            // Simple: a + b × c or (a + b) × c
-            const a = 2 + Math.floor(Math.random() * 8);
-            const b = 2 + Math.floor(Math.random() * 8);
-            const c = 2 + Math.floor(Math.random() * 5);
+            // Simple: a + b × c or (a + b) × c — small numbers
+            const a = 2 + Math.floor(Math.random() * 6); // 2-7
+            const b = 2 + Math.floor(Math.random() * 6); // 2-7
+            const c = 2 + Math.floor(Math.random() * 4); // 2-5
             if (Math.random() < 0.5) {
-                // No parentheses: a + b × c
                 const answer = a + b * c;
                 return { equation: `${a} + ${b} × ${c}`, answer, display: `${a} + ${b} × ${c} = ?`, category };
             } else {
-                // With parentheses: (a + b) × c
                 const answer = (a + b) * c;
                 return { equation: `(${a} + ${b}) × ${c}`, answer, display: `(${a} + ${b}) × ${c} = ?`, category };
             }
@@ -1416,8 +1413,12 @@ function generateProblemByCategory(category) {
 /** Generate distractors (wrong answers close to the correct one) */
 function generateDistractors(correctAnswer, count) {
     const distractors = new Set();
-    const offsets = [1, -1, 2, -2, 5, -5, 10, -10, correctAnswer * 2, Math.floor(correctAnswer / 2)];
-    // Shuffle offsets for variety
+    // Near-miss offsets that feel plausible — scale with answer size
+    const small = correctAnswer <= 20;
+    const offsets = small
+        ? [1, -1, 2, -2, 3, -3, 5, -5]
+        : [5, -5, 10, -10, 20, -20, 50, -50];
+    // Shuffle for variety
     for (let i = offsets.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [offsets[i], offsets[j]] = [offsets[j], offsets[i]];
@@ -1431,7 +1432,8 @@ function generateDistractors(correctAnswer, count) {
     }
     // Fill remaining if needed
     while (distractors.size < count) {
-        const d = correctAnswer + Math.floor(Math.random() * 20) - 10;
+        const range = small ? 5 : 30;
+        const d = correctAnswer + Math.floor(Math.random() * range * 2) - range;
         if (d !== correctAnswer && d > 0) distractors.add(d);
     }
     return [...distractors].slice(0, count);
@@ -1756,7 +1758,7 @@ function switchSubject(subject) {
     window.location.href = '/learning/' + subject + '/';
 }
 
-function goToMenu() {
+function goToMenu(animate = true) {
     showScreen('menu-screen');
     const menuPath = '/learning/math/' + SESSION_SLUG;
     if (window.location.pathname !== menuPath) {
@@ -1767,11 +1769,14 @@ function goToMenu() {
         const card = document.getElementById(`game-card-${gameNum}`);
         if (card) card.classList.add('completed');
     });
-    document.querySelectorAll('.game-card').forEach((card, i) => {
-        card.style.animation = 'none';
-        card.offsetHeight;
-        card.style.animation = `slideUp 0.5s ease-out ${0.1 + i * 0.1}s forwards`;
-    });
+    // Animate cards only when navigating (not on page refresh)
+    if (animate) {
+        document.querySelectorAll('.game-card').forEach((card, i) => {
+            card.style.animation = 'none';
+            card.offsetHeight;
+            card.style.animation = `slideUp 0.5s ease-out ${0.1 + i * 0.1}s forwards`;
+        });
+    }
 }
 
 function showSessionPopup() {
@@ -2076,8 +2081,8 @@ function showBubblePopRound() {
     if (state.currentRound >= state.totalRounds) { finishGame(); return; }
     state.answering = false;
 
-    // Generate a target number and expressions that equal it
-    const target = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 150, 200, 250, 300, 400, 500][Math.floor(Math.random() * 17)];
+    // Generate a target number — keep friendly for 4th grade
+    const target = [10, 12, 15, 18, 20, 24, 30, 36, 40, 50, 60, 80, 90, 100][Math.floor(Math.random() * 14)];
 
     // Generate 2-3 correct expressions
     const correctCount = 2 + Math.floor(Math.random() * 2); // 2 or 3
@@ -2117,11 +2122,11 @@ function generateExpressionsForTarget(target, count) {
     const expressions = new Set();
     const results = [];
 
-    // Multiplication: a × b = target
-    for (let a = 2; a <= Math.min(target, 100); a++) {
+    // Multiplication: a × b = target — keep both factors ≤ 100
+    for (let a = 2; a <= Math.min(target, 20); a++) {
         if (target % a === 0) {
             const b = target / a;
-            if (b >= 2 && b <= 1000) {
+            if (b >= 2 && b <= 100) {
                 const expr = `${a} × ${b}`;
                 if (!expressions.has(expr)) {
                     expressions.add(expr);
@@ -2132,10 +2137,10 @@ function generateExpressionsForTarget(target, count) {
         if (results.length >= count * 3) break;
     }
 
-    // Division: a : b = target → a = target × b
-    for (let b = 2; b <= 10; b++) {
+    // Division: a : b = target → a = target × b — keep dividend ≤ 500
+    for (let b = 2; b <= 9; b++) {
         const a = target * b;
-        if (a <= 10000) {
+        if (a <= 500) {
             const expr = `${a} : ${b}`;
             if (!expressions.has(expr)) {
                 expressions.add(expr);
@@ -2156,11 +2161,11 @@ function generateWrongExpressions(target, count) {
     for (let i = 0; i < count; i++) {
         const wrongTarget = target + offsets[i % offsets.length];
         if (wrongTarget <= 0) continue;
-        // Find a factor pair for the wrong target
-        for (let a = 2; a <= 20; a++) {
+        // Find a factor pair — keep both factors ≤ 100
+        for (let a = 2; a <= 15; a++) {
             if (wrongTarget % a === 0) {
                 const b = wrongTarget / a;
-                if (b >= 2 && b <= 500) {
+                if (b >= 2 && b <= 100) {
                     results.push({ expression: `${a} × ${b}`, value: wrongTarget });
                     break;
                 }
@@ -2168,13 +2173,15 @@ function generateWrongExpressions(target, count) {
         }
     }
 
-    // Fill if needed with divisions
+    // Fill if needed with divisions — keep dividend ≤ 500
     while (results.length < count) {
-        const wrongTarget = target + (Math.floor(Math.random() * 20) - 10);
+        const wrongTarget = target + (Math.floor(Math.random() * 10) - 5);
         if (wrongTarget > 0 && wrongTarget !== target) {
-            const b = 2 + Math.floor(Math.random() * 8);
+            const b = 2 + Math.floor(Math.random() * 7);
             const a = wrongTarget * b;
-            results.push({ expression: `${a} : ${b}`, value: wrongTarget });
+            if (a <= 500) {
+                results.push({ expression: `${a} : ${b}`, value: wrongTarget });
+            }
         }
     }
 
@@ -2273,11 +2280,9 @@ window.addEventListener('DOMContentLoaded', () => {
     updateStarDisplay();
     loadProgress();
 
+    // If loaded directly on /learning/math/{slug}, initialize the menu (no animation on refresh)
     if (document.getElementById('menu-screen').classList.contains('active')) {
-        state.sessionGames.forEach(gameNum => {
-            const card = document.getElementById(`game-card-${gameNum}`);
-            if (card) card.classList.add('completed');
-        });
+        goToMenu(false);
     }
 });
 </script>

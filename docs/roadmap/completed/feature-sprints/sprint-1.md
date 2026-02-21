@@ -212,10 +212,19 @@ Separate math-fun.html template with 4 playable math games and algorithmic Chapt
 
 ---
 
+### 26. Math Difficulty Tuning + Layout Shift Fix (v2.8.1)
+Tuned math problem difficulty to kid-friendly ranges and fixed game card jump on page refresh.
+- Capped multiply bases at 10–90, removed ×1000, quotients ≤ 50
+- Bubble Pop targets capped at 100, expressions use small factors
+- Properties of 0/1 uses curated numbers (5–100) instead of random up to 999
+- Removed slideUp entrance animation on page refresh (both templates)
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.8.0 (25 releases)
-**Features Completed:** 25 (18 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.8.1 (26 releases)
+**Features Completed:** 26 (18 features, 3 UX polish, 1 content expansion, 1 chore, 3 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

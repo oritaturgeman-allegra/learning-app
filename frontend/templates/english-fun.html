@@ -1995,28 +1995,28 @@ body {
     </div>
 
     <div class="game-cards">
-        <div class="game-card game-card-word-match slide-up" id="game-card-1" style="animation-delay: 0.1s" onclick="startGame(1)">
+        <div class="game-card game-card-word-match" id="game-card-1" onclick="startGame(1)">
             <div class="card-emoji">🔤</div>
             <div class="card-text">
                 <div class="card-title">מה המילה?</div>
                 <div class="card-desc">התאימי את המילה באנגלית</div>
             </div>
         </div>
-        <div class="game-card game-card-sentence-builder slide-up" id="game-card-2" style="animation-delay: 0.2s" onclick="startGame(2)">
+        <div class="game-card game-card-sentence-builder" id="game-card-2" onclick="startGame(2)">
             <div class="card-emoji">📝</div>
             <div class="card-text">
                 <div class="card-title">תרגמי את המשפט</div>
                 <div class="card-desc">סדרי את המילים בסדר הנכון</div>
             </div>
         </div>
-        <div class="game-card game-card-listen-choose slide-up" id="game-card-3" style="animation-delay: 0.3s" onclick="startGame(3)">
+        <div class="game-card game-card-listen-choose" id="game-card-3" onclick="startGame(3)">
             <div class="card-emoji">🔊</div>
             <div class="card-text">
                 <div class="card-title">האזיני ובחרי</div>
                 <div class="card-desc">שמעי את המילה ובחרי תמונה</div>
             </div>
         </div>
-        <div class="game-card game-card-true-false slide-up" id="game-card-4" style="animation-delay: 0.4s" onclick="startGame(4)">
+        <div class="game-card game-card-true-false" id="game-card-4" onclick="startGame(4)">
             <div class="card-emoji">🤔</div>
             <div class="card-text">
                 <div class="card-title">כן או לא?</div>
@@ -2922,7 +2922,7 @@ async function loadSessionPickerProgress() {
     }
 }
 
-function goToMenu() {
+function goToMenu(animate = true) {
     showScreen('menu-screen');
     const menuPath = '/learning/' + SUBJECT + '/' + (SESSION_SLUG || 'jet2-unit2');
     if (window.location.pathname !== menuPath) {
@@ -2938,12 +2938,15 @@ function goToMenu() {
         const card = document.getElementById(`game-card-${gameNum}`);
         if (card) card.classList.add('completed');
     });
-    // Re-trigger slide-up animations
-    document.querySelectorAll('.game-card').forEach((card, i) => {
-        card.style.animation = 'none';
-        card.offsetHeight; // force reflow
-        card.style.animation = `slideUp 0.5s ease-out ${0.1 + i * 0.1}s forwards`;
-    });
+    // Animate cards only when navigating (not on page refresh)
+    if (animate) {
+        document.querySelectorAll('.game-card').forEach((card, i) => {
+            card.style.animation = 'none';
+            card.offsetHeight;
+            card.style.animation = `slideUp 0.5s ease-out ${0.1 + i * 0.1}s forwards`;
+        });
+    }
+    positionWordTracker();
 }
 
 function showSessionPopup() {
@@ -3021,8 +3024,8 @@ function buildWordTracker() {
 
     updateWordTrackerCount();
 
-    // Align tracker position to game cards after animation settles
-    setTimeout(() => positionWordTracker(), 600);
+    // Position tracker aligned with game cards
+    positionWordTracker();
 }
 
 /** Position word tracker aligned with game cards */
@@ -3596,16 +3599,9 @@ window.addEventListener('DOMContentLoaded', () => {
     // Wire welcome button
     document.getElementById('welcome-btn').onclick = welcomeClick;
 
-    // If loaded directly on /learning/{slug}, initialize the menu
+    // If loaded directly on /learning/{slug}, initialize the menu (no animation on refresh)
     if (document.getElementById('menu-screen').classList.contains('active')) {
-        buildWordTracker();
-        loadPracticedWords();
-        if (!state.sessionPlan) planSession();
-        // Restore session checkmarks from localStorage
-        state.sessionGames.forEach(gameNum => {
-            const card = document.getElementById(`game-card-${gameNum}`);
-            if (card) card.classList.add('completed');
-        });
+        goToMenu(false);
     }
 
     // If loaded on /learning/{subject} (session picker), show star progress
