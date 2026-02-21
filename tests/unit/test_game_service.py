@@ -118,6 +118,8 @@ class TestGetProgress:
         assert progress["accuracy_by_game"] == {}
         assert progress["weak_words"] == []
         assert progress["recent_games"] == []
+        assert progress["earned_rewards"] == []
+        assert progress["next_reward"]["id"] == "spark"
 
     def test_progress_after_games(self, game_service):
         """Progress accumulates across multiple games."""
@@ -314,3 +316,70 @@ class TestResetPracticedWords:
         words = game_service.get_practiced_words()
         assert words == ["dress"]
         assert "coat" not in words
+
+
+class TestEarnedRewards:
+    """Tests for earned_rewards in get_progress()."""
+
+    def test_no_rewards_with_zero_stars(self, game_service):
+        """Zero stars means no earned rewards."""
+        progress = game_service.get_progress()
+        assert progress["earned_rewards"] == []
+        assert progress["next_reward"]["id"] == "spark"
+        assert progress["next_reward"]["stars"] == 25
+
+    def test_no_rewards_below_threshold(self, game_service):
+        """Stars below first tier threshold earns nothing."""
+        game_service.save_game_result(
+            game_type="word_match",
+            score=10,
+            max_score=10,
+            word_results=[],
+        )
+        progress = game_service.get_progress()
+        assert progress["earned_rewards"] == []
+        assert progress["next_reward"]["id"] == "spark"
+
+    def test_first_reward_at_25_stars(self, game_service):
+        """Earning 25+ stars unlocks the first tier."""
+        # 3 games × 10 stars = 30 total
+        for _ in range(3):
+            game_service.save_game_result(
+                game_type="word_match",
+                score=10,
+                max_score=10,
+                word_results=[],
+            )
+        progress = game_service.get_progress()
+        assert "spark" in progress["earned_rewards"]
+        assert progress["next_reward"]["id"] == "slay"
+
+    def test_multiple_rewards_earned(self, game_service):
+        """Earning 50+ stars unlocks first two tiers."""
+        # 5 games × 10 stars = 50 total
+        for _ in range(5):
+            game_service.save_game_result(
+                game_type="word_match",
+                score=10,
+                max_score=10,
+                word_results=[],
+            )
+        progress = game_service.get_progress()
+        assert "spark" in progress["earned_rewards"]
+        assert "slay" in progress["earned_rewards"]
+        assert len(progress["earned_rewards"]) == 2
+        assert progress["next_reward"]["id"] == "fire"
+
+    def test_all_rewards_earned(self, game_service):
+        """Earning 300+ stars unlocks all tiers."""
+        # 30 games × 10 stars = 300 total
+        for _ in range(30):
+            game_service.save_game_result(
+                game_type="word_match",
+                score=10,
+                max_score=10,
+                word_results=[],
+            )
+        progress = game_service.get_progress()
+        assert len(progress["earned_rewards"]) == 6
+        assert progress["next_reward"] is None

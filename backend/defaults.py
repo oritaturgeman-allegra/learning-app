@@ -2,13 +2,17 @@
 Static defaults and constants for Ariel's English Adventure.
 """
 
-from typing import Dict, List
+from typing import Any, Dict, List
 
 # App version (single source of truth)
-APP_VERSION = "1.8.0"
+APP_VERSION = "1.9.1"
 
 # Recent changelog entries (shown in "What's New" popup)
 APP_CHANGELOG: List[Dict[str, str]] = [
+    {
+        "version": "1.9.0",
+        "text": "Collect reward cards as you earn stars! 6 cards to unlock — tap the trophy to see your collection",
+    },
     {
         "version": "1.8.0",
         "text": "Every word counts! Play all 4 games and practice ALL 55 words — no more gaps!",
@@ -17,10 +21,16 @@ APP_CHANGELOG: List[Dict[str, str]] = [
         "version": "1.7.0",
         "text": "Fresh start button — reset your word tracker for a new practice round, your stars stay forever!",
     },
-    {
-        "version": "1.6.3",
-        "text": "Word chips got a makeover — purple before practice, sage green after, with a fun bounce animation!",
-    },
+]
+
+# Collectible reward tiers — unlocked at star milestones
+REWARD_TIERS: List[Dict[str, Any]] = [
+    {"stars": 25, "id": "spark", "name_en": "Spark", "name_he": "ניצוץ", "emoji": "✨", "description_he": "ההרפתקה רק מתחילה!"},
+    {"stars": 50, "id": "slay", "name_en": "Slay", "name_he": "סלייי", "emoji": "💅", "description_he": "את פשוט שולטת בזה!"},
+    {"stars": 100, "id": "fire", "name_en": "Fire", "name_he": "פייר", "emoji": "🔥", "description_he": "בלתי ניתנת לעצירה!"},
+    {"stars": 150, "id": "unicorn", "name_en": "Unicorn", "name_he": "חד-קרן", "emoji": "🦄", "description_he": "נדירה וקסומה!"},
+    {"stars": 200, "id": "goat", "name_en": "GOAT", "name_he": "גואט", "emoji": "🐐", "description_he": "הכי טובה שיש!"},
+    {"stars": 300, "id": "main_character", "name_en": "Main Character", "name_he": "שחקנית ראשית", "emoji": "👑", "description_he": "את הכוכבת של הסיפור!"},
 ]
 
 # App metadata

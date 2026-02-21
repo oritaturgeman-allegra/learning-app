@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from backend.config import config
-from backend.defaults import APP_METADATA, APP_VERSION
+from backend.defaults import APP_METADATA, APP_VERSION, REWARD_TIERS
 from backend.exceptions import AppError
 from backend.logging_config import setup_logging
 from backend.routes.game import router as game_router
@@ -105,7 +105,7 @@ async def index(request: Request) -> HTMLResponse:
     """Serve the English learning app."""
     return templates.TemplateResponse(
         "english-fun.html",
-        {"request": request, "version": APP_VERSION},
+        {"request": request, "version": APP_VERSION, "reward_tiers": REWARD_TIERS},
     )
 
 

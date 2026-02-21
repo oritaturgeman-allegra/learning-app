@@ -44,6 +44,8 @@ class ProgressResponse(BaseModel):
     accuracy_by_game: Dict[str, Any]
     weak_words: List[Dict[str, Any]]
     recent_games: List[Dict[str, Any]]
+    earned_rewards: List[str]
+    next_reward: Optional[Dict[str, Any]]
 
 
 # --- Endpoints ---

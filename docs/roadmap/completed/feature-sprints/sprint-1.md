@@ -115,17 +115,36 @@ Session Word Planner guarantees all 55 words are practiced when all 4 games are 
 
 ---
 
+### 15. Collectible Reward Cards (v1.9.0)
+Star milestone rewards — 6 collectible cards unlocked at 25, 50, 100, 150, 200, 300 stars with Gen Alpha-themed names.
+- Trophy button in header opens collection gallery (earned = vibrant, locked = grey silhouettes)
+- Reward popup with bounce animation on unlock, auto-dismiss after 5s
+- Progress bar showing distance to next reward
+- Backend `earned_rewards` + `next_reward` in progress API (derived from total_stars, no new DB table)
+- 5 new unit tests (59 total passing, 81% coverage)
+
+---
+
+### 16. Reward Card Animation Fix (v1.9.1)
+Replaced broken 3D card flip with reliable bounce-reveal animation.
+- Card shows reward name, emoji, and description immediately
+- Auto-dismiss after 5 seconds so it doesn't block gameplay
+- Click overlay background to dismiss early
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v1.8.0 (14 releases)
-**Features Completed:** 14 (9 features, 3 UX polish, 1 content expansion, 1 chore)
-**Test Coverage:** 14 unit tests, 100% pass rate
+**Versions Shipped:** v1.0.0 → v1.9.1 (16 releases)
+**Features Completed:** 16 (10 features, 3 UX polish, 1 content expansion, 1 chore, 1 bug fix)
+**Test Coverage:** 59 tests, 81% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
 - 55 vocabulary words from Jet 2 Unit 2 — full coverage guaranteed per session
 - Persistent progress tracking in SQLite
 - Word tracker sidebar with practiced/unpracticed chip states
 - Session celebration with fireworks after all 4 games
+- Collectible reward cards with trophy gallery
 - Kid-friendly pastel UI with Hebrew RTL support
 - American English female voice for pronunciation
 

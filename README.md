@@ -12,12 +12,12 @@ A web app that teaches English vocabulary to Hebrew-speaking children through 4 
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v1.9.1   | 02/21 | Fix: Reward card popup — simpler reveal animation, auto-dismiss after 5s                  |
+| v1.9.0   | 02/21 | Feature: Collectible reward cards — 6 cards to unlock at star milestones + gallery        |
 | v1.8.0   | 02/21 | Feature: Full vocabulary coverage — all 55 words guaranteed across one session            |
 | v1.7.0   | 02/21 | Feature: Reset button — start a fresh practice round, stars stay forever                 |
 | v1.6.3   | 02/20 | UX: Word chip makeover — purple/lavender unpracticed, sage green practiced + bounce anim  |
 | v1.6.2   | 02/20 | Feature: Practiced words persist in DB — progress survives page refresh                  |
-| v1.6.1   | 02/20 | UX: Word chips — pill-shaped vocabulary tracker with practiced/unpracticed states         |
-| v1.5.1   | 02/20 | UX: Green checkmark badge on completed game cards with pop animation                     |
 
 ---
 

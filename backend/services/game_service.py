@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 
+from backend.defaults import REWARD_TIERS
 from backend.exceptions import GameError
 from backend.models.app_state import AppState
 from backend.models.base import init_db, session_scope
@@ -127,6 +128,8 @@ class GameService:
                         "accuracy_by_game": {},
                         "weak_words": [],
                         "recent_games": [],
+                        "earned_rewards": [],
+                        "next_reward": REWARD_TIERS[0],
                     }
 
                 # Total stars
@@ -173,12 +176,19 @@ class GameService:
                 # Recent games (last 10)
                 recent_games = [r.to_dict() for r in results[:10]]
 
+                # Earned rewards based on total stars
+                earned_rewards = [t["id"] for t in REWARD_TIERS if t["stars"] <= total_stars]
+                unearned = [t for t in REWARD_TIERS if t["stars"] > total_stars]
+                next_reward = unearned[0] if unearned else None
+
                 return {
                     "total_stars": total_stars,
                     "games_played": len(results),
                     "accuracy_by_game": accuracy_by_game,
                     "weak_words": weak_words[:10],
                     "recent_games": recent_games,
+                    "earned_rewards": earned_rewards,
+                    "next_reward": next_reward,
                 }
 
         except SQLAlchemyError as e:

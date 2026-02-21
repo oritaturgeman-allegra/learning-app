@@ -1206,6 +1206,344 @@ body {
 }
 
 /* ==========================================================================
+   TROPHY BUTTON (header)
+   ========================================================================== */
+.trophy-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--gold-bg);
+    border: 2px solid var(--gold);
+    border-radius: var(--radius-pill);
+    padding: 4px 12px;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--gold);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.trophy-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.trophy-btn-small {
+    font-size: 0.85rem;
+    padding: 3px 10px;
+}
+
+.trophy-count {
+    font-size: 0.85em;
+}
+
+/* ==========================================================================
+   REWARD UNLOCK POPUP
+   ========================================================================== */
+.reward-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1100;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+}
+
+.reward-overlay.active {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.reward-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl) var(--space-lg);
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    animation: rewardReveal 0.8s ease-out both;
+    cursor: default;
+}
+
+.reward-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--grad-rainbow);
+}
+
+.reward-card::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 27px;
+    background: var(--grad-rainbow);
+    z-index: -1;
+    animation: pulseGlow 1.5s infinite;
+}
+
+.reward-card-badge {
+    background: var(--grad-primary);
+    color: white;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    padding: 4px 16px;
+    border-radius: var(--radius-pill);
+    margin-bottom: var(--space-xs);
+    animation: bounceIn 0.5s ease-out 0.3s both;
+}
+
+.reward-emoji {
+    font-size: 4.5rem;
+    animation: bounceIn 0.6s ease-out 0.4s both;
+}
+
+.reward-name {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--text-dark);
+    font-weight: 700;
+    animation: bounceIn 0.5s ease-out 0.5s both;
+}
+
+.reward-name-he {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    animation: bounceIn 0.5s ease-out 0.55s both;
+}
+
+.reward-desc {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin: var(--space-xs) 0;
+    animation: bounceIn 0.5s ease-out 0.6s both;
+}
+
+.reward-stars {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--gold);
+    animation: bounceIn 0.5s ease-out 0.65s both;
+}
+
+.reward-collect-btn {
+    background: var(--grad-welcome);
+    color: white;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 10px 24px;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: var(--space-sm);
+    transition: transform 0.2s;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    animation: bounceIn 0.5s ease-out 0.75s both;
+}
+
+.reward-collect-btn:hover {
+    transform: scale(1.05);
+}
+
+@keyframes rewardReveal {
+    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+    60% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+    80% { transform: scale(0.95) rotate(-1deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+/* ==========================================================================
+   COLLECTION GALLERY
+   ========================================================================== */
+.collection-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1050;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-lg);
+    backdrop-filter: blur(4px);
+}
+
+.collection-overlay.active {
+    display: flex;
+}
+
+.collection-panel {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: popIn 0.4s ease-out;
+    position: relative;
+}
+
+.collection-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--grad-rainbow);
+}
+
+.collection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+}
+
+.collection-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    color: var(--text-dark);
+}
+
+.collection-close-btn {
+    background: none;
+    border: 2px solid var(--text-muted);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.collection-close-btn:hover {
+    background: #f3f4f6;
+    border-color: var(--text-dark);
+    color: var(--text-dark);
+}
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.collection-card {
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-sm);
+    transition: transform 0.2s;
+    position: relative;
+    overflow: hidden;
+    gap: 4px;
+}
+
+.collection-card.earned {
+    background: white;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 0 0 3px var(--gold);
+    cursor: pointer;
+}
+
+.collection-card.earned:hover {
+    transform: scale(1.05);
+}
+
+.collection-card.earned .collection-card-emoji {
+    font-size: 2.2rem;
+}
+
+.collection-card.earned .collection-card-name {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.collection-card.earned .collection-card-name-he {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.collection-card.locked {
+    background: #f3f4f6;
+    border: 2px dashed #d1d5db;
+    cursor: default;
+}
+
+.collection-card.locked .collection-card-emoji {
+    font-size: 2.2rem;
+    filter: grayscale(1) opacity(0.25);
+}
+
+.collection-card.locked .collection-card-lock {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+}
+
+.collection-progress {
+    text-align: center;
+}
+
+.collection-progress-text {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+}
+
+.collection-progress-bar {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+}
+
+.collection-progress-fill {
+    height: 100%;
+    background: var(--grad-primary);
+    border-radius: var(--radius-pill);
+    transition: width 0.6s ease-out;
+}
+
+@media (max-width: 400px) {
+    .collection-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ==========================================================================
    MASCOT
    ========================================================================== */
 .mascot {
@@ -1361,6 +1699,7 @@ body {
                 <span class="star-icon">⭐</span>
                 <span id="star-count">0</span>
             </div>
+            <button class="trophy-btn" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="trophy-count">0/6</span></button>
             <button class="reset-btn" onclick="confirmReset()" title="התחלה מחדש">🔄</button>
         </div>
     </div>
@@ -1421,6 +1760,7 @@ body {
             <span class="star-icon">⭐</span>
             <span id="game-star-count">0</span>
         </div>
+        <button class="trophy-btn trophy-btn-small" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="game-trophy-count">0/6</span></button>
         <div class="app-title">🌟 English Fun</div>
     </div>
 
@@ -1464,6 +1804,35 @@ body {
     </div>
 </div>
 
+<!-- =====================================================================
+     REWARD UNLOCK POPUP — shown when a new tier is reached
+     ====================================================================== -->
+<div class="reward-overlay" id="reward-overlay" onclick="closeRewardPopup()">
+    <div class="reward-card" onclick="event.stopPropagation()">
+        <div class="reward-card-badge">פרס חדש!</div>
+        <div class="reward-emoji" id="reward-emoji">✨</div>
+        <div class="reward-name" id="reward-name">Spark</div>
+        <div class="reward-name-he" id="reward-name-he">ניצוץ</div>
+        <div class="reward-desc" id="reward-desc">ההרפתקה רק מתחילה!</div>
+        <div class="reward-stars" id="reward-stars">⭐ 25</div>
+        <button class="reward-collect-btn" onclick="closeRewardPopup()">🎉 לאוסף שלי</button>
+    </div>
+</div>
+
+<!-- =====================================================================
+     COLLECTION GALLERY — all reward cards
+     ====================================================================== -->
+<div class="collection-overlay" id="collection-overlay">
+    <div class="collection-panel">
+        <div class="collection-header">
+            <div class="collection-title">🏆 האוסף שלי</div>
+            <button class="collection-close-btn" onclick="closeCollection()">✕</button>
+        </div>
+        <div class="collection-grid" id="collection-grid"></div>
+        <div class="collection-progress" id="collection-progress"></div>
+    </div>
+</div>
+
 <!-- Reset confirmation dialog -->
 <div class="reset-dialog-overlay" id="reset-dialog">
     <div class="reset-dialog">
@@ -1478,6 +1847,11 @@ body {
 </div>
 
 <script>
+/* ==========================================================================
+   REWARD TIERS — collectible cards unlocked at star milestones
+   ========================================================================== */
+const REWARD_TIERS = {{ reward_tiers | tojson }};
+
 /* ==========================================================================
    VOCABULARY DATA — Organized by textbook unit
    ========================================================================== */
@@ -1644,6 +2018,10 @@ async function loadProgress() {
             if (data.success) {
                 state.totalStars = data.data.total_stars;
                 localStorage.setItem('ariel_stars', state.totalStars.toString());
+                // Sync earned rewards from API (handles localStorage cleared)
+                if (data.data.earned_rewards) {
+                    localStorage.setItem('ariel_earned_rewards', JSON.stringify(data.data.earned_rewards));
+                }
                 updateStarDisplay();
                 return;
             }
@@ -1969,6 +2347,7 @@ function saveStars() {
 function updateStarDisplay() {
     document.getElementById('star-count').textContent = state.totalStars;
     document.getElementById('game-star-count').textContent = state.totalStars;
+    updateTrophyCount();
 }
 
 /** Update progress bar */
@@ -2018,6 +2397,8 @@ function checkMilestone() {
             showMilestone();
         }
     }
+    // Check for reward tier unlock (queued after milestone animation)
+    checkRewardUnlock();
 }
 
 function showMilestone() {
@@ -2060,6 +2441,125 @@ function showEmojiParade() {
     });
 
     setTimeout(() => { overlay.classList.remove('active'); }, 3000);
+}
+
+/* ==========================================================================
+   REWARD COLLECTION SYSTEM
+   ========================================================================== */
+
+/** Get earned reward IDs from localStorage */
+function getEarnedRewards() {
+    return JSON.parse(localStorage.getItem('ariel_earned_rewards') || '[]');
+}
+
+/** Save earned reward IDs to localStorage */
+function saveEarnedRewards(earned) {
+    localStorage.setItem('ariel_earned_rewards', JSON.stringify(earned));
+}
+
+/** Update trophy count badges in header */
+function updateTrophyCount() {
+    const earned = getEarnedRewards();
+    const text = `${earned.length}/${REWARD_TIERS.length}`;
+    const el = document.getElementById('trophy-count');
+    if (el) el.textContent = text;
+    const gameEl = document.getElementById('game-trophy-count');
+    if (gameEl) gameEl.textContent = text;
+}
+
+/** Check if a new reward tier was unlocked */
+function checkRewardUnlock() {
+    const earned = getEarnedRewards();
+    const newTier = REWARD_TIERS.find(t => t.stars <= state.totalStars && !earned.includes(t.id));
+    if (newTier) {
+        earned.push(newTier.id);
+        saveEarnedRewards(earned);
+        updateTrophyCount();
+        // Queue popup after milestone animation (3s delay)
+        setTimeout(() => showRewardPopup(newTier), 3000);
+    }
+}
+
+let rewardAutoCloseTimer = null;
+
+/** Show reward unlock popup */
+function showRewardPopup(tier) {
+    document.getElementById('reward-emoji').textContent = tier.emoji;
+    document.getElementById('reward-name').textContent = tier.name_en;
+    document.getElementById('reward-name-he').textContent = tier.name_he;
+    document.getElementById('reward-desc').textContent = tier.description_he;
+    document.getElementById('reward-stars').textContent = `⭐ ${tier.stars}`;
+
+    // Reset animation by re-inserting the card
+    const card = document.querySelector('.reward-card');
+    card.style.animation = 'none';
+    card.offsetHeight;
+    card.style.animation = 'rewardReveal 0.8s ease-out both';
+
+    const overlay = document.getElementById('reward-overlay');
+    overlay.classList.add('active');
+    playCelebration();
+    spawnConfetti();
+
+    // Auto-close after 5 seconds so it doesn't block gameplay
+    clearTimeout(rewardAutoCloseTimer);
+    rewardAutoCloseTimer = setTimeout(closeRewardPopup, 5000);
+}
+
+/** Close reward popup */
+function closeRewardPopup() {
+    clearTimeout(rewardAutoCloseTimer);
+    document.getElementById('reward-overlay').classList.remove('active');
+}
+
+/** Open the collection gallery */
+function openCollection() {
+    const earned = getEarnedRewards();
+    const grid = document.getElementById('collection-grid');
+    grid.innerHTML = '';
+
+    REWARD_TIERS.forEach((tier, i) => {
+        const isEarned = earned.includes(tier.id);
+        const card = document.createElement('div');
+        card.className = `collection-card ${isEarned ? 'earned' : 'locked'}`;
+        card.style.animation = `popIn 0.3s ease-out ${i * 0.08}s both`;
+
+        if (isEarned) {
+            card.innerHTML = `
+                <div class="collection-card-emoji">${tier.emoji}</div>
+                <div class="collection-card-name">${tier.name_en}</div>
+                <div class="collection-card-name-he">${tier.name_he}</div>
+            `;
+        } else {
+            card.innerHTML = `
+                <div class="collection-card-emoji">${tier.emoji}</div>
+                <div class="collection-card-lock">⭐ ${tier.stars}</div>
+            `;
+        }
+        grid.appendChild(card);
+    });
+
+    // Progress bar
+    const progressEl = document.getElementById('collection-progress');
+    const nextTier = REWARD_TIERS.find(t => !earned.includes(t.id));
+    if (nextTier) {
+        const progress = Math.min((state.totalStars / nextTier.stars) * 100, 100);
+        progressEl.innerHTML = `
+            <div class="collection-progress-text">⭐ ${nextTier.stars} :הפרס הבא ב</div>
+            <div class="collection-progress-bar">
+                <div class="collection-progress-fill" style="width: ${progress}%"></div>
+            </div>
+        `;
+    } else {
+        progressEl.innerHTML = `<div class="collection-progress-text">🎉 !אספת את כל הפרסים</div>`;
+    }
+
+    document.getElementById('collection-overlay').classList.add('active');
+}
+
+/** Close collection gallery */
+function closeCollection() {
+    document.getElementById('collection-overlay').classList.remove('active');
 }
 
 /* ==========================================================================
