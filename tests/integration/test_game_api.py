@@ -78,8 +78,12 @@ class TestSaveGameResultAPI:
         assert response.json()["data"]["session_slug"] is None
 
     def test_save_all_game_types(self, client):
-        """All four game types are accepted."""
-        for game_type in ["word_match", "sentence_scramble", "listen_choose", "true_false"]:
+        """All eight game types (English + Math) are accepted."""
+        all_types = [
+            "word_match", "sentence_scramble", "listen_choose", "true_false",
+            "quick_solve", "missing_number", "true_false_math", "bubble_pop",
+        ]
+        for game_type in all_types:
             response = client.post("/api/game/result", json={
                 "game_type": game_type,
                 "score": 5,
@@ -87,6 +91,25 @@ class TestSaveGameResultAPI:
                 "word_results": [],
             })
             assert response.status_code == 200
+
+    def test_save_math_game_result(self, client):
+        """Save a math game result with session_slug and problem tracking."""
+        response = client.post("/api/game/result", json={
+            "game_type": "quick_solve",
+            "score": 7,
+            "max_score": 10,
+            "word_results": [
+                {"word": "30 × 4", "correct": True, "category": "multiply_tens"},
+                {"word": "450 : 9", "correct": False, "category": "divide_single"},
+            ],
+            "session_slug": "math-tens-hundreds",
+        })
+        assert response.status_code == 200
+        data = response.json()
+        assert data["success"] is True
+        assert data["data"]["game_type"] == "quick_solve"
+        assert data["data"]["score"] == 7
+        assert data["data"]["session_slug"] == "math-tens-hundreds"
 
     def test_invalid_game_type_rejected(self, client):
         """Invalid game type returns 422 (Pydantic validation)."""

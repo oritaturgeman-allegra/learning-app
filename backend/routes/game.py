@@ -30,7 +30,7 @@ class WordResult(BaseModel):
 class SaveGameResultRequest(BaseModel):
     """Request body for saving a game result."""
 
-    game_type: str = Field(..., pattern="^(word_match|sentence_scramble|listen_choose|true_false)$")
+    game_type: str = Field(..., pattern="^(word_match|sentence_scramble|listen_choose|true_false|quick_solve|missing_number|true_false_math|bubble_pop)$")
     score: int = Field(..., ge=0)
     max_score: int = Field(..., gt=0)
     word_results: List[WordResult] = Field(default_factory=list)

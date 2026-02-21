@@ -202,11 +202,21 @@ Each session card now shows its own star count — stars earned in English stay 
 
 ---
 
+### 25. Math Game Engine (v2.8.0)
+Separate math-fun.html template with 4 playable math games and algorithmic Chapter A problem generator.
+- Quick Solve, Missing Number, True or False, Bubble Pop — all with Israeli notation (× and :)
+- Problem categories: multiply tens/hundreds, divide, properties of 0/1, order of operations
+- Distractor generator for near-miss wrong answers
+- Floating bubble CSS animations, session celebration, reward system
+- 4 new math game types registered in backend (72 tests total)
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.7.0 (24 releases)
-**Features Completed:** 24 (17 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
-**Test Coverage:** 63 tests, 81% coverage, 100% pass rate
+**Versions Shipped:** v1.0.0 → v2.8.0 (25 releases)
+**Features Completed:** 25 (18 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
+**Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
 - 55 vocabulary words from Jet 2 Unit 2 — full coverage guaranteed per session

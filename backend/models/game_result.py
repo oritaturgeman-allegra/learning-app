@@ -18,7 +18,8 @@ class GameResult(Base):
 
     Attributes:
         id: Primary key
-        game_type: Game identifier (word_match, sentence_scramble, listen_choose, true_false)
+        category: Subject category (english or math)
+        game_type: Game identifier (word_match, sentence_scramble, listen_choose, true_false, etc.)
         score: Stars earned in this game
         max_score: Maximum possible stars for this game
         word_results: JSON array of per-word results [{word, correct, category}]
@@ -31,6 +32,7 @@ class GameResult(Base):
 
     # Core fields
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    category: Mapped[str] = mapped_column(String(30), nullable=False, default="english", index=True)
     game_type: Mapped[str] = mapped_column(String(30), nullable=False, index=True)
     score: Mapped[int] = mapped_column(Integer, nullable=False)
     max_score: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -58,6 +60,7 @@ class GameResult(Base):
         """Convert model to dictionary for API responses."""
         return {
             "id": self.id,
+            "category": self.category,
             "game_type": self.game_type,
             "score": self.score,
             "max_score": self.max_score,

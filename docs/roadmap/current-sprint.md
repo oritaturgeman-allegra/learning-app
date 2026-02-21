@@ -70,71 +70,70 @@ Math games need a **separate template** (`math-fun.html`) or a **shared game eng
 ### 2. Math Template + Game Engine
 **Priority:** High | **Effort:** Large
 
-- [ ] Create `frontend/templates/math-fun.html` (or extend existing template with math mode)
-- [ ] Math game menu screen with 4 game cards (Quick Solve, Missing Number, T/F, Bubble Pop)
-- [ ] Shared header (stars + trophy) consistent with English template
-- [ ] Subject tabs for switching between English and Math
-- [ ] Route `/learning/math/math-tens-hundreds` serves the math template
+- [x] Create `frontend/templates/math-fun.html` (or extend existing template with math mode)
+- [x] Math game menu screen with 4 game cards (Quick Solve, Missing Number, T/F, Bubble Pop)
+- [x] Shared header (stars + trophy) consistent with English template
+- [x] Subject tabs for switching between English and Math
+- [x] Route `/learning/math/math-tens-hundreds` serves the math template
 
 ### 3. Problem Generator — Chapter A
 **Priority:** High | **Effort:** Medium
 
-- [ ] `generateProblem()` function for Chapter A topics:
+- [x] `generateProblem()` function for Chapter A topics:
   - Multiply by 10, 100, 1,000 (e.g., `7 × 100 = ?`)
   - Multiply by whole tens/hundreds (e.g., `30 × 4 = ?`, `200 × 5 = ?`)
   - Divide by single digit (e.g., `450 : 9 = ?`)
   - Divide by 10, 100, 1,000 (e.g., `3000 : 100 = ?`)
-  - Connection multiply↔divide (e.g., `If 6 × 8 = 48, then 48 : 6 = ?`)
   - Order of operations (e.g., `3 + 4 × 5 = ?`, `(3 + 4) × 5 = ?`)
   - Properties of 0 and 1 (e.g., `0 × 847 = ?`, `1 × 56 = ?`)
-- [ ] Distractor generator (near-miss wrong answers for multiple choice)
-- [ ] Round planner — mix of topic categories per game session
+- [x] Distractor generator (near-miss wrong answers for multiple choice)
+- [x] Round planner — mix of topic categories per game session
 
 ### 4. Game 1 — Quick Solve (פתרי מהר!)
 **Priority:** High | **Effort:** Medium
 
-- [ ] Game screen: equation display + 4 answer buttons
-- [ ] 10 rounds, 1 star per correct answer
-- [ ] Correct/wrong animations + sound feedback (reuse existing)
-- [ ] Save result to API with `session_slug: "math-tens-hundreds"`
-- [ ] Hebrew game card on menu: פתרי מהר! with ⚡ emoji
+- [x] Game screen: equation display + 4 answer buttons
+- [x] 10 rounds, 1 star per correct answer
+- [x] Correct/wrong animations + sound feedback (reuse existing)
+- [x] Save result to API with `session_slug: "math-tens-hundreds"`
+- [x] Hebrew game card on menu: פתרי מהר! with ⚡ emoji
 
 ### 5. Game 2 — Missing Number (מצאי את המספר!)
 **Priority:** High | **Effort:** Medium
 
-- [ ] Game screen: equation with blank `_` + number pad (4-6 options)
-- [ ] 8 rounds, 1 star per correct answer
-- [ ] Blank position varies: missing product, missing factor, missing divisor
-- [ ] Show complete equation after answering for reinforcement
-- [ ] Hebrew game card on menu
+- [x] Game screen: equation with blank `_` + 4 answer options
+- [x] 8 rounds, 1 star per correct answer
+- [x] Blank position varies: missing product, missing factor, missing divisor
+- [x] Show correct answer highlight after answering
+- [x] Hebrew game card on menu
 
 ### 6. Game 3 — True or False (נכון או לא?)
 **Priority:** High | **Effort:** Small
 
-- [ ] Game screen: complete equation + two buttons (נכון / לא נכון)
-- [ ] 10 rounds, 1 star per correct judgment
-- [ ] ~50% true, ~50% false with near-miss errors
-- [ ] If wrong: briefly show the correct answer
-- [ ] Hebrew game card on menu
+- [x] Game screen: complete equation + two buttons (נכון / לא נכון)
+- [x] 10 rounds, 1 star per correct judgment
+- [x] ~50% true, ~50% false with near-miss errors
+- [x] If wrong: briefly show the correct answer
+- [x] Hebrew game card on menu
 
 ### 7. Game 4 — Bubble Pop (פוצצי בועות!)
 **Priority:** Medium | **Effort:** Large
 
-- [ ] Game screen: target number at top + 6 floating bubbles with expressions
-- [ ] 8 rounds, 1 star per correct bubble popped
-- [ ] 2-3 correct bubbles per round, 3-4 wrong ones
-- [ ] CSS floating animation for bubbles
-- [ ] Pop animation on tap/click
-- [ ] Hebrew game card on menu
+- [x] Game screen: target number at top + 6 floating bubbles with expressions
+- [x] 8 rounds, 1 star per correct bubble popped
+- [x] 2-3 correct bubbles per round, 3-4 wrong ones
+- [x] CSS floating animation for bubbles
+- [x] Pop animation on tap/click
+- [x] Hebrew game card on menu
 
 ### 8. Integration + Polish
 **Priority:** High | **Effort:** Medium
 
-- [ ] Backend: math sessions save/load progress correctly
-- [ ] Per-session stars work for math cards
-- [ ] Session celebration after completing all 4 math games
-- [ ] Tests for math game result saving
-- [ ] Version bump + changelog + README
+- [x] Backend: math sessions save/load progress correctly
+- [x] Per-session stars work for math cards
+- [x] Session celebration after completing all 4 math games
+- [x] Tests for math game result saving
+- [x] Version bump + changelog + README
 
 ---
 

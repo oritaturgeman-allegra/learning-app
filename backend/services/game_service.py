@@ -19,7 +19,10 @@ from backend.models.game_result import GameResult
 logger = logging.getLogger(__name__)
 
 # Valid game types
-VALID_GAME_TYPES = {"word_match", "sentence_scramble", "listen_choose", "true_false"}
+VALID_GAME_TYPES = {
+    "word_match", "sentence_scramble", "listen_choose", "true_false",
+    "quick_solve", "missing_number", "true_false_math", "bubble_pop",
+}
 
 # Stars per correct answer by game type
 STARS_PER_CORRECT = {
@@ -27,7 +30,14 @@ STARS_PER_CORRECT = {
     "sentence_scramble": 2,
     "listen_choose": 1,
     "true_false": 1,
+    "quick_solve": 1,
+    "missing_number": 1,
+    "true_false_math": 1,
+    "bubble_pop": 1,
 }
+
+# Category (subject) by game type
+MATH_GAME_TYPES = {"quick_solve", "missing_number", "true_false_math", "bubble_pop"}
 
 # Rounds per game type
 ROUNDS_PER_GAME = {
@@ -35,6 +45,10 @@ ROUNDS_PER_GAME = {
     "sentence_scramble": 6,
     "listen_choose": 10,
     "true_false": 8,
+    "quick_solve": 10,
+    "missing_number": 8,
+    "true_false_math": 10,
+    "bubble_pop": 8,
 }
 
 
@@ -79,10 +93,12 @@ class GameService:
             raise GameError("save_result", f"Invalid score {score}/{max_score}")
 
         accuracy = score / max_score if max_score > 0 else 0.0
+        category = "math" if game_type in MATH_GAME_TYPES else "english"
 
         try:
             with session_scope() as session:
                 result = GameResult(
+                    category=category,
                     game_type=game_type,
                     score=score,
                     max_score=max_score,

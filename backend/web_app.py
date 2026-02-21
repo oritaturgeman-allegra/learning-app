@@ -145,8 +145,9 @@ async def learning_session(request: Request, subject: str, session_slug: str) ->
         raise HTTPException(status_code=404, detail="Subject not found")
     if session_slug not in VALID_SESSION_SLUGS:
         raise HTTPException(status_code=404, detail="Session not found")
+    template_name = "math-fun.html" if subject == "math" else "english-fun.html"
     return templates.TemplateResponse(
-        "english-fun.html",
+        template_name,
         {
             "request": request,
             "version": APP_VERSION,
