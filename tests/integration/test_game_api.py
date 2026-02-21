@@ -322,12 +322,23 @@ class TestPageRoutes:
         assert 'id="session-picker-screen"' in response.text
 
     def test_learning_session_returns_menu(self, client):
-        """GET /learning/jet2-unit2 returns the game menu."""
-        response = client.get("/learning/jet2-unit2")
+        """GET /learning/english/jet2-unit2 returns the game menu."""
+        response = client.get("/learning/english/jet2-unit2")
         assert response.status_code == 200
         assert 'id="menu-screen"' in response.text
 
-    def test_learning_invalid_session_returns_404(self, client):
-        """GET /learning/invalid-slug returns 404."""
-        response = client.get("/learning/invalid-slug")
+    def test_learning_invalid_subject_returns_404(self, client):
+        """GET /learning/invalid-subject/jet2-unit2 returns 404."""
+        response = client.get("/learning/invalid-subject/jet2-unit2")
         assert response.status_code == 404
+
+    def test_learning_invalid_session_returns_404(self, client):
+        """GET /learning/english/invalid-slug returns 404."""
+        response = client.get("/learning/english/invalid-slug")
+        assert response.status_code == 404
+
+    def test_old_url_redirects_to_new(self, client):
+        """GET /learning/jet2-unit2 redirects to /learning/english/jet2-unit2."""
+        response = client.get("/learning/jet2-unit2", follow_redirects=False)
+        assert response.status_code == 301
+        assert response.headers["location"] == "/learning/english/jet2-unit2"

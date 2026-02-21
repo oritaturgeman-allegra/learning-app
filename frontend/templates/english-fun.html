@@ -1861,7 +1861,7 @@ body {
     </div>
     <div class="session-cards-list">
         {% for session in sessions|default([]) %}
-        <div class="session-card slide-up" style="animation-delay: {{ 0.1 + loop.index0 * 0.15 }}s" onclick="selectSession('{{ session.slug }}')">
+        <div class="session-card session-card-{{ session.slug }} slide-up" style="animation-delay: {{ 0.1 + loop.index0 * 0.15 }}s" onclick="selectSession('{{ session.slug }}')">
             <div class="session-card-emoji">{{ session.emoji }}</div>
             <div class="session-card-info">
                 <div class="session-card-name">{{ session.name }}</div>
@@ -2161,7 +2161,8 @@ const UNITS = {
     },
 };
 
-// Active unit — set from URL route or default to first unit
+// Active subject and unit — set from URL route or defaults
+const SUBJECT = '{{ subject|default("english") }}';
 const SESSION_SLUG = '{{ session_slug|default("") }}';
 const ACTIVE_UNIT = SESSION_SLUG && UNITS[SESSION_SLUG] ? UNITS[SESSION_SLUG] : UNITS['jet2-unit2'];
 const vocabulary = ACTIVE_UNIT.vocabulary;
@@ -2758,7 +2759,8 @@ function showScreen(screenId) {
 // Handle browser back/forward button
 window.addEventListener('popstate', () => {
     const path = window.location.pathname;
-    if (path.startsWith('/learning/')) {
+    const parts = path.split('/').filter(Boolean); // e.g. ['learning', 'english', 'jet2-unit2']
+    if (parts.length >= 3 && parts[0] === 'learning') {
         showScreen('menu-screen');
     } else if (path === '/learning') {
         showScreen('session-picker-screen');
@@ -2795,7 +2797,7 @@ function goToSessionPicker() {
 function selectSession(slug) {
     // Navigate to the session's game menu via full page load
     // This ensures SESSION_SLUG is set correctly from the server
-    window.location.href = '/learning/' + slug;
+    window.location.href = '/learning/' + SUBJECT + '/' + slug;
 }
 
 /** Load star count onto session picker cards */
@@ -2822,7 +2824,7 @@ async function loadSessionPickerProgress() {
 
 function goToMenu() {
     showScreen('menu-screen');
-    const menuPath = '/learning/' + (SESSION_SLUG || 'jet2-unit2');
+    const menuPath = '/learning/' + SUBJECT + '/' + (SESSION_SLUG || 'jet2-unit2');
     if (window.location.pathname !== menuPath) {
         history.pushState(null, '', menuPath);
     }

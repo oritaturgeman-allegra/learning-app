@@ -7,12 +7,19 @@ from typing import Any, Dict
 
 import sentry_sdk
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from backend.config import config
-from backend.defaults import APP_METADATA, APP_VERSION, REWARD_TIERS, SESSIONS, VALID_SESSION_SLUGS
+from backend.defaults import (
+    APP_METADATA,
+    APP_VERSION,
+    REWARD_TIERS,
+    SESSIONS,
+    VALID_SESSION_SLUGS,
+    VALID_SUBJECTS,
+)
 from backend.exceptions import AppError
 from backend.logging_config import setup_logging
 from backend.routes.game import router as game_router
@@ -130,9 +137,11 @@ async def learning(request: Request) -> HTMLResponse:
     )
 
 
-@app.get("/learning/{session_slug}", response_class=HTMLResponse)
-async def learning_session(request: Request, session_slug: str) -> HTMLResponse:
-    """Serve the game menu for a specific learning session."""
+@app.get("/learning/{subject}/{session_slug}", response_class=HTMLResponse)
+async def learning_session(request: Request, subject: str, session_slug: str) -> HTMLResponse:
+    """Serve the game menu for a specific learning session under a subject."""
+    if subject not in VALID_SUBJECTS:
+        raise HTTPException(status_code=404, detail="Subject not found")
     if session_slug not in VALID_SESSION_SLUGS:
         raise HTTPException(status_code=404, detail="Session not found")
     return templates.TemplateResponse(
@@ -142,10 +151,19 @@ async def learning_session(request: Request, session_slug: str) -> HTMLResponse:
             "version": APP_VERSION,
             "reward_tiers": REWARD_TIERS,
             "sessions": SESSIONS,
+            "subject": subject,
             "session_slug": session_slug,
             "initial_screen": "menu",
         },
     )
+
+
+@app.get("/learning/{session_slug}")
+async def learning_session_redirect(request: Request, session_slug: str) -> RedirectResponse:
+    """Redirect old URLs to new subject-scoped URLs for backward compatibility."""
+    if session_slug in VALID_SESSION_SLUGS:
+        return RedirectResponse(url=f"/learning/english/{session_slug}", status_code=301)
+    raise HTTPException(status_code=404, detail="Not found")
 
 
 @app.get("/health")

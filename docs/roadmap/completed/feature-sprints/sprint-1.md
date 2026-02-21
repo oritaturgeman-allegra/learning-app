@@ -1,7 +1,7 @@
 # Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
-Ship **v1.0.0 → v1.6.3** — Build a complete gamified English learning app with 4 mini-games, persistent progress tracking, and a polished kid-friendly UI.
+Ship **v1.0.0 → v2.3.0** — Build a complete gamified English learning app with 4 mini-games, persistent progress tracking, and a polished kid-friendly UI.
 
 ## Sprint Theme
 Foundation & Polish — Core game engine, vocabulary content, star rewards, word tracker, and visual delight for a Gen Alpha learner.
@@ -158,10 +158,19 @@ New intermediate screen at `/learning` showing session cards — pick a unit and
 
 ---
 
+### 20. Subject-Based URL Routing (v2.3.0)
+Multi-subject URL structure — `/learning/english/jet2-unit2` replaces `/learning/jet2-unit2`, preparing for math support.
+- New route `/learning/{subject}/{session_slug}` with subject validation
+- `VALID_SUBJECTS` allow-list in defaults.py
+- 301 redirect from old URLs for backward compatibility
+- Frontend JS updated: `SUBJECT` constant, `selectSession`, `goToMenu`, `popstate`
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.2.0 (19 releases)
-**Features Completed:** 19 (12 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.3.0 (20 releases)
+**Features Completed:** 20 (13 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
 **Test Coverage:** 63 tests, 81% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
