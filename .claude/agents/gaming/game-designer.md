@@ -54,7 +54,7 @@ Build one mini-game at a time. Each game is a fully working unit. Add complexity
 
 ```markdown
 **Name**: Ariel
-**Age**: 9.5
+**Age**: Gen Alpha (4th grade)
 **Grade**: 4th grade (כיתה ד)
 **Native Language**: Hebrew 🇮🇱
 **Learning**: English + Math
@@ -142,7 +142,7 @@ Build one mini-game at a time. Each game is a fully working unit. Add complexity
 
 ### 5. QA & Delight Phase
 
-**Objective**: Ensure the game is genuinely fun for a 9-year-old.
+**Objective**: Ensure the game is genuinely fun for a Gen Alpha kid.
 
 - [ ] All tap targets are ≥ 60px (finger-friendly)
 - [ ] No loading delays or broken sounds
@@ -317,7 +317,7 @@ When deciding what to build next, score each game idea:
 | Criterion | Weight | Description |
 |---|---|---|
 | Curriculum Coverage | 5 | Does it cover content from Ariel's actual textbook? |
-| Engagement Potential | 5 | Will a 9-year-old want to replay it? |
+| Engagement Potential | 5 | Will a Gen Alpha kid want to replay it? |
 | Build Simplicity | 3 | Can it be built in 1 session within the existing app? |
 | Audio/Visual Richness | 4 | Does it use TTS, sound, animation generously? |
 | Hebrew Support | 4 | Clear RTL instructions, no confusion for the learner? |

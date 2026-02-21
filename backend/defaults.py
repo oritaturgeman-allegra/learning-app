@@ -1,5 +1,5 @@
 """
-Static defaults and constants for Ariel's English Adventure.
+Static defaults and constants for Ariel Learning App.
 """
 
 from typing import Any, Dict, List
@@ -35,7 +35,7 @@ REWARD_TIERS: List[Dict[str, Any]] = [
 
 # App metadata
 APP_METADATA = {
-    "title": "Ariel's English Adventure",
+    "title": "Ariel Learning App",
     "description": "Gamified English learning for kids",
     "version": APP_VERSION,
 }

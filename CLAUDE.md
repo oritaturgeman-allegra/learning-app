@@ -1,6 +1,6 @@
-# Ariel's English Adventure
+# Ariel Learning App
 
-Gamified English learning web app for a 9.5-year-old Israeli girl. Teaches vocabulary from Jet 2 textbook (Unit 2) through 4 interactive mini-games with rewards, animations, and sound feedback.
+Gamified English learning web app for a Gen Alpha Israeli girl (4th grade). Teaches vocabulary from Jet 2 textbook (Unit 2) through 4 interactive mini-games with rewards, animations, and sound feedback.
 
 ## Commands
 

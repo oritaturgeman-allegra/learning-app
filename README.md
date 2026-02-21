@@ -1,4 +1,4 @@
-# Ariel's English Adventure 🌟
+# Ariel Learning App 🌟
 
 Gamified English learning for kids — fun, colorful, interactive.
 
@@ -6,7 +6,7 @@ Gamified English learning for kids — fun, colorful, interactive.
 
 A web app that teaches English vocabulary to Hebrew-speaking children through 4 mini-games: word matching, sentence building, listening comprehension, and true/false. Features star rewards, confetti animations, sound feedback, and persistent progress.
 
-**Built for:** Ariel, 4th grade, Jet 2 textbook — Unit 2 vocabulary (clothes, seasons, weather, nature, actions, people, body, food, places, descriptions, things).
+**Built for:** Ariel, Gen Alpha 4th grader, Jet 2 textbook — Unit 2 vocabulary (clothes, seasons, weather, nature, actions, people, body, food, places, descriptions, things).
 
 ## Recent Updates
 

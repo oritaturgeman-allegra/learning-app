@@ -1,5 +1,5 @@
 """
-Configuration module for Ariel's English Adventure.
+Configuration module for Ariel Learning App.
 
 Provides type-safe configuration loading with validation and default values.
 """

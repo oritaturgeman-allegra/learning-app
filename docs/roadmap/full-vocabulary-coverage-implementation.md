@@ -67,7 +67,7 @@ Add ~6 scramble + ~6 true/false sentences containing orphan words. This:
 - [ ] Add ~6 new `scrambleSentences` entries covering orphan words
 - [ ] Add ~6 new `trueFalseSentences` entries covering orphan words
 - [ ] Validate: every vocab word now appears in ≥1 sentence
-- [ ] Sentences should be age-appropriate (9.5-year-old, Jet 2 textbook level)
+- [ ] Sentences should be age-appropriate (Gen Alpha, Jet 2 textbook level)
 
 **Draft new scramble sentences:**
 ```

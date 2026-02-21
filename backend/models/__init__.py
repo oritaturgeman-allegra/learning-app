@@ -1,5 +1,5 @@
 """
-Database models for Ariel's English Adventure.
+Database models for Ariel Learning App.
 """
 
 from backend.models.app_state import AppState

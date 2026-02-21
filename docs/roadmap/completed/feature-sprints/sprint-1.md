@@ -4,7 +4,7 @@
 Ship **v1.0.0 → v1.6.3** — Build a complete gamified English learning app with 4 mini-games, persistent progress tracking, and a polished kid-friendly UI.
 
 ## Sprint Theme
-Foundation & Polish — Core game engine, vocabulary content, star rewards, word tracker, and visual delight for a 9-year-old learner.
+Foundation & Polish — Core game engine, vocabulary content, star rewards, word tracker, and visual delight for a Gen Alpha learner.
 
 ---
 

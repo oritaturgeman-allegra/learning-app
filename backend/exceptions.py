@@ -1,5 +1,5 @@
 """
-Custom exception classes for Ariel's English Adventure.
+Custom exception classes for Ariel Learning App.
 """
 
 from typing import Optional

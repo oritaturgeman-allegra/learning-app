@@ -1,4 +1,4 @@
-"""FastAPI app for Ariel's English Adventure."""
+"""FastAPI app for Ariel Learning App."""
 
 import logging
 import uuid
