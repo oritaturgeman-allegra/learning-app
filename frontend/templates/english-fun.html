@@ -1495,6 +1495,12 @@ body {
     color: var(--text-muted);
 }
 
+.collection-card.earned .collection-card-stars {
+    font-size: 0.7rem;
+    color: #b8860b;
+    margin-top: 4px;
+}
+
 .collection-card.locked {
     background: #f3f4f6;
     border: 2px dashed #d1d5db;
@@ -2529,6 +2535,7 @@ function openCollection() {
                 <div class="collection-card-emoji">${tier.emoji}</div>
                 <div class="collection-card-name">${tier.name_en}</div>
                 <div class="collection-card-name-he">${tier.name_he}</div>
+                <div class="collection-card-stars">⭐ ${tier.stars}</div>
             `;
         } else {
             card.innerHTML = `
