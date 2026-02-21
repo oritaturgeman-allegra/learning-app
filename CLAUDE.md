@@ -28,7 +28,8 @@ Gamified English learning web app for a Gen Alpha Israeli girl (4th grade). Teac
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/` | Serve the learning app |
+| GET | `/` | Serve the landing page |
+| GET | `/learning` | Serve the game menu (refresh-safe) |
 | GET | `/health` | Health check |
 | POST | `/api/game/result` | Save a game result (score + per-word accuracy) |
 | GET | `/api/game/progress` | Get total stars, accuracy by game, weak words |
@@ -75,6 +76,19 @@ Gamified English learning web app for a Gen Alpha Israeli girl (4th grade). Teac
 ## Agents
 
 Task-based agents in `.claude/agents/` — use `/new-task` for recommendations.
+
+## /new-task Output Checklist
+
+When running `/new-task`, the output MUST include ALL these sections in order:
+1. Task Analysis (type, complexity, priority)
+2. Relevant Agents
+3. Implementation Plan (phases)
+4. Files to Modify/Create
+5. Testing Strategy
+6. **Documentation Updates Required** — NEVER skip this. State Yes/No for architecture docs and reason.
+7. Security Review
+8. Potential Issues
+9. Next Steps
 
 ## Git-Ignored Files (Do NOT include in commits)
 

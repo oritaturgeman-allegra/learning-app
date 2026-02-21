@@ -102,10 +102,29 @@ logger.info("Web application initialized")
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request) -> HTMLResponse:
-    """Serve the English learning app."""
+    """Serve the landing page."""
     return templates.TemplateResponse(
         "english-fun.html",
-        {"request": request, "version": APP_VERSION, "reward_tiers": REWARD_TIERS},
+        {
+            "request": request,
+            "version": APP_VERSION,
+            "reward_tiers": REWARD_TIERS,
+            "initial_screen": "welcome",
+        },
+    )
+
+
+@app.get("/learning", response_class=HTMLResponse)
+async def learning(request: Request) -> HTMLResponse:
+    """Serve the game menu directly (supports refresh without losing state)."""
+    return templates.TemplateResponse(
+        "english-fun.html",
+        {
+            "request": request,
+            "version": APP_VERSION,
+            "reward_tiers": REWARD_TIERS,
+            "initial_screen": "menu",
+        },
     )
 
 

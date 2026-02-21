@@ -140,10 +140,18 @@ Games 2 & 4 now save individual vocabulary words (not sentences) to the backend,
 
 ---
 
+### 18. URL Routing — Refresh-Safe Game Menu (v2.1.0)
+Dedicated `/learning` route so the game menu persists on page refresh instead of resetting to the landing page.
+- Backend: new `GET /learning` route serving same template with `initial_screen="menu"`
+- Frontend: Jinja2 conditional `active` class + `history.pushState` URL sync
+- Browser back/forward button support via `popstate` handler
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.0.0 (17 releases)
-**Features Completed:** 17 (10 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.1.0 (18 releases)
+**Features Completed:** 18 (11 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
 **Test Coverage:** 59 tests, 81% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

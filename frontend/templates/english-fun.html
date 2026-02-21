@@ -1689,7 +1689,7 @@ body {
 <!-- =====================================================================
      WELCOME SCREEN
      ====================================================================== -->
-<div class="screen active" id="welcome-screen">
+<div class="screen {% if initial_screen == 'welcome' %}active{% endif %}" id="welcome-screen">
     <div class="welcome-title">שלום אריאל! 👋</div>
     <div class="welcome-subtitle">בואי ללמוד בכיף 🎉</div>
     <button class="welcome-btn" id="welcome-btn" onclick="goToMenu()">מתחילים ▶️</button>
@@ -1698,7 +1698,7 @@ body {
 <!-- =====================================================================
      MAIN MENU
      ====================================================================== -->
-<div class="screen" id="menu-screen">
+<div class="screen {% if initial_screen == 'menu' %}active{% endif %}" id="menu-screen">
     <div class="app-header">
         <div class="header-right">
             <div class="star-counter">
@@ -2577,6 +2577,15 @@ function showScreen(screenId) {
     document.getElementById(screenId).classList.add('active');
 }
 
+// Handle browser back/forward button
+window.addEventListener('popstate', () => {
+    if (window.location.pathname === '/learning') {
+        showScreen('menu-screen');
+    } else {
+        showScreen('welcome-screen');
+    }
+});
+
 function switchSubject(subject) {
     if (subject === 'math') {
         // Shake the disabled tab as feedback
@@ -2593,6 +2602,9 @@ function switchSubject(subject) {
 
 function goToMenu() {
     showScreen('menu-screen');
+    if (window.location.pathname !== '/learning') {
+        history.pushState(null, '', '/learning');
+    }
     updateStarDisplay();
     buildWordTracker();
     loadPracticedWords();
@@ -3260,6 +3272,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Wire welcome button
     document.getElementById('welcome-btn').onclick = welcomeClick;
+
+    // If loaded directly on /learning, initialize the menu
+    if (document.getElementById('menu-screen').classList.contains('active')) {
+        buildWordTracker();
+        loadPracticedWords();
+        if (!state.sessionPlan) planSession();
+        // Restore session checkmarks from localStorage
+        state.sessionGames.forEach(gameNum => {
+            const card = document.getElementById(`game-card-${gameNum}`);
+            if (card) card.classList.add('completed');
+        });
+    }
 
     // Reposition word tracker on resize
     window.addEventListener('resize', () => positionWordTracker());
