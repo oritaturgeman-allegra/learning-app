@@ -6,13 +6,13 @@ from datetime import datetime
 from typing import Any, Dict
 
 import sentry_sdk
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from backend.config import config
-from backend.defaults import APP_METADATA, APP_VERSION, REWARD_TIERS
+from backend.defaults import APP_METADATA, APP_VERSION, REWARD_TIERS, SESSIONS, VALID_SESSION_SLUGS
 from backend.exceptions import AppError
 from backend.logging_config import setup_logging
 from backend.routes.game import router as game_router
@@ -109,6 +109,7 @@ async def index(request: Request) -> HTMLResponse:
             "request": request,
             "version": APP_VERSION,
             "reward_tiers": REWARD_TIERS,
+            "sessions": SESSIONS,
             "initial_screen": "welcome",
         },
     )
@@ -116,13 +117,32 @@ async def index(request: Request) -> HTMLResponse:
 
 @app.get("/learning", response_class=HTMLResponse)
 async def learning(request: Request) -> HTMLResponse:
-    """Serve the game menu directly (supports refresh without losing state)."""
+    """Serve the session picker screen."""
     return templates.TemplateResponse(
         "english-fun.html",
         {
             "request": request,
             "version": APP_VERSION,
             "reward_tiers": REWARD_TIERS,
+            "sessions": SESSIONS,
+            "initial_screen": "session-picker",
+        },
+    )
+
+
+@app.get("/learning/{session_slug}", response_class=HTMLResponse)
+async def learning_session(request: Request, session_slug: str) -> HTMLResponse:
+    """Serve the game menu for a specific learning session."""
+    if session_slug not in VALID_SESSION_SLUGS:
+        raise HTTPException(status_code=404, detail="Session not found")
+    return templates.TemplateResponse(
+        "english-fun.html",
+        {
+            "request": request,
+            "version": APP_VERSION,
+            "reward_tiers": REWARD_TIERS,
+            "sessions": SESSIONS,
+            "session_slug": session_slug,
             "initial_screen": "menu",
         },
     )

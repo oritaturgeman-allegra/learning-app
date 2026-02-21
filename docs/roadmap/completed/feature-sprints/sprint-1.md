@@ -148,11 +148,21 @@ Dedicated `/learning` route so the game menu persists on page refresh instead of
 
 ---
 
+### 19. Session Picker Screen (v2.2.0)
+New intermediate screen at `/learning` showing session cards — pick a unit and jump straight to the games at `/learning/{slug}`.
+- Session picker with animated pastel gradient background and RTL session cards
+- Unified header (stars + trophy) across session picker and games menu
+- `/learning/{session_slug}` route with slug validation (404 for invalid)
+- Client-side navigation via `pushState` + `popstate` for 3 URL states
+- 4 new integration tests for page routes
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.1.0 (18 releases)
-**Features Completed:** 18 (11 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
-**Test Coverage:** 59 tests, 81% coverage, 100% pass rate
+**Versions Shipped:** v1.0.0 → v2.2.0 (19 releases)
+**Features Completed:** 19 (12 features, 3 UX polish, 1 content expansion, 1 chore, 2 bug fixes)
+**Test Coverage:** 63 tests, 81% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
 - 55 vocabulary words from Jet 2 Unit 2 — full coverage guaranteed per session
@@ -160,6 +170,7 @@ Dedicated `/learning` route so the game menu persists on page refresh instead of
 - Word tracker sidebar with practiced/unpracticed chip states
 - Session celebration with fireworks after all 4 games
 - Collectible reward cards with trophy gallery
+- Session picker for multi-unit support
 - Kid-friendly pastel UI with Hebrew RTL support
 - American English female voice for pronunciation
 

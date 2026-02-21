@@ -304,3 +304,30 @@ class TestResetAPI:
         words = client.get("/api/game/practiced-words").json()["data"]["practiced_words"]
         assert words == ["dress"]
         assert "coat" not in words
+
+
+class TestPageRoutes:
+    """Tests for HTML page routes."""
+
+    def test_index_returns_welcome_screen(self, client):
+        """GET / returns the welcome screen."""
+        response = client.get("/")
+        assert response.status_code == 200
+        assert 'id="welcome-screen"' in response.text
+
+    def test_learning_returns_session_picker(self, client):
+        """GET /learning returns the session picker screen."""
+        response = client.get("/learning")
+        assert response.status_code == 200
+        assert 'id="session-picker-screen"' in response.text
+
+    def test_learning_session_returns_menu(self, client):
+        """GET /learning/jet2-unit2 returns the game menu."""
+        response = client.get("/learning/jet2-unit2")
+        assert response.status_code == 200
+        assert 'id="menu-screen"' in response.text
+
+    def test_learning_invalid_session_returns_404(self, client):
+        """GET /learning/invalid-slug returns 404."""
+        response = client.get("/learning/invalid-slug")
+        assert response.status_code == 404

@@ -232,6 +232,145 @@ body {
 }
 
 /* ==========================================================================
+   SESSION PICKER
+   ========================================================================== */
+#session-picker-screen {
+    justify-content: flex-start;
+    padding-top: 100px;
+    min-height: 100vh;
+    max-width: 100%;
+    background: linear-gradient(135deg, #ede9fe, #fce7f3, #fff7ed);
+    background-size: 400% 400%;
+    animation: gradientCycle 8s ease infinite;
+}
+
+#session-picker-screen .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(135deg, #ede9fe, #fce7f3, #fff7ed);
+    padding: var(--space-xl) var(--space-2xl);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    justify-content: center;
+    z-index: 20;
+}
+
+#session-picker-screen .header-right {
+    position: absolute;
+    right: var(--space-lg);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.session-picker-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.session-picker-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.session-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    width: 100%;
+    max-width: 500px;
+    padding: 0 var(--space-md);
+}
+
+.session-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-xl) var(--space-xl);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    cursor: pointer;
+    min-height: 120px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.12);
+    border: 2px solid transparent;
+    direction: rtl;
+}
+
+.session-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(168, 85, 247, 0.2);
+    border-color: var(--purple);
+}
+
+.session-card:active {
+    transform: translateY(-1px);
+}
+
+.session-card-emoji {
+    font-size: 3rem;
+    min-width: 60px;
+    text-align: center;
+}
+
+.session-card-info {
+    flex: 1;
+}
+
+.session-card-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+    direction: ltr;
+    text-align: right;
+}
+
+.session-card-name-he {
+    font-family: var(--font-body);
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+}
+
+.session-card-progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.session-stars-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--gold-bg);
+    color: var(--gold);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 2px var(--space-sm);
+    border-radius: var(--radius-pill);
+}
+
+.session-card-arrow {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.session-card:hover .session-card-arrow {
+    opacity: 1;
+    color: var(--purple);
+}
+
+/* ==========================================================================
    HEADER & STAR COUNTER
    ========================================================================== */
 .app-header {
@@ -256,23 +395,28 @@ body {
 .star-counter {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: 6px;
     background: var(--gold-bg);
     border: 2px solid var(--gold);
-    padding: var(--space-sm) var(--space-md);
+    padding: 6px 14px;
     border-radius: var(--radius-pill);
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--gold);
-    animation: pulseGlow 2s infinite;
+    height: 38px;
 }
 
-.star-counter .star-icon { font-size: 1.4rem; }
+.star-counter .star-icon { font-size: 1.2rem; }
 
 /* ==========================================================================
    MAIN MENU
    ========================================================================== */
+#menu-screen {
+    padding-top: 100px;
+    background: transparent;
+}
+
 #menu-screen::before {
     content: '';
     position: fixed;
@@ -280,9 +424,11 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: url('/static/bg-bows.svg') repeat;
-    background-size: 250px 250px;
+    background: linear-gradient(135deg, #ede9fe, #fce7f3, #fff7ed);
+    background-size: 400% 400%;
+    animation: gradientCycle 8s ease infinite;
     z-index: -1;
+    pointer-events: none;
 }
 
 #menu-screen .app-header {
@@ -290,7 +436,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    background: #fce4ec;
+    background: linear-gradient(135deg, #ede9fe, #fce7f3, #fff7ed);
     padding: var(--space-xl) var(--space-2xl);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     justify-content: center;
@@ -304,7 +450,7 @@ body {
     transform: translateY(-50%);
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-md);
 }
 
 /* Subject tabs — fixed vertical sidebar on the right */
@@ -450,7 +596,7 @@ body {
     font-family: var(--font-body);
     font-size: clamp(1.1rem, 3.5vw, 1.4rem);
     color: var(--text-muted);
-    margin-top: 60px;
+    margin-top: var(--space-md);
     margin-bottom: var(--space-md);
     text-align: center;
 }
@@ -1211,31 +1357,27 @@ body {
 .trophy-btn {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     background: var(--gold-bg);
     border: 2px solid var(--gold);
     border-radius: var(--radius-pill);
-    padding: 4px 12px;
+    padding: 6px 14px;
     font-family: var(--font-display);
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--gold);
     cursor: pointer;
+    height: 38px;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .trophy-btn:hover {
-    transform: scale(1.08);
+    transform: scale(1.05);
     box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
 }
 
-.trophy-btn-small {
-    font-size: 0.85rem;
-    padding: 3px 10px;
-}
-
 .trophy-count {
-    font-size: 0.85em;
+    font-size: 0.9em;
 }
 
 /* ==========================================================================
@@ -1696,9 +1838,9 @@ body {
 </div>
 
 <!-- =====================================================================
-     MAIN MENU
+     SESSION PICKER
      ====================================================================== -->
-<div class="screen {% if initial_screen == 'menu' %}active{% endif %}" id="menu-screen">
+<div class="screen {% if initial_screen == 'session-picker' %}active{% endif %}" id="session-picker-screen">
     <div class="app-header">
         <div class="header-right">
             <div class="star-counter">
@@ -1706,13 +1848,47 @@ body {
                 <span id="star-count">0</span>
             </div>
             <button class="trophy-btn" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="trophy-count">0/6</span></button>
-            <button class="reset-btn" onclick="confirmReset()" title="התחלה מחדש">🔄</button>
         </div>
     </div>
 
     <div class="subject-tabs" id="subject-tabs">
         <button class="subject-tab active" onclick="switchSubject('english')">🇺🇸 אנגלית</button>
         <button class="subject-tab disabled" onclick="switchSubject('math')">🔢 חשבון <span class="tab-lock">🔒</span></button>
+    </div>
+
+    <div class="session-picker-header">
+        <h1 class="session-picker-title bounce-in">📚 מה לומדים היום?</h1>
+    </div>
+    <div class="session-cards-list">
+        {% for session in sessions|default([]) %}
+        <div class="session-card slide-up" style="animation-delay: {{ 0.1 + loop.index0 * 0.15 }}s" onclick="selectSession('{{ session.slug }}')">
+            <div class="session-card-emoji">{{ session.emoji }}</div>
+            <div class="session-card-info">
+                <div class="session-card-name">{{ session.name }}</div>
+                <div class="session-card-name-he">{{ session.name_he }}</div>
+                <div class="session-card-progress" id="progress-{{ session.slug }}">
+                    <span class="session-stars-badge">⭐ <span class="session-star-count">0</span></span>
+                </div>
+            </div>
+            <div class="session-card-arrow">←</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- =====================================================================
+     MAIN MENU
+     ====================================================================== -->
+<div class="screen {% if initial_screen == 'menu' %}active{% endif %}" id="menu-screen">
+    <div class="app-header">
+        <div class="header-right">
+            <div class="star-counter">
+                <span class="star-icon">⭐</span>
+                <span id="menu-star-count">0</span>
+            </div>
+            <button class="trophy-btn" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="menu-trophy-count">0/6</span></button>
+            <button class="reset-btn" onclick="confirmReset()" title="התחלה מחדש">🔄</button>
+        </div>
     </div>
 
     <div class="word-tracker" id="word-tracker">
@@ -1766,7 +1942,7 @@ body {
             <span class="star-icon">⭐</span>
             <span id="game-star-count">0</span>
         </div>
-        <button class="trophy-btn trophy-btn-small" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="game-trophy-count">0/6</span></button>
+        <button class="trophy-btn" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="game-trophy-count">0/6</span></button>
         <div class="app-title">🌟 English Fun</div>
     </div>
 
@@ -1985,8 +2161,9 @@ const UNITS = {
     },
 };
 
-// Active unit (future: unit selection UI will set this dynamically)
-const ACTIVE_UNIT = UNITS['jet2-unit2'];
+// Active unit — set from URL route or default to first unit
+const SESSION_SLUG = '{{ session_slug|default("") }}';
+const ACTIVE_UNIT = SESSION_SLUG && UNITS[SESSION_SLUG] ? UNITS[SESSION_SLUG] : UNITS['jet2-unit2'];
 const vocabulary = ACTIVE_UNIT.vocabulary;
 const scrambleSentences = ACTIVE_UNIT.scrambleSentences;
 const trueFalseSentences = ACTIVE_UNIT.trueFalseSentences;
@@ -2352,6 +2529,7 @@ function saveStars() {
 /** Update all star counter displays */
 function updateStarDisplay() {
     document.getElementById('star-count').textContent = state.totalStars;
+    document.getElementById('menu-star-count').textContent = state.totalStars;
     document.getElementById('game-star-count').textContent = state.totalStars;
     updateTrophyCount();
 }
@@ -2467,10 +2645,10 @@ function saveEarnedRewards(earned) {
 function updateTrophyCount() {
     const earned = getEarnedRewards();
     const text = `${earned.length}/${REWARD_TIERS.length}`;
-    const el = document.getElementById('trophy-count');
-    if (el) el.textContent = text;
-    const gameEl = document.getElementById('game-trophy-count');
-    if (gameEl) gameEl.textContent = text;
+    ['trophy-count', 'menu-trophy-count', 'game-trophy-count'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    });
 }
 
 /** Check if a new reward tier was unlocked */
@@ -2579,8 +2757,12 @@ function showScreen(screenId) {
 
 // Handle browser back/forward button
 window.addEventListener('popstate', () => {
-    if (window.location.pathname === '/learning') {
+    const path = window.location.pathname;
+    if (path.startsWith('/learning/')) {
         showScreen('menu-screen');
+    } else if (path === '/learning') {
+        showScreen('session-picker-screen');
+        loadSessionPickerProgress();
     } else {
         showScreen('welcome-screen');
     }
@@ -2600,10 +2782,49 @@ function switchSubject(subject) {
     document.querySelector(`[onclick="switchSubject('${subject}')"]`).classList.add('active');
 }
 
-function goToMenu() {
-    showScreen('menu-screen');
+/** Navigate to session picker screen */
+function goToSessionPicker() {
+    showScreen('session-picker-screen');
     if (window.location.pathname !== '/learning') {
         history.pushState(null, '', '/learning');
+    }
+    loadSessionPickerProgress();
+}
+
+/** Select a session and navigate to its game menu */
+function selectSession(slug) {
+    // Navigate to the session's game menu via full page load
+    // This ensures SESSION_SLUG is set correctly from the server
+    window.location.href = '/learning/' + slug;
+}
+
+/** Load star count onto session picker cards */
+async function loadSessionPickerProgress() {
+    try {
+        const res = await fetch(`${API_BASE}/progress`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success) {
+                const stars = data.data.total_stars;
+                document.querySelectorAll('.session-star-count').forEach(el => {
+                    el.textContent = stars;
+                });
+            }
+        }
+    } catch (e) {
+        // API unavailable — show localStorage fallback
+        const stars = localStorage.getItem('ariel_stars') || '0';
+        document.querySelectorAll('.session-star-count').forEach(el => {
+            el.textContent = stars;
+        });
+    }
+}
+
+function goToMenu() {
+    showScreen('menu-screen');
+    const menuPath = '/learning/' + (SESSION_SLUG || 'jet2-unit2');
+    if (window.location.pathname !== menuPath) {
+        history.pushState(null, '', menuPath);
     }
     updateStarDisplay();
     buildWordTracker();
@@ -2671,7 +2892,7 @@ function closeSessionPopup() {
 // Welcome screen: wait for button click
 function welcomeClick() {
     initAudio(); // First user gesture — unlock AudioContext
-    goToMenu();
+    goToSessionPicker();
 }
 
 /* ==========================================================================
@@ -2709,7 +2930,7 @@ function positionWordTracker() {
     const lastCard = document.getElementById('game-card-4');
     if (!tracker || !firstCard || !lastCard) return;
 
-    const topY = firstCard.getBoundingClientRect().top - 55;
+    const topY = firstCard.getBoundingClientRect().top - 56;
     const bottomY = lastCard.getBoundingClientRect().bottom;
     const height = bottomY - topY;
 
@@ -3273,7 +3494,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // Wire welcome button
     document.getElementById('welcome-btn').onclick = welcomeClick;
 
-    // If loaded directly on /learning, initialize the menu
+    // If loaded directly on /learning/{slug}, initialize the menu
     if (document.getElementById('menu-screen').classList.contains('active')) {
         buildWordTracker();
         loadPracticedWords();
@@ -3283,6 +3504,11 @@ window.addEventListener('DOMContentLoaded', () => {
             const card = document.getElementById(`game-card-${gameNum}`);
             if (card) card.classList.add('completed');
         });
+    }
+
+    // If loaded on /learning (session picker), show star progress
+    if (document.getElementById('session-picker-screen').classList.contains('active')) {
+        loadSessionPickerProgress();
     }
 
     // Reposition word tracker on resize

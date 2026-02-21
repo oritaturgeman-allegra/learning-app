@@ -5,10 +5,14 @@ Static defaults and constants for Ariel Learning App.
 from typing import Any, Dict, List
 
 # App version (single source of truth)
-APP_VERSION = "2.1.0"
+APP_VERSION = "2.2.0"
 
 # Recent changelog entries (shown in "What's New" popup)
 APP_CHANGELOG: List[Dict[str, str]] = [
+    {
+        "version": "2.2.0",
+        "text": "Choose your learning session! New session picker screen — pick a unit and jump straight to the games",
+    },
     {
         "version": "2.1.0",
         "text": "Refresh without losing your place! The game menu now has its own page — no more starting over",
@@ -17,11 +21,15 @@ APP_CHANGELOG: List[Dict[str, str]] = [
         "version": "2.0.0",
         "text": "Word tracker now remembers ALL your words — even from sentences! No more missing words after refresh",
     },
-    {
-        "version": "1.9.0",
-        "text": "Collect reward cards as you earn stars! 6 cards to unlock — tap the trophy to see your collection",
-    },
 ]
+
+# Available learning sessions (units)
+SESSIONS: List[Dict[str, str]] = [
+    {"slug": "jet2-unit2", "name": "Jet 2: Unit 2", "name_he": "ג׳ט 2: יחידה 2", "emoji": "📘"},
+]
+
+# Valid session slugs for route validation
+VALID_SESSION_SLUGS: set = {s["slug"] for s in SESSIONS}
 
 # Collectible reward tiers — unlocked at star milestones
 REWARD_TIERS: List[Dict[str, Any]] = [
