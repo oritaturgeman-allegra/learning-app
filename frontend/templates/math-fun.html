@@ -440,30 +440,25 @@ body {
 }
 
 .game-card.completed::after {
-    content: '✓';
+    content: '⭐';
     position: absolute;
     left: var(--space-md);
     top: 50%;
     transform: translateY(-50%);
     width: 38px;
     height: 38px;
-    background: var(--green);
-    color: white;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
+    font-size: 1.5rem;
     animation: checkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 /* Math game card colors */
-.game-card-quick-solve { background: #93c5fd; }
-.game-card-missing-number { background: #6ee7b7; }
+.game-card-quick-solve-math { background: #93c5fd; }
+.game-card-missing-number-math { background: #6ee7b7; }
 .game-card-true-false-math { background: #fda4af; }
-.game-card-bubble-pop { background: #c4b5fd; }
+.game-card-bubble-pop-math { background: #c4b5fd; }
 
 .game-card .card-emoji {
     font-size: 2.5rem;
@@ -1360,14 +1355,14 @@ body {
     </div>
 
     <div class="game-cards">
-        <div class="game-card game-card-quick-solve" id="game-card-1" onclick="startGame(1)">
+        <div class="game-card game-card-quick-solve-math" id="game-card-1" onclick="startGame(1)">
             <div class="card-emoji">⚡</div>
             <div class="card-text">
                 <div class="card-title">פתרי מהר!</div>
                 <div class="card-desc">בחרי את התשובה הנכונה</div>
             </div>
         </div>
-        <div class="game-card game-card-missing-number" id="game-card-2" onclick="startGame(2)">
+        <div class="game-card game-card-missing-number-math" id="game-card-2" onclick="startGame(2)">
             <div class="card-emoji">🔍</div>
             <div class="card-text">
                 <div class="card-title">מצאי את המספר!</div>
@@ -1375,13 +1370,13 @@ body {
             </div>
         </div>
         <div class="game-card game-card-true-false-math" id="game-card-3" onclick="startGame(3)">
-            <div class="card-emoji">✅</div>
+            <div class="card-emoji">🤔</div>
             <div class="card-text">
                 <div class="card-title">נכון או לא?</div>
                 <div class="card-desc">האם התרגיל נכון?</div>
             </div>
         </div>
-        <div class="game-card game-card-bubble-pop" id="game-card-4" onclick="startGame(4)">
+        <div class="game-card game-card-bubble-pop-math" id="game-card-4" onclick="startGame(4)">
             <div class="card-emoji">🫧</div>
             <div class="card-text">
                 <div class="card-title">פוצצי בועות!</div>

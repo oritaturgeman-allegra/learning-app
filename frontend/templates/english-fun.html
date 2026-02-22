@@ -869,22 +869,17 @@ body {
 }
 
 .game-card.completed::after {
-    content: '✓';
+    content: '⭐';
     position: absolute;
     left: var(--space-md);
     top: 50%;
     transform: translateY(-50%);
     width: 38px;
     height: 38px;
-    background: var(--green);
-    color: white;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
+    font-size: 1.5rem;
     animation: checkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
@@ -894,10 +889,10 @@ body {
     100% { transform: translateY(-50%) scale(1); }
 }
 
-.game-card-word-match { background: #c4b5fd; }
-.game-card-sentence-builder { background: #fdba74; }
-.game-card-listen-choose { background: #7dd3fc; }
-.game-card-true-false { background: #f9a8d4; }
+.game-card-word-match-english { background: #c4b5fd; }
+.game-card-sentence-builder-english { background: #fdba74; }
+.game-card-listen-choose-english { background: #7dd3fc; }
+.game-card-true-false-english { background: #f9a8d4; }
 
 .game-card .card-emoji {
     font-size: 2.5rem;
@@ -2082,31 +2077,31 @@ body {
     </div>
 
     <div class="game-cards">
-        <div class="game-card game-card-word-match" id="game-card-1" onclick="startGame(1)">
+        <div class="game-card game-card-word-match-english" id="game-card-1" onclick="startGame(1)">
             <div class="card-emoji">🔤</div>
             <div class="card-text">
                 <div class="card-title">מה המילה?</div>
                 <div class="card-desc">התאימי את המילה באנגלית</div>
             </div>
         </div>
-        <div class="game-card game-card-sentence-builder" id="game-card-2" onclick="startGame(2)">
+        <div class="game-card game-card-sentence-builder-english" id="game-card-2" onclick="startGame(2)">
             <div class="card-emoji">📝</div>
             <div class="card-text">
                 <div class="card-title">תרגמי את המשפט</div>
                 <div class="card-desc">סדרי את המילים בסדר הנכון</div>
             </div>
         </div>
-        <div class="game-card game-card-listen-choose" id="game-card-3" onclick="startGame(3)">
+        <div class="game-card game-card-listen-choose-english" id="game-card-3" onclick="startGame(3)">
             <div class="card-emoji">🔊</div>
             <div class="card-text">
                 <div class="card-title">האזיני ובחרי</div>
                 <div class="card-desc">שמעי את המילה ובחרי תמונה</div>
             </div>
         </div>
-        <div class="game-card game-card-true-false" id="game-card-4" onclick="startGame(4)">
+        <div class="game-card game-card-true-false-english" id="game-card-4" onclick="startGame(4)">
             <div class="card-emoji">🤔</div>
             <div class="card-text">
-                <div class="card-title">כן או לא?</div>
+                <div class="card-title">נכון או לא?</div>
                 <div class="card-desc">האם המשפט נכון?</div>
             </div>
         </div>

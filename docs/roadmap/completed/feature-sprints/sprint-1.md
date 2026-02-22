@@ -253,10 +253,16 @@ Session completion checkmarks now derived from database via `/api/game/progress`
 
 ---
 
+### 31. Game Card Completion Badge Polish (v2.11.2)
+Changed game card completion indicator from green ✓ circle to ⭐ star — avoids visual conflict with session completion checkmark.
+- Math True/False emoji changed from ✅ to 🤔 for consistency with English
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.11.1 (30 releases)
-**Features Completed:** 30 (21 features, 3 UX polish, 1 content expansion, 1 chore, 4 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.11.2 (31 releases)
+**Features Completed:** 31 (21 features, 4 UX polish, 1 content expansion, 1 chore, 4 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
