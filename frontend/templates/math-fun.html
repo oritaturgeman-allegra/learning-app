@@ -366,6 +366,32 @@ body {
     color: var(--purple);
 }
 
+#game-screen {
+    padding-top: 80px;
+}
+
+#game-screen .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--bg);
+    padding: var(--space-xl) var(--space-2xl);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    justify-content: center;
+    z-index: 20;
+}
+
+#game-screen .header-right {
+    position: absolute;
+    right: var(--space-lg);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
 .menu-subtitle {
     font-family: var(--font-body);
     font-size: clamp(1.1rem, 3.5vw, 1.4rem);
@@ -1247,16 +1273,20 @@ body {
      ====================================================================== -->
 <div class="screen" id="game-screen">
     <div class="app-header">
-        <div class="star-counter">
-            <span class="star-icon">⭐</span>
-            <span id="game-star-count">0</span>
+        <div class="header-left">
+            <a class="home-btn" href="/learning" title="חזרה לבחירת נושא">🏠</a>
         </div>
-        <button class="trophy-btn" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="game-trophy-count">0/6</span></button>
-        <div class="app-title">🔢 חשבון</div>
+        <div class="header-right">
+            <div class="star-counter">
+                <span class="star-icon">⭐</span>
+                <span id="game-star-count">0</span>
+            </div>
+            <button class="trophy-btn" onclick="openCollection()" title="האוסף שלי">🏆 <span class="trophy-count" id="game-trophy-count">0/6</span></button>
+        </div>
     </div>
 
     <div class="game-header">
-        <button class="back-btn" onclick="goToMenu()">→ חזרה</button>
+        <button class="back-btn" onclick="goToMenu(false)">→ חזרה</button>
         <div class="game-title" id="game-title"></div>
     </div>
 
@@ -1278,7 +1308,7 @@ body {
     <div class="complete-stars" id="complete-total-stars"></div>
     <div class="complete-buttons">
         <button class="complete-btn replay" id="replay-btn">🔄 שחקי שוב</button>
-        <button class="complete-btn menu" onclick="goToMenu()">🏠 תפריט ראשי</button>
+        <button class="complete-btn menu" onclick="goToMenu(false)">🏠 תפריט ראשי</button>
     </div>
 </div>
 
@@ -1763,13 +1793,13 @@ function openCollection() {
     if (nextTier) {
         const progress = Math.min((state.totalStars / nextTier.stars) * 100, 100);
         progressEl.innerHTML = `
-            <div class="collection-progress-text">⭐ ${nextTier.stars} :הפרס הבא ב</div>
+            <div class="collection-progress-text">⭐ הפרס הבא ב: ${nextTier.stars}</div>
             <div class="collection-progress-bar">
                 <div class="collection-progress-fill" style="width: ${progress}%"></div>
             </div>
         `;
     } else {
-        progressEl.innerHTML = `<div class="collection-progress-text">🎉 !אספת את כל הפרסים</div>`;
+        progressEl.innerHTML = `<div class="collection-progress-text">🎉 אספת את כל הפרסים!</div>`;
     }
     document.getElementById('collection-overlay').classList.add('active');
 }
@@ -1850,7 +1880,7 @@ function spawnFireworks() {
 
 function closeSessionPopup() {
     document.getElementById('session-overlay').classList.remove('active');
-    goToMenu();
+    goToMenu(false);
 }
 
 window.addEventListener('popstate', () => {

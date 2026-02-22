@@ -58,7 +58,52 @@ Math games need a **separate template** (`math-fun.html`) or a **shared game eng
 
 ## Sprint 1 Tasks
 
-All tasks completed — see `docs/roadmap/completed/feature-sprints/sprint-1.md` for details.
+### Chapter A: Tens & Hundreds (`math-tens-hundreds`) — DONE
+
+All 8 tasks completed (v2.8.0–v2.9.0). See `docs/roadmap/completed/feature-sprints/sprint-1.md` for details.
+
+- [x] Math architecture setup (4 session cards, routing, backend)
+- [x] Math template + game engine (`math-fun.html`)
+- [x] Problem generator — Chapter A (6 categories)
+- [x] Game 1 — Quick Solve
+- [x] Game 2 — Missing Number
+- [x] Game 3 — True or False
+- [x] Game 4 — Bubble Pop
+- [x] Integration + polish
+
+### Chapter B: Two-Digit Multiply (`math-two-digit`) — TODO
+
+- [ ] Problem generator for Chapter B topics:
+  - 2-digit × 1-digit (e.g., `23 × 4 = ?`)
+  - 2-digit × 2-digit (e.g., `15 × 12 = ?`)
+  - Vertical multiplication layout
+  - Powers of numbers (e.g., `5² = ?`)
+- [ ] Unlock session card (remove `locked: True`)
+- [ ] Route `/learning/math/math-two-digit` serves math template with Chapter B problems
+- [ ] All 4 games work with Chapter B content
+- [ ] Tests + version bump
+
+### Chapter C: Long Division (`math-long-division`) — TODO
+
+- [ ] Problem generator for Chapter C topics:
+  - Division by single digit with remainder
+  - Long division step-by-step
+  - Division verification (multiply back)
+- [ ] Unlock session card
+- [ ] Route + template integration
+- [ ] All 4 games work with Chapter C content
+- [ ] Tests + version bump
+
+### Chapter D: Primes & Divisibility (`math-primes`) — TODO
+
+- [ ] Problem generator for Chapter D topics:
+  - Divisibility rules for 3, 6, 9
+  - Prime vs composite identification
+  - Prime factorization
+- [ ] Unlock session card
+- [ ] Route + template integration
+- [ ] All 4 games work with Chapter D content
+- [ ] Tests + version bump
 
 ---
 
@@ -72,6 +117,9 @@ Sprint is successful if:
 - [x] Problems use Israeli notation (× and :)
 - [x] Tests pass for math game saving/progress
 - [x] Version bumped and docs updated
+- [ ] Chapter B (`math-two-digit`) unlocked and playable
+- [ ] Chapter C (`math-long-division`) unlocked and playable
+- [ ] Chapter D (`math-primes`) unlocked and playable
 
 ---
 
