@@ -237,10 +237,18 @@ Session-aware problem generator — Chapter B unlocked with 2-digit × 1-digit, 
 
 ---
 
+### 29. Chapter C: Long Division + Hint System (v2.11.0)
+Chapter C unlocked — long division with remainder (dual-input UI), clean division, and reverse verification problems.
+- Hint system (💡) with per-problem solving clues across all 4 games
+- Quick Solve shows quotient + remainder inputs for division-with-remainder
+- Missing Number adapts for `division_verify` and `divide_remainder` categories
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.10.0 (28 releases)
-**Features Completed:** 28 (20 features, 3 UX polish, 1 content expansion, 1 chore, 3 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.11.0 (29 releases)
+**Features Completed:** 29 (21 features, 3 UX polish, 1 content expansion, 1 chore, 3 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

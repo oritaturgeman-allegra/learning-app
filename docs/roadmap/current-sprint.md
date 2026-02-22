@@ -82,16 +82,17 @@ All 8 tasks completed (v2.8.0–v2.9.0). See `docs/roadmap/completed/feature-spr
 - [x] All 4 games work with Chapter B content (session-aware generator)
 - [x] Tests pass + version bump (v2.10.0)
 
-### Chapter C: Long Division (`math-long-division`) — TODO
+### Chapter C: Long Division (`math-long-division`) — DONE
 
-- [ ] Problem generator for Chapter C topics:
-  - Division by single digit with remainder
-  - Long division step-by-step
-  - Division verification (multiply back)
-- [ ] Unlock session card
-- [ ] Route + template integration
-- [ ] All 4 games work with Chapter C content
-- [ ] Tests + version bump
+- [x] Problem generator for Chapter C topics:
+  - Division by single digit with remainder (dual-input: quotient + remainder)
+  - Long division (3-digit ÷ 1-digit, clean results)
+  - Division verification (reverse multiplication: `? × 7 = 63`)
+- [x] Unlock session card (removed `locked: True`)
+- [x] Route + template integration (session-aware generator)
+- [x] All 4 games work with Chapter C content
+- [x] Hint system — 💡 tooltip with solving clues per problem
+- [x] Tests pass + version bump (v2.11.0)
 
 ### Chapter D: Primes & Divisibility (`math-primes`) — TODO
 
@@ -117,7 +118,7 @@ Sprint is successful if:
 - [x] Tests pass for math game saving/progress
 - [x] Version bumped and docs updated
 - [x] Chapter B (`math-two-digit`) unlocked and playable
-- [ ] Chapter C (`math-long-division`) unlocked and playable
+- [x] Chapter C (`math-long-division`) unlocked and playable
 - [ ] Chapter D (`math-primes`) unlocked and playable
 
 ---

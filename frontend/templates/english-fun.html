@@ -406,6 +406,31 @@ body {
     color: var(--purple);
 }
 
+.session-card.session-completed {
+    border-color: var(--green);
+}
+
+.session-card-check {
+    display: none;
+    font-size: 1.4rem;
+    background: var(--green);
+    color: var(--white);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.session-card.session-completed .session-card-check {
+    display: flex;
+}
+
+.session-card.session-completed .session-card-arrow {
+    display: none;
+}
+
 /* ==========================================================================
    HEADER & STAR COUNTER
    ========================================================================== */
@@ -2016,6 +2041,7 @@ body {
                     <span class="session-stars-badge">⭐ <span class="session-star-count">0</span></span>
                 </div>
             </div>
+            <div class="session-card-check">✓</div>
             <div class="session-card-arrow">←</div>
         </div>
         {% endfor %}
@@ -3648,8 +3674,28 @@ function finishGame() {
 
     // If all 4 games completed — show session celebration after a moment
     if (state.sessionGames.size === 4) {
+        markSessionCompleted(SESSION_SLUG);
         setTimeout(() => showSessionPopup(), 2500);
     }
+}
+
+/** Mark a session as completed in localStorage */
+function markSessionCompleted(slug) {
+    if (!slug) return;
+    const completed = JSON.parse(localStorage.getItem('ariel_completed_sessions') || '[]');
+    if (!completed.includes(slug)) {
+        completed.push(slug);
+        localStorage.setItem('ariel_completed_sessions', JSON.stringify(completed));
+    }
+}
+
+/** Restore checkmarks on session picker cards */
+function restoreSessionCheckmarks() {
+    const completed = JSON.parse(localStorage.getItem('ariel_completed_sessions') || '[]');
+    completed.forEach(slug => {
+        const card = document.querySelector(`.session-card-${slug}`);
+        if (card) card.classList.add('session-completed');
+    });
 }
 
 /* ==========================================================================
@@ -3657,6 +3703,7 @@ function finishGame() {
    ========================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
     updateStarDisplay();
+    restoreSessionCheckmarks();
 
     // Load progress from API (async, non-blocking)
     loadProgress();

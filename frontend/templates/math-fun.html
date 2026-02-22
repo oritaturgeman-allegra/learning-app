@@ -578,6 +578,129 @@ body {
     color: var(--blue);
 }
 
+/* Hint tooltip */
+.hint-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 2px solid #e5e7eb;
+    border-radius: 50%;
+    background: var(--white);
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: var(--space-sm);
+    transition: all 0.2s;
+    position: relative;
+}
+
+.hint-btn:hover, .hint-btn:focus {
+    border-color: var(--yellow);
+    background: #fef9c3;
+    transform: scale(1.1);
+}
+
+.hint-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fef9c3;
+    border: 2px solid var(--yellow);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-body);
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    color: var(--text-dark);
+    direction: rtl;
+    white-space: nowrap;
+    max-width: 90vw;
+    white-space: normal;
+    text-align: center;
+    min-width: 200px;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.hint-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--yellow);
+}
+
+.hint-btn:hover .hint-tooltip,
+.hint-btn.active .hint-tooltip {
+    display: block;
+}
+
+/* Remainder dual-input */
+.remainder-inputs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    direction: ltr;
+    margin: var(--space-lg) 0;
+    flex-wrap: wrap;
+}
+
+.remainder-inputs label {
+    font-family: var(--font-body);
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    color: var(--text-light);
+    direction: rtl;
+}
+
+.remainder-inputs input {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    width: 80px;
+    text-align: center;
+    padding: var(--space-sm);
+    border: 3px solid #e5e7eb;
+    border-radius: var(--radius-md);
+    background: var(--white);
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.remainder-inputs input:focus {
+    border-color: var(--blue);
+}
+
+.remainder-inputs .input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.remainder-submit {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    padding: var(--space-sm) var(--space-xl);
+    border: 3px solid var(--blue);
+    border-radius: var(--radius-lg);
+    background: var(--blue);
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: var(--space-md);
+}
+
+.remainder-submit:hover {
+    transform: scale(1.05);
+    background: var(--purple);
+    border-color: var(--purple);
+}
+
 /* Answer grid (2x2) */
 .answer-grid {
     display: grid;
@@ -1404,6 +1527,9 @@ const CATEGORIES_BY_SESSION = {
     'math-two-digit': [
         'two_digit_x_one_digit', 'two_digit_x_two_digit', 'powers',
     ],
+    'math-long-division': [
+        'divide_remainder', 'long_division', 'division_verify',
+    ],
 };
 
 /** Generate a math problem for the current session.
@@ -1493,6 +1619,59 @@ function generateProblemByCategory(category) {
             const answer = base * base;
             return { equation: `${base}²`, answer, display: `${base}² = ?`, category };
         }
+        /* ------ Chapter C: Long Division ------ */
+        case 'divide_remainder': {
+            // e.g. 47 : 5 = 9 remainder 2 — dividends 20-99, divisors 2-9
+            const divisor = 2 + Math.floor(Math.random() * 8); // 2-9
+            const quotient = 3 + Math.floor(Math.random() * 15); // 3-17
+            const remainder = 1 + Math.floor(Math.random() * (divisor - 1)); // 1 to divisor-1
+            const dividend = divisor * quotient + remainder;
+            if (dividend > 99) return generateProblemByCategory(category); // retry
+            return {
+                equation: `${dividend} : ${divisor}`,
+                answer: quotient,
+                remainder,
+                display: `${dividend} : ${divisor} = ?`,
+                category,
+                hint: `כמה פעמים ${divisor} נכנס ב-${dividend}? כפלי ובדקי מה נשאר`,
+            };
+        }
+        case 'long_division': {
+            // e.g. 156 : 12 = 13 — 3-digit ÷ 1-digit, clean result
+            const divisor = 2 + Math.floor(Math.random() * 8); // 2-9
+            const quotient = 11 + Math.floor(Math.random() * 90); // 11-100
+            const dividend = divisor * quotient;
+            if (dividend > 999) return generateProblemByCategory(category); // retry
+            return {
+                equation: `${dividend} : ${divisor}`,
+                answer: quotient,
+                display: `${dividend} : ${divisor} = ?`,
+                category,
+                hint: `חלקי שלב אחר שלב — כמה פעמים ${divisor} נכנס בספרות השמאליות?`,
+            };
+        }
+        case 'division_verify': {
+            // e.g. ? × 7 = 63 — reverse: find the missing factor
+            const a = 2 + Math.floor(Math.random() * 8); // 2-9
+            const b = 3 + Math.floor(Math.random() * 15); // 3-17
+            const product = a * b;
+            if (Math.random() < 0.5) {
+                return {
+                    equation: `? × ${a} = ${product}`,
+                    answer: b,
+                    display: `? × ${a} = ${product}`,
+                    category,
+                    hint: `איזה מספר כפול ${a} נותן ${product}? נסי לחלק: ${product} : ${a}`,
+                };
+            }
+            return {
+                equation: `${product} : ? = ${b}`,
+                answer: a,
+                display: `${product} : ? = ${b}`,
+                category,
+                hint: `במה צריך לחלק את ${product} כדי לקבל ${b}? נסי: ${product} : ${b}`,
+            };
+        }
         default:
             return generateProblemByCategory('multiply_tens');
     }
@@ -1531,18 +1710,36 @@ function generateDistractors(correctAnswer, count) {
 function generateTFProblem() {
     const problem = generateProblem();
     const isTrue = Math.random() < 0.5;
+    const hasRemainder = problem.remainder !== undefined;
+
+    // Format answer with remainder if applicable
+    const correctStr = hasRemainder
+        ? `${problem.equation} = ${problem.answer} שארית ${problem.remainder}`
+        : `${problem.equation} = ${problem.answer}`;
+
     if (isTrue) {
         return {
-            display: `${problem.equation} = ${problem.answer}`,
+            display: correctStr,
             isTrue: true,
-            correctDisplay: `${problem.equation} = ${problem.answer}`,
+            correctDisplay: correctStr,
+            hint: problem.hint,
         };
     } else {
+        if (hasRemainder) {
+            // Swap remainder or quotient to make it wrong
+            const wrongR = problem.remainder + (Math.random() < 0.5 ? 1 : -1);
+            const wrongQ = problem.answer + (Math.random() < 0.5 ? 1 : -1);
+            const wrongStr = Math.random() < 0.5
+                ? `${problem.equation} = ${problem.answer} שארית ${Math.max(0, wrongR)}`
+                : `${problem.equation} = ${wrongQ} שארית ${problem.remainder}`;
+            return { display: wrongStr, isTrue: false, correctDisplay: correctStr, hint: problem.hint };
+        }
         const wrongAnswer = generateDistractors(problem.answer, 1)[0];
         return {
             display: `${problem.equation} = ${wrongAnswer}`,
             isTrue: false,
-            correctDisplay: `${problem.equation} = ${problem.answer}`,
+            correctDisplay: correctStr,
+            hint: problem.hint,
         };
     }
 }
@@ -1944,6 +2141,24 @@ function startGame(gameNum) {
 }
 
 /* ==========================================================================
+   HINT SYSTEM — 💡 tooltip for solving clues
+   ========================================================================== */
+
+/** Render a hint button HTML string. Returns empty string if no hint. */
+function renderHintBtn(hint) {
+    if (!hint) return '';
+    return `<button class="hint-btn" onclick="toggleHint(this)" aria-label="רמז">💡<div class="hint-tooltip">${hint}</div></button>`;
+}
+
+function toggleHint(btn) {
+    btn.classList.toggle('active');
+    // Auto-close after 4 seconds
+    if (btn.classList.contains('active')) {
+        setTimeout(() => btn.classList.remove('active'), 4000);
+    }
+}
+
+/* ==========================================================================
    GAME 1: QUICK SOLVE — פתרי מהר!
    ========================================================================== */
 function initQuickSolve() {
@@ -1956,24 +2171,54 @@ function showQuickSolveRound() {
     state.answering = false;
 
     const problem = generateProblem();
-    const distractors = generateDistractors(problem.answer, 3);
-    const options = shuffle([problem.answer, ...distractors]);
-
-    const content = document.getElementById('game-content');
-    content.innerHTML = `
-        <div class="question-area pop-in">
-            <div class="equation-display">${problem.display}</div>
-        </div>
-        <div class="answer-grid">
-            ${options.map((opt, i) => `
-                <button class="answer-btn" onclick="checkQuickSolve(this, ${opt}, ${problem.answer})" style="animation: popIn 0.3s ease-out ${i * 0.08}s both">
-                    ${opt}
-                </button>
-            `).join('')}
-        </div>
-    `;
-    // Store for tracking
     state._currentProblem = problem;
+    const content = document.getElementById('game-content');
+
+    // Remainder problems get dual-input UI
+    if (problem.remainder !== undefined) {
+        content.innerHTML = `
+            <div class="question-area pop-in">
+                <div class="equation-display">${problem.display}</div>
+                ${renderHintBtn(problem.hint)}
+            </div>
+            <div class="remainder-inputs pop-in">
+                <div class="input-group">
+                    <label>מנה</label>
+                    <input type="number" id="quotient-input" inputmode="numeric" autofocus>
+                </div>
+                <div class="input-group">
+                    <label>שארית</label>
+                    <input type="number" id="remainder-input" inputmode="numeric">
+                </div>
+            </div>
+            <button class="remainder-submit" onclick="checkQuickSolveRemainder()">בדקי ←</button>
+            <div id="remainder-feedback" style="margin-top: var(--space-md); text-align: center;"></div>
+        `;
+        document.getElementById('quotient-input').focus();
+        // Submit on Enter from either input
+        content.querySelectorAll('input').forEach(inp => {
+            inp.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') checkQuickSolveRemainder();
+            });
+        });
+    } else {
+        // Standard multiple-choice
+        const distractors = generateDistractors(problem.answer, 3);
+        const options = shuffle([problem.answer, ...distractors]);
+        content.innerHTML = `
+            <div class="question-area pop-in">
+                <div class="equation-display">${problem.display}</div>
+                ${renderHintBtn(problem.hint)}
+            </div>
+            <div class="answer-grid">
+                ${options.map((opt, i) => `
+                    <button class="answer-btn" onclick="checkQuickSolve(this, ${opt}, ${problem.answer})" style="animation: popIn 0.3s ease-out ${i * 0.08}s both">
+                        ${opt}
+                    </button>
+                `).join('')}
+            </div>
+        `;
+    }
     updateProgress();
 }
 
@@ -2009,6 +2254,50 @@ function checkQuickSolve(btn, selected, correct) {
     setTimeout(() => showQuickSolveRound(), 1500);
 }
 
+function checkQuickSolveRemainder() {
+    if (state.answering) return;
+    state.answering = true;
+
+    const qInput = document.getElementById('quotient-input');
+    const rInput = document.getElementById('remainder-input');
+    const qVal = parseInt(qInput.value);
+    const rVal = parseInt(rInput.value);
+    const problem = state._currentProblem;
+    const isCorrect = qVal === problem.answer && rVal === problem.remainder;
+    const feedback = document.getElementById('remainder-feedback');
+
+    document.querySelector('.remainder-submit').classList.add('disabled');
+    document.querySelector('.remainder-submit').style.pointerEvents = 'none';
+
+    if (isCorrect) {
+        qInput.style.borderColor = 'var(--green)';
+        rInput.style.borderColor = 'var(--green)';
+        qInput.style.background = '#dcfce7';
+        rInput.style.background = '#dcfce7';
+        playCorrect();
+        spawnConfetti();
+        awardStar(1);
+        document.getElementById('mascot').classList.add('wiggle');
+        setTimeout(() => document.getElementById('mascot').classList.remove('wiggle'), 600);
+    } else {
+        qInput.style.borderColor = 'var(--red)';
+        rInput.style.borderColor = 'var(--red)';
+        qInput.style.background = '#fee2e2';
+        rInput.style.background = '#fee2e2';
+        playWrong();
+        feedback.innerHTML = `<div style="font-family: var(--font-display); color: var(--green-dark); background: #dcfce7; padding: var(--space-md); border-radius: var(--radius-md); direction: ltr;">${problem.equation} = ${problem.answer} שארית ${problem.remainder}</div>`;
+    }
+
+    state.wordResults.push({
+        word: problem.equation,
+        correct: isCorrect,
+        category: problem.category,
+    });
+
+    state.currentRound++;
+    setTimeout(() => showQuickSolveRound(), 2000);
+}
+
 /* ==========================================================================
    GAME 2: MISSING NUMBER — מצאי את המספר!
    ========================================================================== */
@@ -2022,20 +2311,31 @@ function showMissingNumberRound() {
     state.answering = false;
 
     const problem = generateProblem();
-    // Create a version with a blank
-    const parts = problem.equation.split(' ');
-    // Randomly blank out a number (not an operator)
-    const numberIndices = [];
-    parts.forEach((p, i) => { if (/^\d+$/.test(p) || /^\(\d+/.test(p)) numberIndices.push(i); });
-    // Pick first or last number for blanking (simpler UX)
-    const blankIdx = numberIndices[Math.floor(Math.random() * numberIndices.length)] || 0;
-    const missingValue = parseInt(parts[blankIdx].replace(/[()]/g, ''));
-    const displayParts = [...parts];
-    // Preserve parentheses around the blank
-    const hasOpenParen = parts[blankIdx].startsWith('(');
-    const hasCloseParen = parts[blankIdx].endsWith(')');
-    displayParts[blankIdx] = (hasOpenParen ? '(' : '') + '___' + (hasCloseParen ? ')' : '');
-    const displayEquation = displayParts.join(' ') + ' = ' + problem.answer;
+    let displayEquation, missingValue;
+
+    if (problem.category === 'division_verify') {
+        // Already has ? — use the answer directly
+        displayEquation = problem.display;
+        missingValue = problem.answer;
+    } else if (problem.category === 'divide_remainder') {
+        // Show dividend as blank: ___ : 5 = 9 שארית 2
+        const parts = problem.equation.split(' ');
+        const dividend = parseInt(parts[0]);
+        missingValue = dividend;
+        displayEquation = `___ : ${parts[2]} = ${problem.answer} שארית ${problem.remainder}`;
+    } else {
+        // Standard blanking — pick a random number to hide
+        const parts = problem.equation.split(' ');
+        const numberIndices = [];
+        parts.forEach((p, i) => { if (/^\d+$/.test(p) || /^\(\d+/.test(p)) numberIndices.push(i); });
+        const blankIdx = numberIndices[Math.floor(Math.random() * numberIndices.length)] || 0;
+        missingValue = parseInt(parts[blankIdx].replace(/[()]/g, ''));
+        const displayParts = [...parts];
+        const hasOpenParen = parts[blankIdx].startsWith('(');
+        const hasCloseParen = parts[blankIdx].endsWith(')');
+        displayParts[blankIdx] = (hasOpenParen ? '(' : '') + '___' + (hasCloseParen ? ')' : '');
+        displayEquation = displayParts.join(' ') + ' = ' + problem.answer;
+    }
 
     const distractors = generateDistractors(missingValue, 3);
     const options = shuffle([missingValue, ...distractors]);
@@ -2044,6 +2344,7 @@ function showMissingNumberRound() {
     content.innerHTML = `
         <div class="question-area pop-in">
             <div class="equation-display">${displayEquation}</div>
+            ${renderHintBtn(problem.hint)}
         </div>
         <div class="answer-grid">
             ${options.map((opt, i) => `
@@ -2110,6 +2411,7 @@ function showTrueFalseMathRound() {
             <div class="tf-card">
                 <div class="equation-display">${problem.display}</div>
             </div>
+            ${renderHintBtn(problem.hint)}
         </div>
         <div class="tf-buttons">
             <button class="tf-btn yes" onclick="checkTrueFalseMath(this, true, ${problem.isTrue})">✅ נכון</button>
@@ -2173,6 +2475,7 @@ function showBubblePopRound() {
     const BUBBLE_TARGETS = {
         'math-tens-hundreds': [10, 12, 15, 18, 20, 24, 30, 36, 40, 50, 60, 80, 90, 100],
         'math-two-digit': [44, 48, 56, 60, 72, 84, 90, 96, 108, 120, 132, 144, 150, 180],
+        'math-long-division': [6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 21, 24],
     };
     const targets = BUBBLE_TARGETS[SESSION_SLUG] || BUBBLE_TARGETS['math-tens-hundreds'];
     const target = targets[Math.floor(Math.random() * targets.length)];
@@ -2383,7 +2686,18 @@ function finishGame() {
     playCelebration();
 
     if (state.sessionGames.size === 4) {
+        markSessionCompleted(SESSION_SLUG);
         setTimeout(() => showSessionPopup(), 2500);
+    }
+}
+
+/** Mark a session as completed in localStorage */
+function markSessionCompleted(slug) {
+    if (!slug) return;
+    const completed = JSON.parse(localStorage.getItem('ariel_completed_sessions') || '[]');
+    if (!completed.includes(slug)) {
+        completed.push(slug);
+        localStorage.setItem('ariel_completed_sessions', JSON.stringify(completed));
     }
 }
 
