@@ -80,6 +80,13 @@ When multiple solutions exist, prioritize:
 - **JavaScript**: Vanilla JS (in `frontend/static/js/main.js`)
 - **No frameworks**: Pure HTML/CSS/JS approach
 
+### CSS Naming Convention
+- **Subject-scoped classes**: Game card classes MUST include the subject suffix: `game-card-{game-name}-{subject}`
+  - English: `game-card-word-match-english`, `game-card-true-false-english`
+  - Math: `game-card-quick-solve-math`, `game-card-true-false-math`
+- **Why**: Prevents name collisions between subjects and makes it clear which template a class belongs to
+- **General rule**: When the same component type exists across multiple subjects/contexts, always suffix with the context name
+
 ### Design System
 **ALWAYS** reference `docs/architecture/design.md` and `ui-designer.md` for colors, typography, and component styles.
 
