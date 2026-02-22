@@ -71,17 +71,16 @@ All 8 tasks completed (v2.8.0–v2.9.0). See `docs/roadmap/completed/feature-spr
 - [x] Game 4 — Bubble Pop
 - [x] Integration + polish
 
-### Chapter B: Two-Digit Multiply (`math-two-digit`) — TODO
+### Chapter B: Two-Digit Multiply (`math-two-digit`) — DONE
 
-- [ ] Problem generator for Chapter B topics:
+- [x] Problem generator for Chapter B topics:
   - 2-digit × 1-digit (e.g., `23 × 4 = ?`)
   - 2-digit × 2-digit (e.g., `15 × 12 = ?`)
-  - Vertical multiplication layout
   - Powers of numbers (e.g., `5² = ?`)
-- [ ] Unlock session card (remove `locked: True`)
-- [ ] Route `/learning/math/math-two-digit` serves math template with Chapter B problems
-- [ ] All 4 games work with Chapter B content
-- [ ] Tests + version bump
+- [x] Unlock session card (removed `locked: True`)
+- [x] Route `/learning/math/math-two-digit` serves math template with Chapter B problems
+- [x] All 4 games work with Chapter B content (session-aware generator)
+- [x] Tests pass + version bump (v2.10.0)
 
 ### Chapter C: Long Division (`math-long-division`) — TODO
 
@@ -117,7 +116,7 @@ Sprint is successful if:
 - [x] Problems use Israeli notation (× and :)
 - [x] Tests pass for math game saving/progress
 - [x] Version bumped and docs updated
-- [ ] Chapter B (`math-two-digit`) unlocked and playable
+- [x] Chapter B (`math-two-digit`) unlocked and playable
 - [ ] Chapter C (`math-long-division`) unlocked and playable
 - [ ] Chapter D (`math-primes`) unlocked and playable
 

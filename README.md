@@ -12,12 +12,12 @@ A web app that teaches English vocabulary to Hebrew-speaking children through 4 
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v2.10.0  | 02/22 | Feature: Chapter B unlocked — two-digit multiplication and powers across all 4 math games |
 | v2.9.0   | 02/22 | Feature: Home button in header — navigate back to subject picker from any learning page   |
 | v2.8.1   | 02/22 | Fix: Math difficulty tuning — kid-friendly number ranges across all games + no layout shift on refresh |
 | v2.8.0   | 02/22 | Feature: Math game engine — 4 playable math games with Chapter A problem generator        |
 | v2.7.0   | 02/21 | Feature: Math session cards — 4 chapters from the textbook (tens & hundreds, two-digit, long division, primes) |
 | v2.6.0   | 02/21 | Feature: Per-session star tracking — each unit card shows its own earned stars             |
-| v2.5.0   | 02/21 | Feature: Math subject + subject tabs on all screens — switch between English and Math     |
 
 ---
 

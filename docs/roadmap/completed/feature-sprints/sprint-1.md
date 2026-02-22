@@ -229,10 +229,18 @@ Home button (🏠) in the sticky header on session picker and game menu screens 
 
 ---
 
+### 28. Chapter B: Two-Digit Multiply (v2.10.0)
+Session-aware problem generator — Chapter B unlocked with 2-digit × 1-digit, 2-digit × 2-digit, and powers (n²).
+- `generateProblem()` picks categories based on `SESSION_SLUG`
+- Bubble Pop targets and expression generators adapted for Chapter B ranges
+- All 4 math games work with Chapter B content
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.9.0 (27 releases)
-**Features Completed:** 27 (19 features, 3 UX polish, 1 content expansion, 1 chore, 3 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.10.0 (28 releases)
+**Features Completed:** 28 (20 features, 3 UX polish, 1 content expansion, 1 chore, 3 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
