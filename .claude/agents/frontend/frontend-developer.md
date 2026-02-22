@@ -75,9 +75,9 @@ When multiple solutions exist, prioritize:
 ## Project-Specific Guidelines
 
 ### Stack
-- **Templates**: Jinja2 (in `frontend/templates/`)
+- **Templates**: Jinja2 HTML (in `frontend/templates/`) — markup + inline Jinja2 vars only
 - **Styling**: Modular CSS (in `frontend/static/css/`)
-- **JavaScript**: Vanilla JS (in `frontend/static/js/main.js`)
+- **JavaScript**: Modular vanilla JS (in `frontend/static/js/`)
 - **No frameworks**: Pure HTML/CSS/JS approach
 
 ### CSS Naming Convention
@@ -94,17 +94,55 @@ When multiple solutions exist, prioritize:
 ```
 frontend/
 ├── templates/
-│   └── index.html       # Main page with modals
+│   ├── english-fun.html   # English template (HTML + inline Jinja2 vars + state init)
+│   └── math-fun.html      # Math template (HTML + inline Jinja2 vars + state init)
 └── static/
     ├── css/
-    │   ├── base.css     # Variables, resets
-    │   ├── layout.css   # Page structure
-    │   ├── components.css # Buttons, cards, forms
-    │   ├── podcast.css  # Podcast player styles
-    │   └── news.css     # News section styles
+    │   ├── shared.css     # Shared design tokens, animations, components
+    │   ├── english.css    # English-specific styles (word tracker, scramble)
+    │   └── math.css       # Math-specific styles (equations, hints, bubbles)
     └── js/
-        └── main.js      # All JavaScript
+        ├── shared.js        # Shared functions (audio, rewards, API, UI nav)
+        ├── english-data.js  # UNITS vocabulary data, GAME_TYPE_MAP
+        ├── english-game.js  # English game logic, word tracker, session planner
+        ├── math-data.js     # CATEGORIES_BY_SESSION, MATH_HINTS, config consts
+        └── math-game.js     # Math game logic, problem generators
 ```
+
+### Template / Static File Separation Rules
+
+**Templates contain ONLY:**
+- HTML markup and Jinja2 template logic (`{% if %}`, `{% for %}`)
+- Inline `<script>` in `<head>` for Jinja2 variables that can't be in static files:
+  ```javascript
+  const REWARD_TIERS = {{ reward_tiers | tojson }};
+  const SUBJECT = '{{ subject|default("english") }}';
+  const SESSION_SLUG = '{{ session_slug|default("") }}';
+  ```
+- Inline `<script>` at end of `<body>` for `state` init and `DOMContentLoaded`
+- `<link>` and `<script src>` references to static files
+
+**Static files contain EVERYTHING ELSE:**
+- All CSS (design tokens, components, animations, responsive)
+- All JS functions, game logic, data constants, event handlers
+- Data objects (vocabulary, hints, category mappings)
+
+**Load order in templates:**
+```
+1. Inline <script> in <head>: Jinja2 vars (REWARD_TIERS, SUBJECT, SESSION_SLUG)
+2. <script src="/static/js/shared.js">
+3. <script src="/static/js/{subject}-data.js">
+4. <script src="/static/js/{subject}-game.js">
+5. Inline <script> at end of body: state init + DOMContentLoaded
+```
+
+**When adding new features:**
+- New shared styles → `shared.css`
+- New subject-specific styles → `english.css` or `math.css`
+- New shared functions (audio, rewards, API) → `shared.js`
+- New data/constants → `{subject}-data.js`
+- New game logic → `{subject}-game.js`
+- NEVER put CSS or JS functions inline in templates
 
 ---
 
@@ -189,7 +227,7 @@ Only 3 breakpoints needed — fluid CSS handles everything in between:
 
 ### JavaScript (if needed)
 ```javascript
-// In frontend/static/js/main.js
+// In the appropriate frontend/static/js/*.js file
 function initComponentName() {
   // Event handlers and logic
 }
