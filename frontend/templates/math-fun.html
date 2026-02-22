@@ -1530,6 +1530,41 @@ const CATEGORIES_BY_SESSION = {
     ],
 };
 
+/* ---------- MATH HINTS — natural Hebrew, organized by category ---------- */
+const MATH_HINTS = {
+    /* Chapter A: Tens & Hundreds */
+    multiply_tens:      (base, factor) => `נסי ככה: כמה זה ${base / 10} × ${factor}? עכשיו תוסיפי 0 בסוף`,
+    multiply_hundreds:  (factor) => `תחשבי רגע: כמה זה ${factor} × 1? תוסיפי שני אפסים בסוף`,
+    divide_single:      (divisor, dividend) => `תשתמשי בלוח הכפל — מה כפול ${divisor} נותן ${dividend}?`,
+    divide_tens:        (divisor, dividend) => divisor === 10
+        ? `הטריק: תורידי את ה-0 מ-${dividend} ויש לך את התשובה`
+        : `הטריק: תורידי שני אפסים מ-${dividend} ויש לך את התשובה`,
+    properties_zero:    'זכרי: לא משנה מה המספר — כפול 0 זה תמיד 0!',
+    properties_one:     'זכרי: כפול 1 — המספר נשאר בדיוק אותו דבר!',
+    order_no_parens:    'זכרי: קודם כפל, אחר כך חיבור!',
+    order_with_parens:  'זכרי: קודם פותרים את מה שבתוך הסוגריים!',
+
+    /* Chapter B: Two-Digit Multiply */
+    two_digit_x_one:    (tens, ones, b) => `נסי לפרק: קודם ${tens} × ${b}, ואז ${ones} × ${b}, ותחברי`,
+    two_digit_x_two:    (b) => `נסי לפרק את ${b} לעשרות ואחדות, ותכפלי כל חלק בנפרד`,
+    powers:             (base) => `חזקה זה כפל חוזר! ${base}² = ${base} × ${base}`,
+
+    /* Chapter C: Long Division */
+    divide_remainder:   (divisor, dividend) => `תשתמשי בלוח הכפל — מה הכי קרוב ל-${dividend} שמתחלק ב-${divisor}?`,
+    long_division:      (divisor) => `תתחילי מהספרה השמאלית — כמה פעמים ${divisor} נכנס שם?`,
+    division_verify_q:  (a, product) => `תחשבי: מה כפול ${a} שווה ${product}? נסי לחלק!`,
+    division_verify_d:  (b, product) => `תחשבי: ${b} כפול מה שווה ${product}?`,
+
+    /* Chapter D: Primes & Divisibility */
+    divisibility_3:     (digits) => `הטריק: תחברי את הספרות ${digits.join('+')} ותבדקי אם הסכום מתחלק ב-3`,
+    divisibility_9:     (digits) => `הטריק: תחברי את הספרות ${digits.join('+')} ותבדקי אם הסכום מתחלק ב-9`,
+    divisibility_6:     'מתחלק ב-6? תבדקי שני דברים: שהמספר זוגי, ושסכום הספרות מתחלק ב-3',
+    prime:              (p) => `שימי לב: ${p} לא מתחלק באף מספר חוץ מ-1 ומעצמו — ראשוני!`,
+    composite:          (n, factor) => `נסי לחלק את ${n} ב-${factor} — כמה פעמים נכנס?`,
+    prime_factorization:(firstFactor) => `תתחילי מהמספר הראשוני הכי קטן — נסי לחלק ב-${firstFactor}`,
+    composite_tf:       (num, factor) => `שימי לב: ${num} מתחלק ב-${factor}, אז הוא לא ראשוני`,
+};
+
 /** Generate a math problem for the current session.
  *  Returns { equation, answer, display, category }
  *  - equation: string like "7 × 100"
@@ -1550,36 +1585,44 @@ function generateProblemByCategory(category) {
             const base = [10, 20, 30, 40, 50, 60, 70, 80, 90][Math.floor(Math.random() * 9)];
             const factor = 2 + Math.floor(Math.random() * 7); // 2-8
             const answer = base * factor;
-            return { equation: `${base} × ${factor}`, answer, display: `${base} × ${factor} = ?`, category };
+            return { equation: `${base} × ${factor}`, answer, display: `${base} × ${factor} = ?`, category,
+                hint: MATH_HINTS.multiply_tens(base, factor),
+            };
         }
         case 'multiply_hundreds': {
             // e.g. 7 × 100, 3 × 100 — keep to ×100 only (×1000 too big)
             const factor = 2 + Math.floor(Math.random() * 8); // 2-9
             const answer = factor * 100;
-            return { equation: `${factor} × 100`, answer, display: `${factor} × 100 = ?`, category };
+            return { equation: `${factor} × 100`, answer, display: `${factor} × 100 = ?`, category,
+                hint: MATH_HINTS.multiply_hundreds(factor),
+            };
         }
         case 'divide_single': {
             // e.g. 120 : 4 = 30 — keep quotients small (10-50)
             const divisor = 2 + Math.floor(Math.random() * 8); // 2-9
             const quotient = [10, 20, 30, 40, 50][Math.floor(Math.random() * 5)];
             const dividend = divisor * quotient;
-            return { equation: `${dividend} : ${divisor}`, answer: quotient, display: `${dividend} : ${divisor} = ?`, category };
+            return { equation: `${dividend} : ${divisor}`, answer: quotient, display: `${dividend} : ${divisor} = ?`, category,
+                hint: MATH_HINTS.divide_single(divisor, dividend),
+            };
         }
         case 'divide_tens': {
             // e.g. 300 : 10, 500 : 100
             const divisor = [10, 100][Math.floor(Math.random() * 2)];
             const quotient = (2 + Math.floor(Math.random() * 7)) * (divisor === 10 ? 10 : 1);
             const dividend = divisor * quotient;
-            return { equation: `${dividend} : ${divisor}`, answer: quotient, display: `${dividend} : ${divisor} = ?`, category };
+            return { equation: `${dividend} : ${divisor}`, answer: quotient, display: `${dividend} : ${divisor} = ?`, category,
+                hint: MATH_HINTS.divide_tens(divisor, dividend),
+            };
         }
         case 'properties_0_1': {
             // 0 × n = 0, 1 × n = n — keep n small and friendly (2-100)
             const n = [5, 8, 12, 17, 20, 25, 30, 42, 50, 64, 75, 88, 100][Math.floor(Math.random() * 13)];
             const variant = Math.floor(Math.random() * 4);
-            if (variant === 0) return { equation: `0 × ${n}`, answer: 0, display: `0 × ${n} = ?`, category };
-            if (variant === 1) return { equation: `${n} × 0`, answer: 0, display: `${n} × 0 = ?`, category };
-            if (variant === 2) return { equation: `1 × ${n}`, answer: n, display: `1 × ${n} = ?`, category };
-            return { equation: `${n} × 1`, answer: n, display: `${n} × 1 = ?`, category };
+            if (variant === 0) return { equation: `0 × ${n}`, answer: 0, display: `0 × ${n} = ?`, category, hint: MATH_HINTS.properties_zero };
+            if (variant === 1) return { equation: `${n} × 0`, answer: 0, display: `${n} × 0 = ?`, category, hint: MATH_HINTS.properties_zero };
+            if (variant === 2) return { equation: `1 × ${n}`, answer: n, display: `1 × ${n} = ?`, category, hint: MATH_HINTS.properties_one };
+            return { equation: `${n} × 1`, answer: n, display: `${n} × 1 = ?`, category, hint: MATH_HINTS.properties_one };
         }
         case 'order_of_operations': {
             // Simple: a + b × c or (a + b) × c — small numbers
@@ -1588,10 +1631,14 @@ function generateProblemByCategory(category) {
             const c = 2 + Math.floor(Math.random() * 4); // 2-5
             if (Math.random() < 0.5) {
                 const answer = a + b * c;
-                return { equation: `${a} + ${b} × ${c}`, answer, display: `${a} + ${b} × ${c} = ?`, category };
+                return { equation: `${a} + ${b} × ${c}`, answer, display: `${a} + ${b} × ${c} = ?`, category,
+                    hint: MATH_HINTS.order_no_parens,
+                };
             } else {
                 const answer = (a + b) * c;
-                return { equation: `(${a} + ${b}) × ${c}`, answer, display: `(${a} + ${b}) × ${c} = ?`, category };
+                return { equation: `(${a} + ${b}) × ${c}`, answer, display: `(${a} + ${b}) × ${c} = ?`, category,
+                    hint: MATH_HINTS.order_with_parens,
+                };
             }
         }
         /* ------ Chapter B: Two-Digit Multiply ------ */
@@ -1601,7 +1648,11 @@ function generateProblemByCategory(category) {
             const b = 2 + Math.floor(Math.random() * 8);   // 2-9
             if (a * b > 500) return generateProblemByCategory(category); // retry
             const answer = a * b;
-            return { equation: `${a} × ${b}`, answer, display: `${a} × ${b} = ?`, category };
+            const tens = Math.floor(a / 10) * 10;
+            const ones = a % 10;
+            return { equation: `${a} × ${b}`, answer, display: `${a} × ${b} = ?`, category,
+                hint: MATH_HINTS.two_digit_x_one(tens, ones, b),
+            };
         }
         case 'two_digit_x_two_digit': {
             // e.g. 15 × 12 = 180 — keep products ≤ 2000
@@ -1609,13 +1660,17 @@ function generateProblemByCategory(category) {
             const b = 11 + Math.floor(Math.random() * 39); // 11-49
             if (a * b > 2000) return generateProblemByCategory(category); // retry
             const answer = a * b;
-            return { equation: `${a} × ${b}`, answer, display: `${a} × ${b} = ?`, category };
+            return { equation: `${a} × ${b}`, answer, display: `${a} × ${b} = ?`, category,
+                hint: MATH_HINTS.two_digit_x_two(b),
+            };
         }
         case 'powers': {
             // e.g. 5² = 25 — bases 2-12
             const base = 2 + Math.floor(Math.random() * 11); // 2-12
             const answer = base * base;
-            return { equation: `${base}²`, answer, display: `${base}² = ?`, category };
+            return { equation: `${base}²`, answer, display: `${base}² = ?`, category,
+                hint: MATH_HINTS.powers(base),
+            };
         }
         /* ------ Chapter C: Long Division ------ */
         case 'divide_remainder': {
@@ -1631,7 +1686,7 @@ function generateProblemByCategory(category) {
                 remainder,
                 display: `${dividend} : ${divisor} = ?`,
                 category,
-                hint: `כמה פעמים ${divisor} נכנס ב-${dividend}? כפלי ובדקי מה נשאר`,
+                hint: MATH_HINTS.divide_remainder(divisor, dividend),
             };
         }
         case 'long_division': {
@@ -1645,7 +1700,7 @@ function generateProblemByCategory(category) {
                 answer: quotient,
                 display: `${dividend} : ${divisor} = ?`,
                 category,
-                hint: `חלקי שלב אחר שלב — כמה פעמים ${divisor} נכנס בספרות השמאליות?`,
+                hint: MATH_HINTS.long_division(divisor),
             };
         }
         case 'division_verify': {
@@ -1659,7 +1714,7 @@ function generateProblemByCategory(category) {
                     answer: b,
                     display: `? × ${a} = ${product}`,
                     category,
-                    hint: `איזה מספר כפול ${a} נותן ${product}? נסי לחלק: ${product} : ${a}`,
+                    hint: MATH_HINTS.division_verify_q(a, product),
                 };
             }
             return {
@@ -1667,7 +1722,7 @@ function generateProblemByCategory(category) {
                 answer: a,
                 display: `${product} : ? = ${b}`,
                 category,
-                hint: `במה צריך לחלק את ${product} כדי לקבל ${b}? נסי: ${product} : ${b}`,
+                hint: MATH_HINTS.division_verify_d(b, product),
             };
         }
         /* ------ Chapter D: Primes & Divisibility ------ */
@@ -1681,11 +1736,11 @@ function generateProblemByCategory(category) {
             const digitSum = digits.reduce((a, b) => a + b, 0);
             let hint;
             if (divisor === 3) {
-                hint = `סכום הספרות: ${digits.join('+')}=${digitSum}. ${digitSum} מתחלק ב-3!`;
+                hint = MATH_HINTS.divisibility_3(digits);
             } else if (divisor === 9) {
-                hint = `סכום הספרות: ${digits.join('+')}=${digitSum}. ${digitSum} מתחלק ב-9!`;
+                hint = MATH_HINTS.divisibility_9(digits);
             } else {
-                hint = `${dividend} זוגי וסכום הספרות (${digits.join('+')}=${digitSum}) מתחלק ב-3 — אז מתחלק ב-6!`;
+                hint = MATH_HINTS.divisibility_6;
             }
             return { equation: `${dividend} : ${divisor}`, answer: quotient, display: `${dividend} : ${divisor} = ?`, category, hint };
         }
@@ -1702,7 +1757,7 @@ function generateProblemByCategory(category) {
                     answer: p,
                     display: `1 × ? = ${p}`,
                     category,
-                    hint: `${p} מתחלק רק ב-1 וב-${p} — מספר ראשוני!`,
+                    hint: MATH_HINTS.prime(p),
                 };
             } else {
                 // Composite — find smallest prime factor and use it
@@ -1717,7 +1772,7 @@ function generateProblemByCategory(category) {
                     answer: other,
                     display: `? × ${smallestFactor} = ${n}`,
                     category,
-                    hint: `${n} מתחלק ב-${smallestFactor}, אז הוא מספר פריק. כמה פעמים ${smallestFactor} נכנס ב-${n}?`,
+                    hint: MATH_HINTS.composite(n, smallestFactor),
                 };
             }
         }
@@ -1754,7 +1809,7 @@ function generateProblemByCategory(category) {
                 answer,
                 display: `${entry.n} = ${displayFactors.join(' × ')}`,
                 category,
-                hint: `פרקי ל-${entry.n} לגורמים ראשוניים: חלקי ב-${entry.factors[0]}, ואז המשיכי`,
+                hint: MATH_HINTS.prime_factorization(entry.factors[0]),
             };
         }
         default:
@@ -1817,8 +1872,8 @@ function generateTFProblem() {
                 isTrue: false,
                 correctDisplay: `${num} — ${correctLabel}`,
                 hint: actuallyPrime
-                    ? `${num} מתחלק רק ב-1 וב-${num} — ראשוני!`
-                    : `${num} מתחלק גם ב-${[2,3,5,7].find(f => num % f === 0)} — פריק!`,
+                    ? MATH_HINTS.prime(num)
+                    : MATH_HINTS.composite_tf(num, [2,3,5,7].find(f => num % f === 0)),
             };
         }
     }

@@ -267,10 +267,19 @@ Chapter D unlocked — divisibility rules (3, 6, 9), prime vs composite identifi
 
 ---
 
+### 33. Smart Hints Rewrite — Natural Hebrew (v2.12.1)
+Rewrote all math hints across 4 chapters in natural, kid-friendly Hebrew and centralized them in a `MATH_HINTS` const object.
+- Hints use warm teacher language (נסי ככה, הטריק, זכרי, שימי לב) instead of robotic phrasing
+- Feminine singular address throughout (תחשבי, תוסיפי, תורידי)
+- Hints teach method, not intermediate results
+- All 20+ hint strings in one organized object for easy editing
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.12.0 (32 releases)
-**Features Completed:** 32 (22 features, 4 UX polish, 1 content expansion, 1 chore, 4 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.12.1 (33 releases)
+**Features Completed:** 33 (22 features, 5 UX polish, 1 content expansion, 1 chore, 4 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
