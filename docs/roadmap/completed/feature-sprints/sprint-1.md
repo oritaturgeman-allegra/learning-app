@@ -281,12 +281,19 @@ Extracted all CSS and JS from monolithic HTML templates into modular static file
 - Templates now contain only HTML markup, inline Jinja2 vars, and state init
 - Load order: inline Jinja2 vars → shared.js → data.js → game.js
 
+### 35. Custom SVG Subject Icons (v2.13.1)
+Replaced emoji icons (🔢, 🇺🇸, 🔤) with custom SVG icons for a more polished look across both subjects.
+- `input-numbers-light.svg` — blue gradient card with 1-2-3-4 grid (replaces 🔢 for math)
+- `input-letters-light.svg` — orange gradient card with A-B-C-D grid (replaces 🇺🇸 for English)
+- `.math-icon` and `.english-icon` CSS classes auto-scale with parent font-size
+- Applied to subject tabs, subject cards, session picker titles, game cards, and math-primes session card
+
 ---
 
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.13.0 (34 releases)
-**Features Completed:** 34 (22 features, 5 UX polish, 1 content expansion, 2 chores, 4 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.13.1 (35 releases)
+**Features Completed:** 35 (22 features, 6 UX polish, 1 content expansion, 2 chores, 4 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

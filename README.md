@@ -12,12 +12,12 @@ A web app that teaches English vocabulary to Hebrew-speaking children through 4 
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v2.13.1  | 02/22 | Polish: Replace emoji icons (🔢, 🇺🇸, 🔤) with custom SVG icons for math and English subjects |
 | v2.13.0  | 02/22 | Refactor: Extract CSS/JS from monolithic templates into modular static files (92% template size reduction) |
 | v2.12.1  | 02/22 | Polish: Smart hints rewritten in natural Hebrew across all 4 math chapters, centralized in MATH_HINTS |
 | v2.12.0  | 02/22 | Feature: Chapter D unlocked — primes, divisibility rules (3/6/9), and prime factorization |
 | v2.11.2  | 02/22 | Fix: Game card completion badge changed from green ✓ to ⭐ — no more conflict with session checkmark |
 | v2.11.1  | 02/22 | Fix: Session completion checkmarks now derived from DB — persist across browsers           |
-| v2.11.0  | 02/22 | Feature: Chapter C unlocked — long division with remainder, dual-input UI, and hint tooltips |
 
 ---
 

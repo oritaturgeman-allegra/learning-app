@@ -63,11 +63,11 @@
 
     <div class="subject-cards-list">
         <button class="subject-card slide-up" style="animation-delay: 0.1s" onclick="switchSubject('english')">
-            <span class="subject-card-emoji">🇺🇸</span>
+            <span class="subject-card-emoji"><img src="/static/input-letters-light.svg" alt="אנגלית" class="english-icon"></span>
             <span class="subject-card-name">אנגלית</span>
         </button>
         <button class="subject-card slide-up" style="animation-delay: 0.25s" onclick="switchSubject('math')">
-            <span class="subject-card-emoji">🔢</span>
+            <span class="subject-card-emoji"><img src="/static/input-numbers-light.svg" alt="חשבון" class="math-icon"></span>
             <span class="subject-card-name">חשבון</span>
         </button>
     </div>
@@ -91,17 +91,17 @@
     </div>
 
     <div class="subject-tabs">
-        <button class="subject-tab {% if subject == 'english' %}active{% endif %}" onclick="switchSubject('english')">🇺🇸 אנגלית</button>
-        <button class="subject-tab {% if subject == 'math' %}active{% endif %}" onclick="switchSubject('math')">🔢 חשבון</button>
+        <button class="subject-tab {% if subject == 'english' %}active{% endif %}" onclick="switchSubject('english')"><img src="/static/input-letters-light.svg" alt="" class="english-icon"> אנגלית</button>
+        <button class="subject-tab {% if subject == 'math' %}active{% endif %}" onclick="switchSubject('math')"><img src="/static/input-numbers-light.svg" alt="" class="math-icon"> חשבון</button>
     </div>
 
     <div class="session-picker-header session-picker-header-{{ subject|default('english') }}">
-        <h1 class="session-picker-title bounce-in">{% if subject == 'math' %}🔢 חשבון{% else %}🇺🇸 אנגלית{% endif %}</h1>
+        <h1 class="session-picker-title bounce-in">{% if subject == 'math' %}<img src="/static/input-numbers-light.svg" alt="" class="math-icon"> חשבון{% else %}<img src="/static/input-letters-light.svg" alt="" class="english-icon"> אנגלית{% endif %}</h1>
     </div>
     <div class="session-cards-list session-cards-list-{{ subject|default('english') }}">
         {% for session in sessions|default([]) %}
         <div class="session-card session-card-{{ session.slug }} slide-up" style="animation-delay: {{ 0.1 + loop.index0 * 0.15 }}s" {% if not session.locked %}onclick="selectSession('{{ session.slug }}')"{% endif %}>
-            <div class="session-card-emoji">{{ session.emoji }}</div>
+            <div class="session-card-emoji">{% if session.slug == 'math-primes' %}<img src="/static/input-numbers-light.svg" alt="" class="math-icon">{% else %}{{ session.emoji }}{% endif %}</div>
             <div class="session-card-info">
                 {% if subject == 'math' %}<div class="session-card-name-he">{{ session.name_he }}</div>{% else %}<div class="session-card-name">{{ session.name }}</div>{% endif %}
                 <div class="session-card-progress" id="progress-{{ session.slug }}">
@@ -134,8 +134,8 @@
     </div>
 
     <div class="subject-tabs">
-        <button class="subject-tab {% if subject == 'english' %}active{% endif %}" onclick="switchSubject('english')">🇺🇸 אנגלית</button>
-        <button class="subject-tab {% if subject == 'math' %}active{% endif %}" onclick="switchSubject('math')">🔢 חשבון</button>
+        <button class="subject-tab {% if subject == 'english' %}active{% endif %}" onclick="switchSubject('english')"><img src="/static/input-letters-light.svg" alt="" class="english-icon"> אנגלית</button>
+        <button class="subject-tab {% if subject == 'math' %}active{% endif %}" onclick="switchSubject('math')"><img src="/static/input-numbers-light.svg" alt="" class="math-icon"> חשבון</button>
     </div>
 
     <div class="word-tracker" id="word-tracker">
@@ -150,7 +150,7 @@
 
     <div class="game-cards">
         <div class="game-card game-card-word-match-english" id="game-card-1" onclick="startGame(1)">
-            <div class="card-emoji">🔤</div>
+            <div class="card-emoji"><img src="/static/input-letters-light.svg" alt="" class="english-icon"></div>
             <div class="card-text">
                 <div class="card-title">מה המילה?</div>
                 <div class="card-desc">התאימי את המילה באנגלית</div>
