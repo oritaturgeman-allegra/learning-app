@@ -5,10 +5,14 @@ Static defaults and constants for Ariel Learning App.
 from typing import Any, Dict, List
 
 # App version (single source of truth)
-APP_VERSION = "2.12.1"
+APP_VERSION = "2.13.0"
 
 # Recent changelog entries (shown in "What's New" popup)
 APP_CHANGELOG: List[Dict[str, str]] = [
+    {
+        "version": "2.13.0",
+        "text": "שיפור ביצועים! הקוד מסודר יותר וטעינת העמודים מהירה יותר 🚀",
+    },
     {
         "version": "2.12.1",
         "text": "רמזים חכמים בכל פרקי החשבון! 💡 לחצי על הנורה ותקבלי עזרה",

@@ -274,12 +274,19 @@ Rewrote all math hints across 4 chapters in natural, kid-friendly Hebrew and cen
 - Hints teach method, not intermediate results
 - All 20+ hint strings in one organized object for easy editing
 
+### 34. Modular CSS/JS Extraction (v2.13.0)
+Extracted all CSS and JS from monolithic HTML templates into modular static files. Templates reduced from 6,618 lines to 532 lines (92% reduction).
+- 3 CSS files: `shared.css`, `english.css`, `math.css`
+- 5 JS files: `shared.js`, `english-data.js`, `english-game.js`, `math-data.js`, `math-game.js`
+- Templates now contain only HTML markup, inline Jinja2 vars, and state init
+- Load order: inline Jinja2 vars → shared.js → data.js → game.js
+
 ---
 
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.12.1 (33 releases)
-**Features Completed:** 33 (22 features, 5 UX polish, 1 content expansion, 1 chore, 4 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.13.0 (34 releases)
+**Features Completed:** 34 (22 features, 5 UX polish, 1 content expansion, 2 chores, 4 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
