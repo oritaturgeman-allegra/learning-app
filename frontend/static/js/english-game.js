@@ -463,7 +463,7 @@ function updateWordTrackerCount() {
     const countEl = document.getElementById('word-tracker-count');
     if (!countEl) return;
     const remaining = vocabulary.length - state.practicedWords.size;
-    countEl.textContent = `${remaining}/${vocabulary.length} נשארו`;
+    countEl.textContent = `${remaining}/${vocabulary.length} מילים נשארו לתרגל `;
 }
 
 /** Reset word tracker UI for a new session (keeps DB data) */
