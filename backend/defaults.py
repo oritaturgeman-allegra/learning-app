@@ -5,10 +5,14 @@ Static defaults and constants for Ariel Learning App.
 from typing import Any, Dict, List
 
 # App version (single source of truth)
-APP_VERSION = "2.11.2"
+APP_VERSION = "2.12.0"
 
 # Recent changelog entries (shown in "What's New" popup)
 APP_CHANGELOG: List[Dict[str, str]] = [
+    {
+        "version": "2.12.0",
+        "text": "פרק ד׳ נפתח! מספרים ראשוניים, כללי התחלקות ופירוק לגורמים 🔢",
+    },
     {
         "version": "2.11.0",
         "text": "פרק ג׳ נפתח! חילוק ארוך עם שארית, חילוק מאומת ורמזים חכמים 💡",
@@ -16,10 +20,6 @@ APP_CHANGELOG: List[Dict[str, str]] = [
     {
         "version": "2.10.0",
         "text": "פרק ב׳ בחשבון נפתח! כפל דו-ספרתי וחזקות — 4 משחקים עם תרגילים חדשים",
-    },
-    {
-        "version": "2.8.0",
-        "text": "4 משחקי חשבון חדשים! פתרי מהר, מצאי את המספר, נכון או לא, ופוצצי בועות",
     },
 ]
 
@@ -32,7 +32,7 @@ SESSIONS_BY_SUBJECT: Dict[str, List[Dict[str, Any]]] = {
         {"slug": "math-tens-hundreds", "name": "Tens & Hundreds", "name_he": "כפל וחילוק בעשרות ובמאות", "emoji": "🔟"},
         {"slug": "math-two-digit", "name": "Two-Digit Multiply", "name_he": "כפל דו-ספרתי", "emoji": "✖️"},
         {"slug": "math-long-division", "name": "Long Division", "name_he": "חילוק ארוך", "emoji": "➗"},
-        {"slug": "math-primes", "name": "Primes & Divisibility", "name_he": "מספרים ראשוניים", "emoji": "🔢", "locked": True},
+        {"slug": "math-primes", "name": "Primes & Divisibility", "name_he": "מספרים ראשוניים", "emoji": "🔢"},
     ],
 }
 

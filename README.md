@@ -12,12 +12,12 @@ A web app that teaches English vocabulary to Hebrew-speaking children through 4 
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v2.12.0  | 02/22 | Feature: Chapter D unlocked — primes, divisibility rules (3/6/9), and prime factorization |
 | v2.11.2  | 02/22 | Fix: Game card completion badge changed from green ✓ to ⭐ — no more conflict with session checkmark |
 | v2.11.1  | 02/22 | Fix: Session completion checkmarks now derived from DB — persist across browsers           |
 | v2.11.0  | 02/22 | Feature: Chapter C unlocked — long division with remainder, dual-input UI, and hint tooltips |
 | v2.10.0  | 02/22 | Feature: Chapter B unlocked — two-digit multiplication and powers across all 4 math games |
 | v2.9.0   | 02/22 | Feature: Home button in header — navigate back to subject picker from any learning page   |
-| v2.8.1   | 02/22 | Fix: Math difficulty tuning — kid-friendly number ranges across all games + no layout shift on refresh |
 
 ---
 

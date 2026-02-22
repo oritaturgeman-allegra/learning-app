@@ -259,10 +259,18 @@ Changed game card completion indicator from green ✓ circle to ⭐ star — avo
 
 ---
 
+### 32. Chapter D: Primes & Divisibility (v2.12.0)
+Chapter D unlocked — divisibility rules (3, 6, 9), prime vs composite identification, and prime factorization across all 4 math games.
+- 3 new problem categories with Hebrew hints explaining solving strategies
+- True/False game shows "מספר ראשוני / מספר פריק" for prime identification
+- Prime factorization uses curated numbers (12–100) with find-the-missing-factor format
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.11.2 (31 releases)
-**Features Completed:** 31 (21 features, 4 UX polish, 1 content expansion, 1 chore, 4 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.12.0 (32 releases)
+**Features Completed:** 32 (22 features, 4 UX polish, 1 content expansion, 1 chore, 4 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
