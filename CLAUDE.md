@@ -51,9 +51,10 @@ Gamified English learning web app for a Gen Alpha Israeli girl (4th grade). Teac
 **Workflow (after each code change):**
 1. Write code + tests
 2. Run ONLY relevant tests (not full suite — CI handles that)
-3. Bump version in `backend/defaults.py` (semantic versioning)
-4. Update README.md "Recent Updates" (keep 6 items)
-5. Ask user to test specific changes
+3. **BEFORE version bump** — check: Do architecture docs need updating? (`docs/architecture/`) If new API fields, services, routes, data flows, or DB changes → update them. Never skip this step.
+4. Bump version in `backend/defaults.py` (semantic versioning)
+5. Update README.md "Recent Updates" (keep 6 items)
+6. Ask user to test specific changes
 
 **Versioning:**
 - **MINOR** (x.1.x → x.2.x): New games, features, or vocabulary units

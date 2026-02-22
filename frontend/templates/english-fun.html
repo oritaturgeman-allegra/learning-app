@@ -2390,6 +2390,10 @@ async function loadProgress() {
                 if (data.data.earned_rewards) {
                     localStorage.setItem('ariel_earned_rewards', JSON.stringify(data.data.earned_rewards));
                 }
+                // Restore session completion checkmarks from DB
+                if (data.data.completed_sessions) {
+                    restoreSessionCheckmarks(data.data.completed_sessions);
+                }
                 updateStarDisplay();
                 return;
             }
@@ -3674,25 +3678,13 @@ function finishGame() {
 
     // If all 4 games completed — show session celebration after a moment
     if (state.sessionGames.size === 4) {
-        markSessionCompleted(SESSION_SLUG);
         setTimeout(() => showSessionPopup(), 2500);
     }
 }
 
-/** Mark a session as completed in localStorage */
-function markSessionCompleted(slug) {
-    if (!slug) return;
-    const completed = JSON.parse(localStorage.getItem('ariel_completed_sessions') || '[]');
-    if (!completed.includes(slug)) {
-        completed.push(slug);
-        localStorage.setItem('ariel_completed_sessions', JSON.stringify(completed));
-    }
-}
-
-/** Restore checkmarks on session picker cards */
-function restoreSessionCheckmarks() {
-    const completed = JSON.parse(localStorage.getItem('ariel_completed_sessions') || '[]');
-    completed.forEach(slug => {
+/** Restore checkmarks on session picker cards (data from API) */
+function restoreSessionCheckmarks(completedSlugs) {
+    (completedSlugs || []).forEach(slug => {
         const card = document.querySelector(`.session-card-${slug}`);
         if (card) card.classList.add('session-completed');
     });
@@ -3703,9 +3695,8 @@ function restoreSessionCheckmarks() {
    ========================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
     updateStarDisplay();
-    restoreSessionCheckmarks();
 
-    // Load progress from API (async, non-blocking)
+    // Load progress from API (async, restores session checkmarks from DB)
     loadProgress();
 
     // Wire welcome button

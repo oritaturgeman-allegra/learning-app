@@ -2686,18 +2686,7 @@ function finishGame() {
     playCelebration();
 
     if (state.sessionGames.size === 4) {
-        markSessionCompleted(SESSION_SLUG);
         setTimeout(() => showSessionPopup(), 2500);
-    }
-}
-
-/** Mark a session as completed in localStorage */
-function markSessionCompleted(slug) {
-    if (!slug) return;
-    const completed = JSON.parse(localStorage.getItem('ariel_completed_sessions') || '[]');
-    if (!completed.includes(slug)) {
-        completed.push(slug);
-        localStorage.setItem('ariel_completed_sessions', JSON.stringify(completed));
     }
 }
 

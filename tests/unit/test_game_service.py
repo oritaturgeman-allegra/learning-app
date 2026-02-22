@@ -180,6 +180,41 @@ class TestGetProgress:
         progress = game_service.get_progress()
         assert len(progress["recent_games"]) == 10
 
+    def test_completed_sessions_empty(self, game_service):
+        """No games played returns empty completed_sessions."""
+        progress = game_service.get_progress()
+        assert progress["completed_sessions"] == []
+
+    def test_completed_sessions_math_all_4_games(self, game_service):
+        """Session with all 4 math game types appears in completed_sessions."""
+        for game_type in ["quick_solve", "missing_number", "true_false_math", "bubble_pop"]:
+            game_service.save_game_result(
+                game_type=game_type, score=5, max_score=10,
+                word_results=[], session_slug="math-tens-hundreds",
+            )
+        progress = game_service.get_progress()
+        assert "math-tens-hundreds" in progress["completed_sessions"]
+
+    def test_completed_sessions_partial_not_included(self, game_service):
+        """Session with only 3 of 4 game types is NOT in completed_sessions."""
+        for game_type in ["quick_solve", "missing_number", "true_false_math"]:
+            game_service.save_game_result(
+                game_type=game_type, score=5, max_score=10,
+                word_results=[], session_slug="math-tens-hundreds",
+            )
+        progress = game_service.get_progress()
+        assert "math-tens-hundreds" not in progress["completed_sessions"]
+
+    def test_completed_sessions_english(self, game_service):
+        """English session with all 4 game types appears in completed_sessions."""
+        for game_type in ["word_match", "sentence_scramble", "listen_choose", "true_false"]:
+            game_service.save_game_result(
+                game_type=game_type, score=5, max_score=10,
+                word_results=[], session_slug="jet2-unit2",
+            )
+        progress = game_service.get_progress()
+        assert "jet2-unit2" in progress["completed_sessions"]
+
 
 class TestGetPracticedWords:
     """Tests for GameService.get_practiced_words()."""

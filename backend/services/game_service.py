@@ -38,6 +38,13 @@ STARS_PER_CORRECT = {
 
 # Category (subject) by game type
 MATH_GAME_TYPES = {"quick_solve", "missing_number", "true_false_math", "bubble_pop"}
+ENGLISH_GAME_TYPES = {"word_match", "sentence_scramble", "listen_choose", "true_false"}
+
+# Required game types per session slug prefix for completion
+REQUIRED_GAMES_BY_PREFIX = {
+    "math": MATH_GAME_TYPES,
+    "jet": ENGLISH_GAME_TYPES,
+}
 
 # Rounds per game type
 ROUNDS_PER_GAME = {
@@ -145,6 +152,7 @@ class GameService:
                         "games_played": 0,
                         "accuracy_by_game": {},
                         "stars_by_session": {},
+                        "completed_sessions": [],
                         "weak_words": [],
                         "recent_games": [],
                         "earned_rewards": [],
@@ -206,11 +214,32 @@ class GameService:
                 unearned = [t for t in REWARD_TIERS if t["stars"] > total_stars]
                 next_reward = unearned[0] if unearned else None
 
+                # Completed sessions — slugs where all required game types have been played
+                games_by_session: Dict[str, set] = {}
+                for r in results:
+                    slug = r.session_slug
+                    if slug:
+                        if slug not in games_by_session:
+                            games_by_session[slug] = set()
+                        games_by_session[slug].add(r.game_type)
+
+                completed_sessions = []
+                for slug, played_types in games_by_session.items():
+                    # Match required games by slug prefix (math-* → MATH, jet* → ENGLISH)
+                    required = None
+                    for prefix, game_set in REQUIRED_GAMES_BY_PREFIX.items():
+                        if slug.startswith(prefix):
+                            required = game_set
+                            break
+                    if required and required.issubset(played_types):
+                        completed_sessions.append(slug)
+
                 return {
                     "total_stars": total_stars,
                     "games_played": len(results),
                     "accuracy_by_game": accuracy_by_game,
                     "stars_by_session": stars_by_session,
+                    "completed_sessions": completed_sessions,
                     "weak_words": weak_words[:10],
                     "recent_games": recent_games,
                     "earned_rewards": earned_rewards,

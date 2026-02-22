@@ -245,10 +245,18 @@ Chapter C unlocked — long division with remainder (dual-input UI), clean divis
 
 ---
 
+### 30. DB-Derived Session Checkmarks (v2.11.1)
+Session completion checkmarks now derived from database via `/api/game/progress` instead of localStorage.
+- Added `completed_sessions` field to progress API response
+- Removed `markSessionCompleted` localStorage approach from both templates
+- 4 new unit tests for completed_sessions logic
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.11.0 (29 releases)
-**Features Completed:** 29 (21 features, 3 UX polish, 1 content expansion, 1 chore, 3 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.11.1 (30 releases)
+**Features Completed:** 30 (21 features, 3 UX polish, 1 content expansion, 1 chore, 4 bug fixes)
 **Test Coverage:** 72 tests, 82% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
