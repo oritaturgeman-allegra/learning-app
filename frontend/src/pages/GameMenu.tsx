@@ -10,6 +10,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { GAMES_BY_SUBJECT } from "@/data/games";
 import { getUnitData } from "@/data/english";
 import { getPracticedWords } from "@/api/game";
+import { useApp } from "@/context/AppContext";
 import WordTracker from "@/games/english/WordTracker";
 
 const SUBJECT_TABS = [
@@ -34,11 +35,14 @@ export default function GameMenu() {
   const [completedGames, setCompletedGames] = useState<Set<number>>(new Set());
   const [practicedWords, setPracticedWords] = useState<Set<string>>(new Set());
 
+  const { sessionsBySubject } = useApp();
   const currentSubject = subject || "english";
   const slug = sessionSlug || "jet2-unit2";
   const games = GAMES_BY_SUBJECT[currentSubject] || [];
   const isEnglish = currentSubject === "english";
   const unit = isEnglish ? getUnitData(slug) : null;
+  const allSessions = sessionsBySubject[currentSubject] || [];
+  const currentSession = allSessions.find((s) => s.slug === slug);
 
   // Load completed games and practiced words
   useEffect(() => {
@@ -120,14 +124,14 @@ export default function GameMenu() {
         אריאל, בחרי משחק 🎮
       </Typography>
 
-      {/* Session slug display */}
-      {sessionSlug && (
+      {/* Session name */}
+      {currentSession && (
         <Typography
           variant="body2"
           color="text.secondary"
           sx={{ mb: 2, opacity: 0.7 }}
         >
-          {sessionSlug}
+          {isEnglish ? currentSession.name : currentSession.name_he}
         </Typography>
       )}
 

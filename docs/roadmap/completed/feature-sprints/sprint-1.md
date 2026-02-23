@@ -1,7 +1,7 @@
 # Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
-Ship **v1.0.0 → v3.0.1** — Build a complete gamified English + Math learning app with 8 mini-games, persistent progress tracking, and a polished kid-friendly React SPA.
+Ship **v1.0.0 → v3.0.2** — Build a complete gamified English + Math learning app with 8 mini-games, persistent progress tracking, and a polished kid-friendly React SPA.
 
 ## Sprint Theme
 Foundation & Polish — Core game engine, vocabulary content, star rewards, word tracker, and visual delight for a Gen Alpha learner.
@@ -407,10 +407,18 @@ Lavender background on session cards in TopicSessions to visually distinguish th
 
 ---
 
+### 47. Navigation Polish — Session Names, Back Button, Title (v3.0.2)
+UI consistency pass across game screens and session navigation.
+- GameMenu: Session slug replaced with Hebrew name (math) or English name (English) subtitle
+- GameScreen + MathGameScreen: Back button header constrained to `maxWidth: 500` + centered — matches TopicSessions layout
+- TopicSessions: Title changed from "בחרי שיעור" to "בחרי נושא" for clearer hierarchy
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v3.0.1 (46 releases)
-**Features Completed:** 46 (27 features, 7 UX polish, 1 content expansion, 3 chores, 8 bug fixes)
+**Versions Shipped:** v1.0.0 → v3.0.2 (47 releases)
+**Features Completed:** 47 (27 features, 8 UX polish, 1 content expansion, 3 chores, 8 bug fixes)
 **Test Coverage:** 71 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - Full React + TypeScript + MUI rewrite — single modern SPA

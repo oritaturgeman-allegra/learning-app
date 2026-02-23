@@ -10,7 +10,7 @@ Specialized game designer and developer for building interactive, gamified learn
 - Scaffolding new game types from existing content (workbooks, textbooks)
 - Optimizing game UX for young, energetic learners (ages 6–12)
 - Adding Hebrew instructions and RTL support to learning apps
-- Building new games within the FastAPI + Jinja2 template architecture
+- Building new games within the React + TypeScript + MUI architecture
 - Reviewing and improving child engagement and learning outcomes
 
 ---
@@ -40,7 +40,7 @@ Build one mini-game at a time. Each game is a fully working unit. Add complexity
 - Educational game design for ages 6–12
 - Hebrew ↔ English bilingual UX
 - Gamification mechanics (stars, streaks, milestones, surprises)
-- FastAPI + Jinja2 template game architecture (vanilla JS/CSS)
+- React 19 + TypeScript + MUI 7 game component architecture
 - Web Speech API (TTS for English pronunciation)
 - Emoji-based visual vocabulary
 - RTL/LTR mixed-direction layout
@@ -81,15 +81,15 @@ Build one mini-game at a time. Each game is a fully working unit. Add complexity
 
 **Output**: Structured content object matching the app's data format.
 
-```javascript
-// English vocabulary format (matches VOCABULARY in english-fun.html)
+```typescript
+// English vocabulary format (in frontend/src/data/english.ts → UnitData.vocabulary)
 { english: "coat", hebrew: "מעיל", emoji: "🧥", category: "clothes" }
 
-// Sentence format (matches SENTENCES in english-fun.html)
+// Sentence format (in frontend/src/data/english.ts → UnitData.scrambleSentences / trueFalseSentences)
 { english: "She is wearing a blue dress.", hebrew: "היא לובשת שמלה כחולה." }
 
-// Math format (future)
-{ question: "3 + 4 = ?", answer: 7, options: [5, 6, 7, 8] }
+// Math problems are generated algorithmically (in frontend/src/data/math.ts → generateProblem())
+// No static data — problems created per round based on session slug and chapter
 ```
 
 ### 2. Game Selection Phase
@@ -126,17 +126,18 @@ Build one mini-game at a time. Each game is a fully working unit. Add complexity
 
 **Objective**: Add the new game to the existing app.
 
-- [ ] Add content data to `frontend/templates/english-fun.html` (vocabulary / sentences / math)
-- [ ] Add game card to menu screen with color, emoji, Hebrew name
-- [ ] Build game screen (question display, answer options, round counter)
-- [ ] Build CSS: match existing design system (see `ui-designer.md`)
-- [ ] Build game engine (shuffle, score, round tracking)
-- [ ] Add Web Speech API where applicable (speak word on load + speaker button)
-- [ ] Add AudioContext feedback (correct beep / wrong buzz)
-- [ ] Add confetti/star-burst on correct answers
-- [ ] Integrate with existing star counter and progress tracking API
-- [ ] Add backend route if game needs server-side logic
-- [ ] Test all rounds, milestone triggers, end screen
+- [ ] Add content data to `frontend/src/data/english.ts` or `frontend/src/data/math.ts`
+- [ ] Add game metadata to `frontend/src/data/games.ts` (id, name, emoji, color)
+- [ ] Build React game component in `frontend/src/games/{subject}/`
+- [ ] Use `useGameEngine` hook for round progression, scoring, and answer delay
+- [ ] Style with MUI sx prop, match existing design system (see `ui-designer.md`)
+- [ ] Add Web Speech API where applicable (via `useAudio` hook)
+- [ ] Add AudioContext feedback (correct chime / wrong buzz via `useAudio`)
+- [ ] Integrate with GameScreen/MathGameScreen for API save and star tracking
+- [ ] Add React.lazy() import in GameScreen/MathGameScreen for code splitting
+- [ ] Register game in `frontend/src/data/games.ts` game list
+- [ ] Build frontend: `cd frontend && npm run build`
+- [ ] Test all rounds, milestone triggers, completion screen
 
 **Output**: Working game integrated into the existing app.
 
@@ -197,50 +198,61 @@ Build one mini-game at a time. Each game is a fully working unit. Add complexity
 
 | Subject | Canonical Source | Format |
 |---------|-----------------|--------|
-| English vocabulary | `frontend/templates/english-fun.html` → `VOCABULARY` | `{ english, hebrew, emoji, category }` |
-| English sentences | `frontend/templates/english-fun.html` → `SENTENCES` | `{ english, hebrew }` |
-| Math problems | TBD — will be added when math games are built | `{ question, answer, options }` |
+| English vocabulary | `frontend/src/data/english.ts` → `UNITS[slug].vocabulary` | `{ english, hebrew, emoji, category }` |
+| English sentences | `frontend/src/data/english.ts` → `scrambleSentences` / `trueFalseSentences` | `{ english, hebrew }` |
+| Math problems | `frontend/src/data/math.ts` → `generateProblem(sessionSlug)` | Algorithmic — generated per round |
+| Game metadata | `frontend/src/data/games.ts` → `ENGLISH_GAMES` / `MATH_GAMES` | `{ id, name, emoji, color }` |
 
 ### Game Type Templates
 
 ```markdown
 ## Available Game Templates
 
-### Built ✅
+### English Games ✅ (4 built)
 
-### 🟣 GAME 1 — "מה המילה?" (Word Match)
+### 🟣 GAME 1 — "מה המילה?" (Word Match) — `WordMatch.tsx`
 Show Hebrew word → tap correct English word from 4 options
-+1 ⭐ per correct | 10 rounds | Shuffle options each round
++1 ⭐ per correct | flexible rounds (9-13) | Uses `useGameEngine` hook
 
-### 🟠 GAME 2 — "תרגמי את המשפט" (Sentence Scramble)
+### 🟠 GAME 2 — "תרגמי את המשפט" (Sentence Scramble) — `SentenceScramble.tsx`
 Show jumbled English sentence words → tap to build correct order
-+2 ⭐ per correct | 8 rounds | Speaker plays full sentence on load
++2 ⭐ per correct | 6 rounds | Speaker plays full sentence on load
 
-### 🟡 GAME 3 — "האזיני ובחרי" (Listen & Choose)
+### 🟡 GAME 3 — "האזיני ובחרי" (Listen & Choose) — `ListenAndChoose.tsx`
 App speaks English word → tap matching emoji from 4 choices
-+1 ⭐ per correct | 10 rounds | Auto-plays audio on each round
++1 ⭐ per correct | flexible rounds (9-13) | Auto-plays audio via `useAudio`
 
-### 🟢 GAME 4 — "כן או לא?" (True or False)
+### 🟢 GAME 4 — "כן או לא?" (True or False) — `TrueFalse.tsx`
 Show English sentence + emoji → tap ✅ YES or ❌ NO
-+1 ⭐ per correct | 10 rounds | Gentle, no-pressure format
++1 ⭐ per correct | 8 rounds | Gentle, no-pressure format
 
-### Planned 🔮
+### Math Games ✅ (4 built)
 
-### 🔵 GAME 5 — "מה חסר?" (Fill the Missing Letter) [English]
+### 🔵 GAME 5 — "פתרי מהר" (Quick Solve) — `QuickSolve.tsx`
+Show math equation → type answer (or quotient + remainder for division)
++1 ⭐ per correct | 10 rounds | Israeli notation (× and :)
+
+### 🔴 GAME 6 — "מצאי את המספר" (Missing Number) — `MissingNumber.tsx`
+Show equation with blank → choose correct number from 4 options
++1 ⭐ per correct | 8 rounds | Supports all 4 math chapters
+
+### 🟤 GAME 7 — "נכון או לא?" (Math True or False) — `MathTrueFalse.tsx`
+Show equation with claimed answer → tap ✅ or ❌
++1 ⭐ per correct | 10 rounds | Wrong answers are near-miss distractors
+
+### ⚪ GAME 8 — "פוצצי בועות" (Bubble Pop) — `BubblePop.tsx`
+Pop bubbles that match the target expression/value
++1 ⭐ per correct bubble | 8 rounds | Floating CSS bubble animations
+
+### Future Ideas 🔮
+
+### "מה חסר?" (Fill the Missing Letter) [English]
 Show English word with one missing letter → tap the correct letter
-+1 ⭐ per correct | 10 rounds | Great for spelling practice
+Great for spelling practice
 
-### 🔴 GAME 6 — "חשבון מהיר" (Quick Math) [Math]
-Show simple equation → tap correct answer from 4 options
-+1 ⭐ per correct | Adjustable difficulty | Timer optional (off by default)
-
-### 🟤 GAME 7 — "בנה את המספר" (Number Builder) [Math]
-Show a number in words (e.g., "forty-two") → tap the digits to form it
-+2 ⭐ per correct | Great for number literacy
-
-### ⚪ GAME 8 — "בחר את התמונה" (Choose the Picture) [English]
+### "בחר את התמונה" (Choose the Picture) [English]
 App speaks word → 4 emoji options on screen → tap matching one
-+1 ⭐ per correct | Pure listening comprehension
+Pure listening comprehension
 ```
 
 ### Tech Architecture Spec
@@ -250,41 +262,40 @@ App speaks word → 4 emoji options on screen → tap matching one
 
 ### Stack
 - Backend: FastAPI + SQLAlchemy (SQLite) — see `backend/`
-- Frontend: Jinja2 template (`frontend/templates/english-fun.html`) — vanilla JS + CSS
-- Audio: Web Speech API (TTS) + AudioContext (sound effects)
+- Frontend: React 19 + TypeScript + MUI 7 + Vite SPA
+- Audio: Web Speech API (TTS) + AudioContext (sound effects) via `useAudio` hook
 - Fonts: Google Fonts (Fredoka display, Rubik body/Hebrew)
-- Storage: SQLite (game results, progress) + localStorage (session state)
+- Storage: SQLite (game results, progress) + localStorage (fallback)
 
 ### Key Files
-- `frontend/templates/english-fun.html` — All game UI, CSS, JS, and content data
+- `frontend/src/games/english/` — 4 English game components + GameScreen + WordTracker
+- `frontend/src/games/math/` — 4 Math game components + MathGameScreen + HintButton
+- `frontend/src/hooks/useGameEngine.ts` — Shared round/scoring/delay logic for all games
+- `frontend/src/hooks/useAudio.ts` — AudioContext tones + Web Speech API TTS
+- `frontend/src/data/games.ts` — Game metadata registry
+- `frontend/src/data/english.ts` — Vocabulary + session planner
+- `frontend/src/data/math.ts` — Algorithmic problem generators
+- `frontend/src/context/AppContext.tsx` — Progress + config state
 - `backend/routes/game.py` — API endpoints (save result, get progress, reset)
 - `backend/services/game_service.py` — Business logic (stars, accuracy, practiced words)
-- `backend/models/` — SQLAlchemy models (GameResult, AppState)
 
-### Screen State Machine
-welcome → menu → [game-intro] → game → result → menu
-                                    ↓ (5 stars)
-                                milestone-celebration → game (continues)
+### Navigation Flow
+Welcome → SubjectPicker → SessionPicker → [TopicSessions] → GameMenu → Play Game → CompletionScreen
+URL: /   →  /learning    → /learning/math → /learning/math/topic/... → /learning/math/session-slug
 
 ### Audio Strategy
-- Correct answer: AudioContext beep (short, high-pitched, 880Hz)
-- Wrong answer: AudioContext buzz (short, low, 200Hz)
+- Correct answer: AudioContext chime (880Hz, short)
+- Wrong answer: AudioContext buzz (200Hz, short)
 - Word/sentence pronunciation: Web Speech API (lang: 'en-US')
-- Milestone jingle: AudioContext chord sequence
+- Milestone: Celebration melody (AudioContext chord sequence)
+- All audio managed by `useAudio` hook (singleton AudioContext)
 
 ### Reward System
-- Stars: localStorage key 'ariel_stars' + synced to DB via POST /api/game/result
-- Session games: localStorage key 'ariel_session_games'
-- Milestone: fires every 5 total stars
-- Star display: always-visible top bar
+- Stars: Tracked per-session in DB via POST /api/game/result
+- Global total: Sum of all sessions (drives reward tier unlocks)
+- Milestone: Every 5 stars → celebration overlay, every 10 → emoji parade
+- Reward tiers: 6 collectible cards at 25, 50, 100, 150, 200, 300 stars
 - Reset: POST /api/game/reset — clears practiced words, keeps lifetime stars
-
-### Mascot
-- Element: fixed ⭐ emoji, bottom-right corner
-- Default state: gentle float animation (CSS keyframes)
-- Correct state: 'wiggle' class → scale bounce + rotate (0.6s)
-- Wrong state: 'sad' class → small shrink (0.3s)
-- Milestone state: 'dance' class → full spin + grow (1s)
 ```
 
 ---
@@ -297,7 +308,7 @@ welcome → menu → [game-intro] → game → result → menu
 |----------|---------------|
 | `.claude/agents/frontend/ui-designer.md` | Full design system: colors, typography, spacing, component patterns |
 | `docs/architecture/design.md` | App-specific UI decisions, game card colors, animations |
-| `frontend/templates/english-fun.html` | Live CSS variables (`:root` block) — the source of truth |
+| `frontend/src/theme.ts` | MUI theme — design tokens, palette, typography, component overrides |
 
 ### Game-Specific Design Notes
 
@@ -321,7 +332,7 @@ When deciding what to build next, score each game idea:
 | Build Simplicity | 3 | Can it be built in 1 session within the existing app? |
 | Audio/Visual Richness | 4 | Does it use TTS, sound, animation generously? |
 | Hebrew Support | 4 | Clear RTL instructions, no confusion for the learner? |
-| Low Dependencies | 5 | Uses existing stack (vanilla JS, Web Speech API, AudioContext)? |
+| Low Dependencies | 5 | Uses existing stack (React hooks, MUI, Web Speech API, AudioContext)? |
 
 **Priority Score** = Sum of (score × weight) / max possible
 
@@ -330,8 +341,8 @@ When deciding what to build next, score each game idea:
 ## Curriculum Alignment
 
 When building new games, always check the current curriculum source:
-- **English**: Vocabulary and sentences in `frontend/templates/english-fun.html` (currently Jet 2, Unit 2)
-- **Math**: TBD — will be defined when math games are added
+- **English**: Vocabulary and sentences in `frontend/src/data/english.ts` (currently Jet 2, Unit 2 — 55 words, 20 scramble sentences, 22 T/F sentences)
+- **Math**: Algorithmic problem generators in `frontend/src/data/math.ts` (4 chapters: tens/hundreds, two-digit multiply, long division, primes)
 
 New units or subjects should follow the same content intake process (Phase 1 above).
 
@@ -339,7 +350,9 @@ New units or subjects should follow the same content intake process (Phase 1 abo
 
 ## Open Questions Tracker
 
-- [ ] Should Math games be separate from English games, or mixed in one app?
-- [ ] What math topics is Ariel currently studying? (addition/subtraction/multiplication?)
+- [x] ~~Should Math games be separate from English games, or mixed in one app?~~ → Same app, separate subjects with topic navigation
+- [x] ~~What math topics is Ariel currently studying?~~ → 4 chapters: tens/hundreds, two-digit multiply, long division, primes & divisibility
 - [ ] Should there be a parent/teacher dashboard showing progress?
 - [ ] How many minutes per session is ideal? (recommendation: 10–15 min max)
+- [ ] New English units beyond Jet 2 Unit 2?
+- [ ] New math content beyond 4th grade multiplication/division?

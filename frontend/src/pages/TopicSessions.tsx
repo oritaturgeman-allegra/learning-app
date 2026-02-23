@@ -74,7 +74,7 @@ export default function TopicSessions() {
           fontSize: { xs: "1.4rem", sm: "1.8rem" },
         }}
       >
-        בחרי שיעור
+        בחרי נושא
       </Typography>
 
       {/* Session cards */}
