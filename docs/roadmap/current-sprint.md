@@ -28,7 +28,7 @@ Sprint is successful if:
 - [x] Phase 2: Backend API adaptation (serve SPA, /api/config endpoint)
 - [x] Phase 3: Core layout & navigation screens (API client, AppContext, Layout, 4 pages)
 - [x] Phase 4: Audio & reward systems (useAudio, Confetti, Milestone, RewardPopup, useRewards)
-- [ ] Phase 5: English games
+- [x] Phase 5: English games (WordMatch, SentenceScramble, ListenAndChoose, TrueFalse)
 - [ ] Phase 6: Math games
 - [ ] Phase 7: Cleanup & polish
 

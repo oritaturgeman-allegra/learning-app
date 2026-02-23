@@ -176,9 +176,11 @@ frontend/
 │   ├── theme.ts               # MUI theme with design tokens from shared.css
 │   ├── api/                   # Typed API client (types.ts, game.ts)
 │   ├── context/               # AppContext — progress + config state
-│   ├── components/            # Layout, StarCounter, RewardCollection
+│   ├── components/            # Layout, StarCounter, RewardCollection, overlays
+│   ├── hooks/                 # useAudio, useGameEngine, useRewards
 │   ├── pages/                 # Welcome, SubjectPicker, SessionPicker, GameMenu
-│   ├── data/                  # Game card metadata (games.ts)
+│   ├── data/                  # games.ts (card metadata), english.ts (vocab + planner)
+│   ├── games/english/         # 4 English game components + GameScreen + WordTracker
 │   └── styles/                # CSS keyframe animations (global.css)
 ├── package.json               # Node dependencies (React, MUI, Vite)
 ├── vite.config.ts             # Vite build config + dev proxy to FastAPI

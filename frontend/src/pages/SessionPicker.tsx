@@ -126,7 +126,7 @@ export default function SessionPicker() {
                       fontSize: { xs: "1rem", sm: "1.15rem" },
                     }}
                   >
-                    {session.name_he}
+                    {session.name}
                   </Typography>
                   <Box
                     sx={{

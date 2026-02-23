@@ -350,10 +350,11 @@ Direction set to `rtl`. Emotion cache uses `stylis-plugin-rtl` to flip all CSS.
 
 ### Routes (React Router)
 ```
-/                                → Welcome (landing page)
-/learning                        → SubjectPicker (English/Math)
-/learning/:subject               → SessionPicker
-/learning/:subject/:sessionSlug  → GameMenu
+/                                              → Welcome (landing page)
+/learning                                      → SubjectPicker (English/Math)
+/learning/:subject                             → SessionPicker
+/learning/:subject/:sessionSlug                → GameMenu
+/learning/:subject/:sessionSlug/play/:gameId   → GameScreen (English games)
 ```
 
 ### Dev Workflow
@@ -377,31 +378,42 @@ Replaces Jinja2 template context injection. Returns all server-side config React
 - `sessions_by_subject` — all sessions grouped by subject
 - `subject` / `session_slug` — optional query params for context
 
-### React Project Structure (Phases 3-4)
+### React Project Structure (Phases 3-5)
 ```
 frontend/src/
 ├── api/
-│   ├── types.ts              # TypeScript interfaces for API responses
+│   ├── types.ts              # TypeScript interfaces for API responses (incl. WordResult)
 │   └── game.ts               # Typed API client (fetch wrapper)
 ├── context/
 │   └── AppContext.tsx         # React Context for progress + config + awardStars()
 ├── hooks/
 │   ├── useAudio.ts           # AudioContext tones (correct/wrong/celebration) + TTS
+│   ├── useGameEngine.ts      # Shared game loop: rounds, scoring, answer delays
 │   └── useRewards.ts         # Milestone checks, reward unlocks, confetti orchestration
 ├── components/
-│   ├── Layout.tsx             # Header shell + celebration overlays
+│   ├── Layout.tsx             # Header shell + celebration overlays + milestone watcher
 │   ├── StarCounter.tsx        # Gold pill star counter
 │   ├── RewardCollection.tsx   # Trophy gallery dialog
 │   ├── Confetti.tsx           # 30-piece confetti overlay (portal)
 │   ├── MilestoneOverlay.tsx   # 5-star / 10-star celebration
 │   └── RewardPopup.tsx        # Reward tier unlock popup
 ├── data/
-│   └── games.ts              # Game card metadata per subject
+│   ├── games.ts              # Game card metadata per subject
+│   └── english.ts            # Vocabulary (55 words), sentences, session planner
+├── games/
+│   └── english/
+│       ├── GameScreen.tsx     # Route wrapper: plan manager, game router, API save
+│       ├── CompletionScreen.tsx # Score summary after finishing a game
+│       ├── WordTracker.tsx    # Vocabulary sidebar (desktop) / drawer (mobile)
+│       ├── WordMatch.tsx      # Game 1: emoji + Hebrew → pick English (4 options)
+│       ├── SentenceScramble.tsx # Game 2: Hebrew → assemble English from chips
+│       ├── ListenAndChoose.tsx  # Game 3: hear word → pick from 4 (emoji+English+Hebrew)
+│       └── TrueFalse.tsx      # Game 4: English+Hebrew sentence → yes/no
 ├── pages/
 │   ├── Welcome.tsx            # Landing page (standalone, no header)
 │   ├── SubjectPicker.tsx      # English/Math selection
 │   ├── SessionPicker.tsx      # Unit selection with subject tabs
-│   └── GameMenu.tsx           # Game card grid (4 per subject)
+│   └── GameMenu.tsx           # Game card grid (4 per subject) + word tracker
 ├── styles/
 │   └── global.css             # CSS keyframe animations from shared.css
 ├── App.tsx                    # Routes + AppProvider
@@ -428,8 +440,26 @@ frontend/src/
 - localStorage keys: `ariel_last_milestone`, `ariel_earned_rewards`
 - `refreshProgress()` exposed for re-fetch after game completion
 
+### Game Engine Hook (`useGameEngine.ts`)
+Shared game loop used by all 4 English game components:
+- **Options**: `totalRounds`, `starsPerCorrect` (1 or 2), `answerDelay` (1500 or 2500ms)
+- **State**: `currentRound`, `gameScore`, `maxScore`, `isAnswering`, `isFinished`, `progressPercent`, `wordResults`
+- **`submitAnswer(correct, results)`**: Plays audio feedback, awards stars via `awardStars()`, accumulates word results, locks input during delay, then advances round or sets `isFinished`
+- Layout's milestone watcher (`useEffect` on `totalStars`) auto-triggers celebrations when stars increase
+
+### English Games (Phase 5)
+- **Data**: `data/english.ts` — 55 typed vocabulary words, 20 scramble sentences, 22 T/F sentences, Fisher-Yates shuffle, greedy set-cover session planner
+- **Session plan**: Cached in `sessionStorage` per session slug. 6 scramble + 8 T/F sentences (greedy, max coverage) → remaining words split between Games 1 & 3
+- **GameScreen**: Route wrapper (`/play/:gameId`) — creates plan, loads practiced words, renders game component, saves result to API on finish
+- **CompletionScreen**: Score summary with celebration audio, replay/back buttons
+- **WordTracker**: Fixed sidebar (desktop ≥1100px) or drawer+FAB (mobile) showing 55 word chips, practiced words get teal background + strikethrough
+- **Game 1 (WordMatch)**: Emoji + Hebrew → 4 English options, 1 star/correct
+- **Game 2 (SentenceScramble)**: Hebrew → assemble English from chip tap, 2 stars/correct, 6 rounds
+- **Game 3 (ListenAndChoose)**: Auto-speak → 4 options (emoji+English+Hebrew), 1 star/correct
+- **Game 4 (TrueFalse)**: English+Hebrew sentence → yes/no, 1 star/correct, 8 rounds
+
 ### Migration Plan
-See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phases 1-4 complete. Next: Phases 5-6 (games) → Phase 7 (cleanup).
+See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phases 1-5 complete. Next: Phase 6 (math games) → Phase 7 (cleanup).
 
 ---
 

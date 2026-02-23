@@ -360,10 +360,24 @@ Fixed RTL emoji placement across all React pages and added version footer.
 
 ---
 
+### 43. React English Games — Phase 5 Complete (v2.17.0)
+Ported all 4 English mini-games from vanilla JS to React + TypeScript + MUI.
+- **Data module** (`data/english.ts`): 55 typed vocabulary words, 20 scramble sentences, 22 T/F sentences, greedy set-cover session planner
+- **Game engine hook** (`useGameEngine.ts`): Shared round/scoring/delay logic for all games
+- **4 game components**: WordMatch, SentenceScramble, ListenAndChoose, TrueFalse
+- **GameScreen**: Route wrapper managing session plan, practiced words, API save
+- **CompletionScreen**: Score summary with celebration audio and replay/back buttons
+- **WordTracker**: Fixed sidebar (desktop) / drawer (mobile) with 55 word chips
+- **GameMenu**: Cards navigate to games, show completion checkmarks
+- **Layout**: Milestone watcher auto-triggers celebrations when stars increase
+- Architecture docs updated
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.16.1 (42 releases)
-**Features Completed:** 41 (24 features, 6 UX polish, 1 content expansion, 3 chores, 7 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.17.0 (43 releases)
+**Features Completed:** 42 (25 features, 6 UX polish, 1 content expansion, 3 chores, 7 bug fixes)
 **Test Coverage:** 76 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

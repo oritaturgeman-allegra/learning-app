@@ -42,11 +42,12 @@
 - [ ] **Verify**: Earn stars → sound plays, confetti appears, rewards unlock
 
 ### Phase 5: English Games
-- [ ] Migrate `english-data.js` → `frontend/src/data/english.ts` (typed)
-- [ ] Create `useGameEngine` hook (shared game loop: rounds, scoring, answer checking)
-- [ ] Port games: WordMatch, SentenceBuilder, ListenAndChoose, TrueFalse
-- [ ] Port WordTracker (sidebar on desktop, MUI Drawer on mobile)
-- [ ] Wire up `buildCoverageMap` and word distribution logic
+- [x] Migrate `english-data.js` → `frontend/src/data/english.ts` (typed vocab, sentences, session planner)
+- [x] Create `useGameEngine` hook (shared game loop: rounds, scoring, answer delays)
+- [x] Port games: WordMatch, SentenceScramble, ListenAndChoose, TrueFalse
+- [x] Port WordTracker (sidebar on desktop, MUI Drawer on mobile)
+- [x] GameScreen route wrapper + CompletionScreen + milestone watcher in Layout
+- [x] GameMenu navigates to games, shows completion checkmarks
 - [ ] **User tests all 4 English games on iPhone**
 
 ### Phase 6: Math Games
@@ -138,6 +139,7 @@ npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-do
 | 02/23 | Phase 2 | /api/game/config endpoint, serve React build from FastAPI at /app/, SPA catch-all | v2.14.1 |
 | 02/23 | Phase 3 | API client, AppContext, Layout, StarCounter, RewardCollection, 4 navigation pages, animations | v2.15.0 |
 | 02/23 | Phase 4 | useAudio (tones + TTS), Confetti, MilestoneOverlay, RewardPopup, useRewards orchestration, Layout + AppContext wiring | v2.16.0 |
+| 02/23 | Phase 5 | English games: data/english.ts, useGameEngine, 4 game components, GameScreen, CompletionScreen, WordTracker, GameMenu navigation | v2.17.0 |
 
 ---
 

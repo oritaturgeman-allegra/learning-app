@@ -4,7 +4,7 @@
  * Renders celebration overlays (confetti, milestones, reward popups).
  */
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
 import StarCounter from "@/components/StarCounter";
@@ -17,7 +17,7 @@ import { useRewards } from "@/hooks/useRewards";
 
 export default function Layout() {
   const [galleryOpen, setGalleryOpen] = useState(false);
-  const { earnedRewards, rewardTiers, appVersion } = useApp();
+  const { earnedRewards, rewardTiers, appVersion, totalStars } = useApp();
   const location = useLocation();
 
   const {
@@ -29,7 +29,17 @@ export default function Layout() {
     rewardTier,
     closeReward,
     confettiActive,
+    checkMilestone,
   } = useRewards();
+
+  // Auto-trigger milestone/reward checks when stars increase
+  const prevStarsRef = useRef(totalStars);
+  useEffect(() => {
+    if (totalStars > prevStarsRef.current) {
+      checkMilestone(totalStars, rewardTiers);
+    }
+    prevStarsRef.current = totalStars;
+  }, [totalStars, rewardTiers, checkMilestone]);
 
   // Hide home button on subject picker (already at top level)
   const isSubjectPicker = location.pathname === "/learning";
