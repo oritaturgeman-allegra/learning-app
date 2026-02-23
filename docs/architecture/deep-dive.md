@@ -377,8 +377,40 @@ Replaces Jinja2 template context injection. Returns all server-side config React
 - `sessions_by_subject` — all sessions grouped by subject
 - `subject` / `session_slug` — optional query params for context
 
+### React Project Structure (Phase 3)
+```
+frontend/src/
+├── api/
+│   ├── types.ts              # TypeScript interfaces for API responses
+│   └── game.ts               # Typed API client (fetch wrapper)
+├── context/
+│   └── AppContext.tsx         # React Context for progress + config data
+├── components/
+│   ├── Layout.tsx             # Header shell with Outlet (stars, trophy, home)
+│   ├── StarCounter.tsx        # Gold pill star counter
+│   └── RewardCollection.tsx   # Trophy gallery dialog
+├── data/
+│   └── games.ts              # Game card metadata per subject
+├── pages/
+│   ├── Welcome.tsx            # Landing page (standalone, no header)
+│   ├── SubjectPicker.tsx      # English/Math selection
+│   ├── SessionPicker.tsx      # Unit selection with subject tabs
+│   └── GameMenu.tsx           # Game card grid (4 per subject)
+├── styles/
+│   └── global.css             # CSS keyframe animations from shared.css
+├── App.tsx                    # Routes + AppProvider
+├── main.tsx                   # React root with MUI + RTL providers
+└── theme.ts                   # MUI theme (design tokens)
+```
+
+### State Management
+- `AppContext` provides progress + config data to all pages
+- Fetches `/api/game/config` (once) and `/api/game/progress` (on mount + after games)
+- Falls back to localStorage (`ariel_stars`, `ariel_earned_rewards`) for instant display
+- `refreshProgress()` exposed for re-fetch after game completion
+
 ### Migration Plan
-See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phases 1-2 complete. Next: Phase 3 (navigation screens) → Phases 4-6 (games) → Phase 7 (cleanup).
+See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phases 1-3 complete. Next: Phase 4 (audio/rewards) → Phases 5-6 (games) → Phase 7 (cleanup).
 
 ---
 

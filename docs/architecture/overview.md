@@ -172,8 +172,14 @@ frontend/
 │       └── math-game.js       # Math game logic, problem generators
 ├── src/                       # NEW — React + TypeScript SPA (migration in progress)
 │   ├── main.tsx               # React root mount with MUI theme + RTL providers
-│   ├── App.tsx                # React Router routes + placeholder pages
-│   └── theme.ts               # MUI theme with design tokens from shared.css
+│   ├── App.tsx                # React Router routes + AppProvider
+│   ├── theme.ts               # MUI theme with design tokens from shared.css
+│   ├── api/                   # Typed API client (types.ts, game.ts)
+│   ├── context/               # AppContext — progress + config state
+│   ├── components/            # Layout, StarCounter, RewardCollection
+│   ├── pages/                 # Welcome, SubjectPicker, SessionPicker, GameMenu
+│   ├── data/                  # Game card metadata (games.ts)
+│   └── styles/                # CSS keyframe animations (global.css)
 ├── package.json               # Node dependencies (React, MUI, Vite)
 ├── vite.config.ts             # Vite build config + dev proxy to FastAPI
 ├── tsconfig.json              # TypeScript strict config

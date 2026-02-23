@@ -8,6 +8,7 @@ import rtlPlugin from "stylis-plugin-rtl";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme";
 import App from "./App";
+import "./styles/global.css";
 
 // RTL cache for Emotion — flips all CSS for right-to-left layout
 const rtlCache = createCache({

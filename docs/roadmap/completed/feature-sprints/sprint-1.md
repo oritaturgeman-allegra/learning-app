@@ -325,10 +325,24 @@ FastAPI now serves the React build at `/app/` and provides a config API for the 
 
 ---
 
+### 40. React Navigation Screens (v2.15.0)
+All 4 navigation screens ported to React with MUI components, responsive layout, and live API data.
+- API client (`api/game.ts`) with TypeScript types for all endpoints
+- AppContext provider for progress + config state (stars, rewards, sessions)
+- Layout component with sticky header (star counter, trophy gallery, home button)
+- Welcome page with animated gradient background
+- SubjectPicker with SVG icon cards for English/Math
+- SessionPicker with subject tabs, session cards, per-session star counts
+- GameMenu with colored game cards (games placeholder until Phases 5-6)
+- CSS keyframe animations ported from legacy shared.css
+- RewardCollection dialog with earned/locked reward cards + progress bar
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.14.1 (39 releases)
-**Features Completed:** 38 (22 features, 6 UX polish, 1 content expansion, 3 chores, 6 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.15.0 (40 releases)
+**Features Completed:** 39 (23 features, 6 UX polish, 1 content expansion, 3 chores, 6 bug fixes)
 **Test Coverage:** 76 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

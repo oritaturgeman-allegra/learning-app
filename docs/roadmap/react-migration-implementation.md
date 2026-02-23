@@ -25,12 +25,13 @@
 - [x] Keep Jinja2 routes alive alongside React during migration
 - [x] **Verify**: `npm run build` → FastAPI serves React app at `localhost:8000/app/`
 
-### Phase 3: Core Layout & Navigation Screens
-- [ ] Create shared components: Layout, StarCounter, SubjectCard, SessionCard, GameCard
-- [ ] Create API client (`frontend/src/api/game.ts`) wrapping existing endpoints
-- [ ] Create `useProgress` hook (stars, accuracy, practiced words — localStorage + API sync)
-- [ ] Port pages: Welcome, SubjectPicker, SessionPicker, GameMenu
-- [ ] Bring over CSS keyframe animations in `global.css`
+### Phase 3: Core Layout & Navigation Screens ✅ (v2.15.0)
+- [x] Create shared components: Layout, StarCounter, RewardCollection
+- [x] Create API client (`frontend/src/api/game.ts`) + TypeScript types (`api/types.ts`)
+- [x] Create AppContext (`context/AppContext.tsx`) — progress + config state with localStorage fallback
+- [x] Port pages: Welcome, SubjectPicker, SessionPicker, GameMenu
+- [x] Create game card data (`data/games.ts`) — metadata per subject
+- [x] Bring over CSS keyframe animations in `styles/global.css`
 - [ ] **User tests**: Navigate all screens on iPhone — responsive layout, RTL, star counter
 
 ### Phase 4: Audio & Reward Systems
@@ -78,15 +79,23 @@
 | ✅ Done | `frontend/tsconfig.json` | TypeScript config |
 | ✅ Done | `frontend/index.html` | SPA entry point |
 | ✅ Done | `frontend/src/main.tsx` | React root mount |
-| ✅ Done | `frontend/src/App.tsx` | Routes + theme provider |
+| ✅ Done | `frontend/src/App.tsx` | Routes + AppProvider |
 | ✅ Done | `frontend/src/theme.ts` | MUI theme (design tokens) |
-| Create | `frontend/src/api/game.ts` | API client (fetch wrapper) |
+| ✅ Done | `frontend/src/api/types.ts` | TypeScript interfaces for API responses |
+| ✅ Done | `frontend/src/api/game.ts` | Typed API client (fetch wrapper) |
+| ✅ Done | `frontend/src/context/AppContext.tsx` | React Context for progress + config |
+| ✅ Done | `frontend/src/components/Layout.tsx` | Header shell with Outlet |
+| ✅ Done | `frontend/src/components/StarCounter.tsx` | Gold pill star counter |
+| ✅ Done | `frontend/src/components/RewardCollection.tsx` | Trophy gallery dialog |
+| ✅ Done | `frontend/src/data/games.ts` | Game card metadata per subject |
+| ✅ Done | `frontend/src/styles/global.css` | CSS keyframe animations |
+| ✅ Done | `frontend/src/pages/Welcome.tsx` | Landing page |
+| ✅ Done | `frontend/src/pages/SubjectPicker.tsx` | English/Math selection |
+| ✅ Done | `frontend/src/pages/SessionPicker.tsx` | Unit selection with tabs |
+| ✅ Done | `frontend/src/pages/GameMenu.tsx` | Game card grid |
 | Create | `frontend/src/hooks/useAudio.ts` | Audio system hook |
-| Create | `frontend/src/hooks/useProgress.ts` | Stars, rewards, API sync |
 | Create | `frontend/src/hooks/useRewards.ts` | Reward tier logic |
 | Create | `frontend/src/hooks/useGameEngine.ts` | Shared game loop |
-| Create | `frontend/src/components/*.tsx` | Layout, StarCounter, cards, rewards |
-| Create | `frontend/src/pages/*.tsx` | Welcome, SubjectPicker, SessionPicker, GameMenu |
 | Create | `frontend/src/pages/english/*.tsx` | 4 English game components |
 | Create | `frontend/src/pages/math/*.tsx` | 4 Math game components |
 | Create | `frontend/src/data/english.ts` | Typed vocabulary data |
@@ -126,6 +135,7 @@ npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-do
 |------|-------|---------------|---------|
 | 02/23 | Phase 1 | Vite + React 19 + TS + MUI 7 scaffolding, theme, RTL, routing, placeholder pages | v2.14.0 |
 | 02/23 | Phase 2 | /api/game/config endpoint, serve React build from FastAPI at /app/, SPA catch-all | v2.14.1 |
+| 02/23 | Phase 3 | API client, AppContext, Layout, StarCounter, RewardCollection, 4 navigation pages, animations | v2.15.0 |
 
 ---
 

@@ -219,7 +219,7 @@ audio_cache/
 newsletter_cache/
 
 # Database files (SQLite)
-data/
+/data/
 *.db
 
 # Node.js (React frontend)
