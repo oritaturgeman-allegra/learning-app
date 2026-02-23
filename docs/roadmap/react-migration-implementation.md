@@ -10,13 +10,13 @@
 
 ## Implementation Phases
 
-### Phase 1: React Project Scaffolding
-- [ ] Initialize Vite + React + TypeScript project (`frontend/src/`, `frontend/package.json`, `frontend/vite.config.ts`)
-- [ ] Install dependencies: react, react-dom, react-router-dom, @mui/material, @mui/icons-material, @emotion/react, @emotion/styled, @emotion/cache, stylis-plugin-rtl
-- [ ] Create MUI theme (`frontend/src/theme.ts`) with existing design tokens from `shared.css`
-- [ ] Create `App.tsx` with React Router matching current URL structure
-- [ ] Configure Vite dev server proxy: `/api/*` → `localhost:8000`
-- [ ] **Verify**: `npm run dev` shows React page at `localhost:5173`
+### Phase 1: React Project Scaffolding ✅ (v2.14.0)
+- [x] Initialize Vite + React + TypeScript project (`frontend/src/`, `frontend/package.json`, `frontend/vite.config.ts`)
+- [x] Install dependencies: react, react-dom, react-router-dom, @mui/material, @mui/icons-material, @emotion/react, @emotion/styled, @emotion/cache, stylis-plugin-rtl
+- [x] Create MUI theme (`frontend/src/theme.ts`) with existing design tokens from `shared.css`
+- [x] Create `App.tsx` with React Router matching current URL structure
+- [x] Configure Vite dev server proxy: `/api/*` → `localhost:8000`
+- [x] **Verify**: `npm run dev` shows React page at `localhost:5173`
 
 ### Phase 2: Backend Adaptation
 - [ ] Add `/api/config/{subject}/{session_slug}` endpoint (reward_tiers, sessions, version, changelog)
@@ -73,13 +73,13 @@
 | Modify | `backend/web_app.py` | Add /api/config, SPA fallback, serve React build |
 | Modify | `backend/routes/game.py` | Add config endpoint |
 | Modify | `backend/defaults.py` | Version bump to 3.0.0 |
-| Create | `frontend/package.json` | React, MUI, Vite dependencies |
-| Create | `frontend/vite.config.ts` | Build config, proxy, RTL |
-| Create | `frontend/tsconfig.json` | TypeScript config |
-| Create | `frontend/index.html` | SPA entry point |
-| Create | `frontend/src/main.tsx` | React root mount |
-| Create | `frontend/src/App.tsx` | Routes + theme provider |
-| Create | `frontend/src/theme.ts` | MUI theme (design tokens) |
+| ✅ Done | `frontend/package.json` | React, MUI, Vite dependencies |
+| ✅ Done | `frontend/vite.config.ts` | Build config, proxy, RTL |
+| ✅ Done | `frontend/tsconfig.json` | TypeScript config |
+| ✅ Done | `frontend/index.html` | SPA entry point |
+| ✅ Done | `frontend/src/main.tsx` | React root mount |
+| ✅ Done | `frontend/src/App.tsx` | Routes + theme provider |
+| ✅ Done | `frontend/src/theme.ts` | MUI theme (design tokens) |
 | Create | `frontend/src/api/game.ts` | API client (fetch wrapper) |
 | Create | `frontend/src/hooks/useAudio.ts` | Audio system hook |
 | Create | `frontend/src/hooks/useProgress.ts` | Stars, rewards, API sync |
@@ -124,7 +124,7 @@ npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-do
 
 | Date | Phase | What was done | Version |
 |------|-------|---------------|---------|
-| | | | |
+| 02/23 | Phase 1 | Vite + React 19 + TS + MUI 7 scaffolding, theme, RTL, routing, placeholder pages | v2.14.0 |
 
 ---
 
