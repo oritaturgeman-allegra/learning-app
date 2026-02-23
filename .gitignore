@@ -222,5 +222,9 @@ newsletter_cache/
 data/
 *.db
 
+# Node.js (React frontend)
+frontend/node_modules/
+frontend/dist/
+
 # Local documentation (private - do not commit)
 docs/architecture/
