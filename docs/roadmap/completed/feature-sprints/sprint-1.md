@@ -1,7 +1,7 @@
 # Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
-Ship **v1.0.0 → v3.0.0** — Build a complete gamified English + Math learning app with 8 mini-games, persistent progress tracking, and a polished kid-friendly React SPA.
+Ship **v1.0.0 → v3.0.1** — Build a complete gamified English + Math learning app with 8 mini-games, persistent progress tracking, and a polished kid-friendly React SPA.
 
 ## Sprint Theme
 Foundation & Polish — Core game engine, vocabulary content, star rewards, word tracker, and visual delight for a Gen Alpha learner.
@@ -400,10 +400,17 @@ Final React migration step: deleted legacy Jinja2/vanilla JS frontend, promoted 
 
 ---
 
+### 46. Session Card Lavender Tint (v3.0.1)
+Lavender background on session cards in TopicSessions to visually distinguish them from white topic cards in SessionPicker.
+- `backgroundColor: "#ede9fe"` on Card and CardActionArea in TopicSessions.tsx
+- Topic card in SessionPicker stays white — clear navigation hierarchy
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v3.0.0 (45 releases)
-**Features Completed:** 45 (27 features, 6 UX polish, 1 content expansion, 3 chores, 8 bug fixes)
+**Versions Shipped:** v1.0.0 → v3.0.1 (46 releases)
+**Features Completed:** 46 (27 features, 7 UX polish, 1 content expansion, 3 chores, 8 bug fixes)
 **Test Coverage:** 71 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - Full React + TypeScript + MUI rewrite — single modern SPA

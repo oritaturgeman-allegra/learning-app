@@ -12,12 +12,12 @@ A web app that teaches English vocabulary and math skills to Hebrew-speaking chi
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v3.0.1   | 02/23 | Polish: Lavender tint on session cards to distinguish from topic cards in math navigation  |
 | v3.0.0   | 02/23 | Major: React is sole frontend — legacy Jinja2 removed, code splitting, served at root     |
 | v2.18.0  | 02/23 | Feature: All 4 math games in React — QuickSolve, MissingNumber, MathTrueFalse, BubblePop |
 | v2.17.0  | 02/23 | Feature: All 4 English games playable in React — WordMatch, SentenceScramble, ListenAndChoose, TrueFalse |
 | v2.16.1  | 02/23 | Fix: RTL emoji placement, version footer in lavender strip, unified gradient background   |
 | v2.16.0  | 02/23 | Feature: Audio system, confetti, milestones, reward popups for React frontend              |
-| v2.15.0  | 02/23 | Feature: React navigation screens — Welcome, SubjectPicker, SessionPicker, GameMenu       |
 
 ---
 

@@ -88,6 +88,7 @@ export default function TopicSessions() {
               key={session.slug}
               sx={{
                 borderRadius: 4,
+                backgroundColor: "#ede9fe",
                 border: completed ? "2px solid #22c55e" : "2px solid transparent",
                 boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
                 animation: `slideUp 0.5s ease-out ${0.1 + i * 0.15}s both`,
@@ -106,6 +107,7 @@ export default function TopicSessions() {
                   gap: 2,
                   p: { xs: 2, sm: 3 },
                   justifyContent: "flex-start",
+                  backgroundColor: "#ede9fe",
                 }}
               >
                 <Typography sx={{ fontSize: "2.2rem", minWidth: 48, textAlign: "center" }}>
