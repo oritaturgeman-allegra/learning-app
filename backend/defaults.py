@@ -5,17 +5,17 @@ Static defaults and constants for Ariel Learning App.
 from typing import Any, Dict, List
 
 # App version (single source of truth)
-APP_VERSION = "2.17.0"
+APP_VERSION = "2.18.0"
 
 # Recent changelog entries (shown in "What's New" popup)
 APP_CHANGELOG: List[Dict[str, str]] = [
     {
-        "version": "2.17.0",
-        "text": "כל 4 משחקי האנגלית עובדים! 🎮 מה המילה, תרגמי את המשפט, האזיני ובחרי, וכן או לא",
+        "version": "2.18.0",
+        "text": "כל 4 משחקי החשבון עובדים! ⚡ פתרי מהר, מצאי את המספר, נכון או לא, ופוצצי בועות",
     },
     {
-        "version": "2.16.1",
-        "text": "תיקוני עיצוב — אימוג׳י במקום הנכון ומספר גרסה בתחתית המסך",
+        "version": "2.17.0",
+        "text": "כל 4 משחקי האנגלית עובדים! 🎮 מה המילה, תרגמי את המשפט, האזיני ובחרי, וכן או לא",
     },
     {
         "version": "2.16.0",
@@ -33,14 +33,6 @@ APP_CHANGELOG: List[Dict[str, str]] = [
         "version": "2.14.0",
         "text": "מתחילים לבנות גרסה חדשה ומודרנית! בקרוב האפליקציה תעבוד מעולה גם בטלפון 📱",
     },
-    {
-        "version": "2.13.0",
-        "text": "שיפור ביצועים! הקוד מסודר יותר וטעינת העמודים מהירה יותר 🚀",
-    },
-    {
-        "version": "2.12.1",
-        "text": "רמזים חכמים בכל פרקי החשבון! 💡 לחצי על הנורה ותקבלי עזרה",
-    },
 ]
 
 # Available learning sessions (units), keyed by subject
@@ -53,6 +45,25 @@ SESSIONS_BY_SUBJECT: Dict[str, List[Dict[str, Any]]] = {
         {"slug": "math-two-digit", "name": "Two-Digit Multiply", "name_he": "כפל דו-ספרתי", "emoji": "✖️"},
         {"slug": "math-long-division", "name": "Long Division", "name_he": "חילוק ארוך", "emoji": "➗"},
         {"slug": "math-primes", "name": "Primes & Divisibility", "name_he": "מספרים ראשוניים", "emoji": "🔢"},
+    ],
+}
+
+# Topics group sessions under a subject (supports multi-level navigation)
+# Subjects without topics → SessionPicker shows sessions directly
+# Subjects with topics → SessionPicker shows topics → TopicSessions shows sessions
+TOPICS_BY_SUBJECT: Dict[str, List[Dict[str, Any]]] = {
+    "math": [
+        {
+            "slug": "multiplication-division",
+            "name_he": "כפל וחילוק",
+            "emoji": "✖️",
+            "session_slugs": [
+                "math-tens-hundreds",
+                "math-two-digit",
+                "math-long-division",
+                "math-primes",
+            ],
+        },
     ],
 }
 

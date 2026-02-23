@@ -1,12 +1,11 @@
 /**
  * Game menu — 4 game cards for a session.
  * Shows subject tabs, game cards with colors, and completion state.
- * English games navigate to play screen; math games show "coming soon".
  */
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Card, CardActionArea, Snackbar, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, Stack, Tab, Tabs, Typography } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { GAMES_BY_SUBJECT } from "@/data/games";
 import { getUnitData } from "@/data/english";
@@ -32,7 +31,6 @@ function getCompletedGames(sessionSlug: string): Set<number> {
 export default function GameMenu() {
   const { subject, sessionSlug } = useParams<{ subject: string; sessionSlug: string }>();
   const navigate = useNavigate();
-  const [snackOpen, setSnackOpen] = useState(false);
   const [completedGames, setCompletedGames] = useState<Set<number>>(new Set());
   const [practicedWords, setPracticedWords] = useState<Set<string>>(new Set());
 
@@ -61,12 +59,7 @@ export default function GameMenu() {
   };
 
   const handleGameClick = (gameId: number) => {
-    if (isEnglish) {
-      navigate(`play/${gameId}`);
-    } else {
-      // Math games not yet implemented
-      setSnackOpen(true);
-    }
+    navigate(`play/${gameId}`);
   };
 
   return (
@@ -222,14 +215,6 @@ export default function GameMenu() {
         <WordTracker vocabulary={unit.vocabulary} practicedWords={practicedWords} />
       )}
 
-      {/* "Coming soon" snackbar for math */}
-      <Snackbar
-        open={snackOpen}
-        autoHideDuration={2000}
-        onClose={() => setSnackOpen(false)}
-        message="בקרוב! 🎮"
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
     </Box>
   );
 }

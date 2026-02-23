@@ -12,12 +12,12 @@ A web app that teaches English vocabulary and math skills to Hebrew-speaking chi
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v2.18.0  | 02/23 | Feature: All 4 math games in React — QuickSolve, MissingNumber, MathTrueFalse, BubblePop |
 | v2.17.0  | 02/23 | Feature: All 4 English games playable in React — WordMatch, SentenceScramble, ListenAndChoose, TrueFalse |
 | v2.16.1  | 02/23 | Fix: RTL emoji placement, version footer in lavender strip, unified gradient background   |
 | v2.16.0  | 02/23 | Feature: Audio system, confetti, milestones, reward popups for React frontend              |
 | v2.15.0  | 02/23 | Feature: React navigation screens — Welcome, SubjectPicker, SessionPicker, GameMenu       |
 | v2.14.1  | 02/23 | Infra: Backend serves React SPA build + new /api/game/config endpoint for React           |
-| v2.14.0  | 02/23 | Infra: Scaffold React + MUI + TypeScript frontend for mobile-responsive redesign          |
 
 ---
 
@@ -59,10 +59,10 @@ open http://localhost:8000/app/
 ### Math Games
 | Game | Hebrew Name | Description | Stars |
 |------|-------------|-------------|-------|
-| ⚡ Quick Solve | !פתרי מהר | Pick the correct answer to a math problem | +1⭐ × 8 rounds |
+| ⚡ Quick Solve | !פתרי מהר | Pick the correct answer to a math problem | +1⭐ × 10 rounds |
 | 🔍 Missing Number | !מצאי את המספר | Find the missing number in an equation | +1⭐ × 8 rounds |
-| 🤔 True or False | ?נכון או לא | Is the equation correct? | +1⭐ × 8 rounds |
-| 🫧 Bubble Pop | !פוצצי בועות | Pop bubbles with expressions equal to the target | +1⭐ × 5 rounds |
+| 🤔 True or False | ?נכון או לא | Is the equation correct? | +1⭐ × 10 rounds |
+| 🫧 Bubble Pop | !פוצצי בועות | Pop bubbles with expressions equal to the target | +1⭐ × 8 rounds |
 
 ## Features
 

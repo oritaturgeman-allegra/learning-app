@@ -12,6 +12,13 @@ export interface Session {
   emoji: string;
 }
 
+export interface Topic {
+  slug: string;
+  name_he: string;
+  emoji: string;
+  session_slugs: string[];
+}
+
 export interface RewardTier {
   stars: number;
   id: string;
@@ -41,6 +48,7 @@ export interface ConfigData {
   reward_tiers: RewardTier[];
   sessions: Session[] | Record<string, Session[]>;
   sessions_by_subject: Record<string, Session[]>;
+  topics_by_subject: Record<string, Topic[]>;
   subject: string | null;
   session_slug: string | null;
 }

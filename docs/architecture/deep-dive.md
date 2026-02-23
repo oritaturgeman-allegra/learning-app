@@ -80,15 +80,19 @@ ROUNDS_PER_GAME = {
 ```
 game_results
 ├── id            INTEGER  PK, auto-increment
+├── category      VARCHAR(30)  indexed (english or math)
+├── topic         VARCHAR(50)  nullable, indexed (e.g. "Vocabulary", "Multiplication and Division")
+├── session_slug  VARCHAR(50)  nullable, indexed (e.g. jet2-unit2, math-tens-hundreds)
 ├── game_type     VARCHAR(30)  indexed
 ├── score         INTEGER
 ├── max_score     INTEGER
 ├── accuracy      FLOAT
 ├── word_results  TEXT  (JSON: [{word, correct, category}])
-├── session_slug  VARCHAR(50)  nullable, indexed (which unit: jet2-unit2, multiply-divide)
 ├── user_id       INTEGER  nullable, indexed (future multi-user)
 └── played_at     DATETIME(tz)  default=now(UTC)
 ```
+
+**Topic derivation**: The `topic` field is auto-derived from `session_slug` via the `TOPIC_BY_SESSION` mapping in `game_service.py`. This enables analytics grouping: category → topic → session_slug.
 
 ### AppState Model (`backend/models/app_state.py`)
 
@@ -354,7 +358,7 @@ Direction set to `rtl`. Emotion cache uses `stylis-plugin-rtl` to flip all CSS.
 /learning                                      → SubjectPicker (English/Math)
 /learning/:subject                             → SessionPicker
 /learning/:subject/:sessionSlug                → GameMenu
-/learning/:subject/:sessionSlug/play/:gameId   → GameScreen (English games)
+/learning/:subject/:sessionSlug/play/:gameId   → GameRouter → GameScreen (English) or MathGameScreen (Math)
 ```
 
 ### Dev Workflow
@@ -399,16 +403,24 @@ frontend/src/
 │   └── RewardPopup.tsx        # Reward tier unlock popup
 ├── data/
 │   ├── games.ts              # Game card metadata per subject
-│   └── english.ts            # Vocabulary (55 words), sentences, session planner
+│   ├── english.ts            # Vocabulary (55 words), sentences, session planner
+│   └── math.ts               # Problem generators, hints, categories, distractors, TF, bubbles
 ├── games/
-│   └── english/
-│       ├── GameScreen.tsx     # Route wrapper: plan manager, game router, API save
-│       ├── CompletionScreen.tsx # Score summary after finishing a game
-│       ├── WordTracker.tsx    # Vocabulary sidebar (desktop) / drawer (mobile)
-│       ├── WordMatch.tsx      # Game 1: emoji + Hebrew → pick English (4 options)
-│       ├── SentenceScramble.tsx # Game 2: Hebrew → assemble English from chips
-│       ├── ListenAndChoose.tsx  # Game 3: hear word → pick from 4 (emoji+English+Hebrew)
-│       └── TrueFalse.tsx      # Game 4: English+Hebrew sentence → yes/no
+│   ├── english/
+│   │   ├── GameScreen.tsx     # Route wrapper: plan manager, game router, API save
+│   │   ├── CompletionScreen.tsx # Score summary after finishing a game
+│   │   ├── WordTracker.tsx    # Vocabulary FAB + drawer showing practiced words
+│   │   ├── WordMatch.tsx      # Game 1: emoji + Hebrew → pick English (4 options)
+│   │   ├── SentenceScramble.tsx # Game 2: Hebrew → assemble English from chips
+│   │   ├── ListenAndChoose.tsx  # Game 3: hear word → pick from 4 (emoji+English+Hebrew)
+│   │   └── TrueFalse.tsx      # Game 4: English+Hebrew sentence → yes/no
+│   └── math/
+│       ├── MathGameScreen.tsx # Route wrapper: game router, API save, CompletionScreen
+│       ├── HintButton.tsx     # 💡 hint popover (auto-close 4s)
+│       ├── QuickSolve.tsx     # Game 1: 4-option multiple choice + remainder input
+│       ├── MissingNumber.tsx  # Game 2: blanked equation, 4 options
+│       ├── MathTrueFalse.tsx  # Game 3: equation → yes/no, shows correct on wrong
+│       └── BubblePop.tsx      # Game 4: tap bubbles matching target number
 ├── pages/
 │   ├── Welcome.tsx            # Landing page (standalone, no header)
 │   ├── SubjectPicker.tsx      # English/Math selection
@@ -441,7 +453,7 @@ frontend/src/
 - `refreshProgress()` exposed for re-fetch after game completion
 
 ### Game Engine Hook (`useGameEngine.ts`)
-Shared game loop used by all 4 English game components:
+Shared game loop used by all 4 English game components and 3 of 4 math games (BubblePop manages its own multi-tap state):
 - **Options**: `totalRounds`, `starsPerCorrect` (1 or 2), `answerDelay` (1500 or 2500ms)
 - **State**: `currentRound`, `gameScore`, `maxScore`, `isAnswering`, `isFinished`, `progressPercent`, `wordResults`
 - **`submitAnswer(correct, results)`**: Plays audio feedback, awards stars via `awardStars()`, accumulates word results, locks input during delay, then advances round or sets `isFinished`
@@ -458,8 +470,19 @@ Shared game loop used by all 4 English game components:
 - **Game 3 (ListenAndChoose)**: Auto-speak → 4 options (emoji+English+Hebrew), 1 star/correct
 - **Game 4 (TrueFalse)**: English+Hebrew sentence → yes/no, 1 star/correct, 8 rounds
 
+### Math Games (Phase 6)
+- **Data**: `data/math.ts` — procedural problem generators for 15 categories, Hebrew hints per category, distractor generation, TF problem variants, missing-number blanking, bubble expression generators
+- **15 categories across 4 sessions**: multiply_tens, multiply_hundreds, divide_single, divide_tens, properties_0_1, order_of_operations, two_digit_x_one_digit, two_digit_x_two_digit, powers, divide_remainder, long_division, division_verify, divisibility_rules, prime_composite, prime_factorization
+- **MathGameScreen**: Route wrapper (`/play/:gameId`) — renders game component, saves result to API on finish, reuses `CompletionScreen` from English games
+- **GameRouter** (`App.tsx`): Checks `subject` param and renders English `GameScreen` or `MathGameScreen`
+- **HintButton**: Shared component — 💡 icon button → MUI Popover with Hebrew hint, auto-closes after 4s
+- **Game 1 (QuickSolve)**: Multiple choice (4 options), 10 rounds, 1 star/correct. Special dual-input UI for `divide_remainder` (quotient + remainder fields). Uses `useGameEngine`
+- **Game 2 (MissingNumber)**: Blanks a number from the equation, 4 options, 8 rounds, 1 star/correct. Special handling for division_verify, prime_composite, prime_factorization, divide_remainder. Uses `useGameEngine`
+- **Game 3 (MathTrueFalse)**: Equation shown (correct or wrong), yes/no buttons, 10 rounds, 1 star/correct. Shows correct answer on wrong. Special TF variants for prime_composite and prime_factorization. Uses `useGameEngine`
+- **Game 4 (BubblePop)**: Target number + 6 floating bubbles (2-3 correct + 3-4 wrong expressions), 8 rounds, 1 star per correct bubble. Multi-tap per round — **does NOT use `useGameEngine`**, manages own state. Floating animation, pop on correct, shake on wrong
+
 ### Migration Plan
-See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phases 1-5 complete. Next: Phase 6 (math games) → Phase 7 (cleanup).
+See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phases 1-6 complete. Next: Phase 7 (cleanup).
 
 ---
 

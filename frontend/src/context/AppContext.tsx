@@ -5,7 +5,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
 import { loadConfig, loadProgress } from "@/api/game";
-import type { RewardTier, Session } from "@/api/types";
+import type { RewardTier, Session, Topic } from "@/api/types";
 
 // --- Context shape ---
 
@@ -20,6 +20,7 @@ interface AppContextValue {
   // Config
   rewardTiers: RewardTier[];
   sessionsBySubject: Record<string, Session[]>;
+  topicsBySubject: Record<string, Topic[]>;
   appVersion: string;
 
   // State
@@ -59,6 +60,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [nextReward, setNextReward] = useState<RewardTier | null>(null);
   const [rewardTiers, setRewardTiers] = useState<RewardTier[]>([]);
   const [sessionsBySubject, setSessionsBySubject] = useState<Record<string, Session[]>>({});
+  const [topicsBySubject, setTopicsBySubject] = useState<Record<string, Topic[]>>({});
   const [appVersion, setAppVersion] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -100,6 +102,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           const c = configRes.data;
           setRewardTiers(c.reward_tiers);
           setSessionsBySubject(c.sessions_by_subject);
+          setTopicsBySubject(c.topics_by_subject || {});
           setAppVersion(c.version);
         }
       } catch (err) {
@@ -121,6 +124,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         nextReward,
         rewardTiers,
         sessionsBySubject,
+        topicsBySubject,
         appVersion,
         loading,
         refreshProgress,

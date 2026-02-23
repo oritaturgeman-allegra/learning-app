@@ -50,37 +50,37 @@
 - [x] GameMenu navigates to games, shows completion checkmarks
 - [ ] **User tests all 4 English games on iPhone**
 
-### Phase 6: Math Games
-- [ ] Create `frontend/src/data/math.ts` — typed problem generators, hints, categories
+### Phase 6: Math Games ✅ (v2.18.0)
+- [x] Create `frontend/src/data/math.ts` — typed problem generators, hints, categories
   - Port `generateProblemByCategory()` for all 15 categories (multiply_tens, multiply_hundreds, divide_single, divide_tens, properties_0_1, order_of_operations, two_digit_x_one_digit, two_digit_x_two_digit, powers, divide_remainder, long_division, division_verify, divisibility_rules, prime_composite, prime_factorization)
   - Port `generateDistractors()`, `generateTFProblem()`, `generateExpressionsForTarget()`, `generateWrongExpressions()`
   - Port `CATEGORIES_BY_SESSION` mapping (4 sessions × 3-6 categories each)
   - Port `MATH_HINTS` — Hebrew hint functions/strings per category
-  - Types: `MathProblem`, `TFProblem`, `BubbleItem`
-- [ ] Create `frontend/src/games/math/MathGameScreen.tsx` — route wrapper (like English GameScreen)
+  - Types: `MathProblem`, `TFProblem`, `BubbleItem`, `MissingNumberProblem`
+- [x] Create `frontend/src/games/math/MathGameScreen.tsx` — route wrapper (like English GameScreen)
   - Reads `gameId` + `sessionSlug` from URL params
   - Switches on gameId to render correct math game component
-  - Saves result to API on finish, shows CompletionScreen
-- [ ] Port Game 1: `QuickSolve.tsx` (פתרי מהר!) — 10 rounds, 1 star/correct
+  - Saves result to API on finish, reuses CompletionScreen
+- [x] Port Game 1: `QuickSolve.tsx` (פתרי מהר!) — 10 rounds, 1 star/correct
   - Multiple-choice for standard problems (4 options)
   - Remainder input UI for `divide_remainder` problems (quotient + remainder fields)
   - Hint button per problem
-- [ ] Port Game 2: `MissingNumber.tsx` (מצאי את המספר!) — 8 rounds, 1 star/correct
+- [x] Port Game 2: `MissingNumber.tsx` (מצאי את המספר!) — 8 rounds, 1 star/correct
   - Blanks a number from the equation, shows 4 options
   - Handles special categories: division_verify, prime_composite, prime_factorization, divide_remainder
-- [ ] Port Game 3: `MathTrueFalse.tsx` (נכון או לא?) — 10 rounds, 1 star/correct
+- [x] Port Game 3: `MathTrueFalse.tsx` (נכון או לא?) — 10 rounds, 1 star/correct
   - Shows equation with answer (correct or wrong), yes/no buttons
   - Special T/F for prime_composite ("13 — מספר ראשוני") and prime_factorization
   - Shows correct answer on wrong response
-- [ ] Port Game 4: `BubblePop.tsx` (פוצצי בועות!) — 8 rounds, 1 star per correct bubble
+- [x] Port Game 4: `BubblePop.tsx` (פוצצי בועות!) — 8 rounds, 1 star per correct bubble
   - Shows target number, 6 bubbles (2-3 correct + 3-4 wrong expressions)
   - Floating animation, pop on correct tap, shake on wrong
   - Session-aware target numbers (BUBBLE_TARGETS per session)
-- [ ] Port hint system — `HintButton.tsx` component (💡 icon, MUI Popover, auto-close 4s)
-- [ ] Add math game route to `App.tsx`
-- [ ] Update `GameMenu.tsx` — math cards navigate to games (remove "coming soon" snackbar)
-- [ ] Check & update architecture docs (`docs/architecture/`)
-- [ ] Bump version, update README + sprint docs
+- [x] Port hint system — `HintButton.tsx` component (💡 icon, MUI Popover, auto-close 4s)
+- [x] Add math game route to `App.tsx` — GameRouter checks subject and renders English/Math GameScreen
+- [x] Update `GameMenu.tsx` — math cards navigate to games (removed "coming soon" snackbar)
+- [x] Check & update architecture docs (`docs/architecture/`)
+- [x] Bump version, update README + sprint docs
 - [ ] **User tests all 4 Math games on iPhone**
 
 ### Phase 7: Cleanup & Polish
@@ -166,6 +166,7 @@ npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-do
 | 02/23 | Phase 3 | API client, AppContext, Layout, StarCounter, RewardCollection, 4 navigation pages, animations | v2.15.0 |
 | 02/23 | Phase 4 | useAudio (tones + TTS), Confetti, MilestoneOverlay, RewardPopup, useRewards orchestration, Layout + AppContext wiring | v2.16.0 |
 | 02/23 | Phase 5 | English games: data/english.ts, useGameEngine, 4 game components, GameScreen, CompletionScreen, WordTracker, GameMenu navigation | v2.17.0 |
+| 02/23 | Phase 6 | Math games: data/math.ts (15 categories, hints, distractors, TF, bubbles), 4 game components (QuickSolve, MissingNumber, MathTrueFalse, BubblePop), HintButton, MathGameScreen, GameRouter, GameMenu enabled | v2.18.0 |
 
 ---
 

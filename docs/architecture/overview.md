@@ -6,7 +6,7 @@ Quick reference for Ariel's English Adventure. For details, see [deep-dive.md](.
 
 ## What This App Does
 
-Gamified English learning for a 9.5-year-old Israeli girl. Teaches vocabulary from the Jet 2 textbook (Unit 2) through 4 interactive mini-games with star rewards, animations, and audio feedback.
+Gamified English + Math learning for a 9.5-year-old Israeli girl. Teaches vocabulary from the Jet 2 textbook through 4 English mini-games, and 4th-grade math through 4 math mini-games — with star rewards, animations, and audio feedback.
 
 ---
 

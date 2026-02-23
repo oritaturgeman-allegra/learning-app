@@ -13,6 +13,7 @@ from backend.defaults import (
     APP_VERSION,
     REWARD_TIERS,
     SESSIONS_BY_SUBJECT,
+    TOPICS_BY_SUBJECT,
 )
 from backend.exceptions import GameError
 from backend.services.game_service import get_game_service
@@ -160,6 +161,7 @@ async def get_config(subject: Optional[str] = None, session_slug: Optional[str] 
             "reward_tiers": REWARD_TIERS,
             "sessions": sessions,
             "sessions_by_subject": SESSIONS_BY_SUBJECT,
+            "topics_by_subject": TOPICS_BY_SUBJECT,
             "subject": subject,
             "session_slug": session_slug,
         },

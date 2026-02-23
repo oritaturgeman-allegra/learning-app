@@ -1,13 +1,17 @@
 # Ariel Learning App
 
-Gamified English learning web app for a Gen Alpha Israeli girl (4th grade). Teaches vocabulary from Jet 2 textbook (Unit 2) through 4 interactive mini-games with rewards, animations, and sound feedback.
+Gamified English + Math learning web app for a Gen Alpha Israeli girl (4th grade). Teaches vocabulary from Jet 2 textbook and 4th-grade math through 8 interactive mini-games with rewards, animations, and sound feedback.
 
 ## Commands
 
 ```bash
 # Run web app
 .venv/bin/python -m backend.web_app
-# Open http://localhost:8000
+# Open http://localhost:8000/app/
+
+# Frontend dev
+cd frontend && npm run dev    # Vite at :5173 (proxies /api to :8000)
+cd frontend && npm run build  # Production build to frontend/dist/
 
 # Test
 .venv/bin/pytest tests/unit/test_game_service.py -v  # Game tests
@@ -17,12 +21,40 @@ Gamified English learning web app for a Gen Alpha Israeli girl (4th grade). Teac
 ## Stack
 
 - **Backend:** Python 3.13, FastAPI, SQLAlchemy (SQLite dev / PostgreSQL prod)
-- **Frontend:** Single HTML template, vanilla JS + CSS animations
+- **Frontend (legacy):** Jinja2 HTML templates + vanilla JS (being replaced)
+- **Frontend (new):** React 19 + TypeScript + MUI 7 + Vite, SPA at `/app/`
 - **Audio:** Web Speech API (TTS), AudioContext (sound effects)
 - **Fonts:** Google Fonts (Fredoka display, Rubik body/Hebrew)
 - **Storage:** Database (game results, progress) + localStorage (fallback)
-- **Languages:** Hebrew UI (RTL) + English content (LTR)
+- **Languages:** Hebrew UI (RTL) + English/Math content (LTR)
 - **Testing:** pytest, pytest-cov, pytest-mock
+
+## Navigation Architecture
+
+The app uses a multi-level navigation hierarchy. This pattern applies to ALL subjects:
+
+```
+Subject Picker → Session Picker → [Topic Sessions] → Game Menu → Game
+/learning       /learning/:subject  /learning/:subject/topic/:topicSlug  /learning/:subject/:sessionSlug  /play/:gameId
+```
+
+**Key concept: Topics are optional per subject.**
+- Subjects WITH topics (e.g., math): SessionPicker shows topic cards → TopicSessions shows session cards
+- Subjects WITHOUT topics (e.g., english): SessionPicker shows session cards directly
+
+**Data hierarchy:** `subject → topic (optional) → session → game`
+- Defined in `backend/defaults.py`: `SESSIONS_BY_SUBJECT` + `TOPICS_BY_SUBJECT`
+- Config API (`/api/game/config`) serves both to the React frontend
+- DB tracks: `category (subject) → topic → session_slug → game_type`
+
+**When adding a new subject (e.g., science, geometry):**
+1. Add sessions to `SESSIONS_BY_SUBJECT` in `backend/defaults.py`
+2. Optionally add topic grouping to `TOPICS_BY_SUBJECT`
+3. Add subject tab to `SUBJECT_TABS` in `SessionPicker.tsx` and `GameMenu.tsx`
+4. Create game data module in `frontend/src/data/`
+5. Create game components in `frontend/src/games/{subject}/`
+6. Add `GameRouter` case in `App.tsx` for the new subject
+7. Add `TOPIC_BY_SESSION` mapping in `game_service.py` for analytics
 
 ## API Routes
 
@@ -31,11 +63,13 @@ Gamified English learning web app for a Gen Alpha Israeli girl (4th grade). Teac
 | GET | `/` | Serve the landing page |
 | GET | `/learning` | Serve the subject picker screen |
 | GET | `/learning/{subject}` | Serve the session picker for a subject |
+| GET | `/learning/{subject}/topic/{topicSlug}` | Serve sessions within a topic |
 | GET | `/learning/{subject}/{session_slug}` | Serve the game menu for a session |
 | GET | `/learning/{session_slug}` | Redirect to `/learning/english/{session_slug}` (backward compat) |
 | GET | `/health` | Health check |
 | POST | `/api/game/result` | Save a game result (score + per-word accuracy) |
 | GET | `/api/game/progress` | Get total stars, accuracy by game, weak words |
+| GET | `/api/game/config` | App config (version, sessions, topics, rewards, changelog) |
 | GET | `/api/game/practiced-words` | Get practiced words since last reset |
 | POST | `/api/game/reset` | Reset practiced words for fresh round (stars preserved) |
 
