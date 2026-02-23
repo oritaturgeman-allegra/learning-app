@@ -1,7 +1,7 @@
 # Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
-Ship **v1.0.0 → v3.0.3** — Build a complete gamified English + Math learning app with 8 mini-games, persistent progress tracking, and a polished kid-friendly React SPA.
+Ship **v1.0.0 → v3.0.4** — Build a complete gamified English + Math learning app with 8 mini-games, persistent progress tracking, and a polished kid-friendly React SPA.
 
 ## Sprint Theme
 Foundation & Polish — Core game engine, vocabulary content, star rewards, word tracker, and visual delight for a Gen Alpha learner.
@@ -426,10 +426,19 @@ Restored the 🔄 reset button (lost during React migration) so the child can st
 
 ---
 
+### 49. Fix: Reset Clears Session Completion Checkmark (v3.0.4)
+Backend `get_progress()` now filters `completed_sessions` by `reset_at` — only games played after the last reset count toward session completion.
+- Previously, clicking reset cleared word tracking but the green checkmark on SessionPicker persisted (backend still saw old game results as "completed")
+- `get_progress()` now reads `reset_at` from `app_state` and skips game results played before it when computing `completed_sessions`
+- Stars are still calculated from ALL results (preserved across resets)
+- Handles timezone-aware vs naive datetime comparison (SQLite stores naive, `reset_at` is UTC-aware)
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v3.0.3 (48 releases)
-**Features Completed:** 48 (28 features, 8 UX polish, 1 content expansion, 3 chores, 8 bug fixes)
+**Versions Shipped:** v1.0.0 → v3.0.4 (49 releases)
+**Features Completed:** 49 (28 features, 8 UX polish, 1 content expansion, 3 chores, 9 bug fixes)
 **Test Coverage:** 71 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - Full React + TypeScript + MUI rewrite — single modern SPA

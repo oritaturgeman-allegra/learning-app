@@ -187,7 +187,8 @@ Resets practiced words progress so the child can start fresh:
 1. User clicks reset button on menu → confirmation dialog appears
 2. `POST /api/game/reset` → stores `reset_at` timestamp in `app_state` table
 3. `get_practiced_words()` filters results to only include games played after `reset_at`
-4. Word tracker sidebar reflects the reset immediately
+4. `get_progress()` filters `completed_sessions` to only count games played after `reset_at` — session checkmarks clear
+5. Word tracker resets, game cards become replayable, stars are preserved
 
 ---
 

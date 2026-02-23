@@ -107,7 +107,7 @@ app_state
 ```
 
 Key-value store for app-wide state. Currently stores:
-- `reset_at` — ISO timestamp of last practiced-words reset. Used by `get_practiced_words()` to filter `game_results` to only those played after the reset.
+- `reset_at` — ISO timestamp of last practiced-words reset. Used by `get_practiced_words()` to filter words and by `get_progress()` to filter `completed_sessions` — only game results played after the reset count toward session completion.
 
 ### Session Management (`backend/models/base.py`)
 
@@ -311,8 +311,9 @@ Collectible cards unlocked at star milestones. Defined in `backend/defaults.py` 
 ### Session Completion (`completed_sessions`)
 
 - **Derived from DB** — `get_progress()` groups game results by `session_slug` and checks if all required game types have been played
+- **Respects `reset_at`** — only game results played AFTER the last `reset_at` timestamp count toward completion. This means clicking the reset button clears completion state while preserving stars.
 - **Required games:** Math sessions need `{quick_solve, missing_number, true_false_math, bubble_pop}`; English sessions need `{word_match, sentence_scramble, listen_choose, true_false}`
-- **Frontend:** `restoreSessionCheckmarks()` receives the list from the API and adds `session-completed` class to matching session cards (green border + ✓ badge)
+- **Frontend:** `SessionPicker` reads `completedSessions` from AppContext and shows green border + checkmark on completed session cards
 
 ---
 

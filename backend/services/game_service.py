@@ -226,8 +226,16 @@ class GameService:
                 next_reward = unearned[0] if unearned else None
 
                 # Completed sessions — slugs where all required game types have been played
+                # Only count games played AFTER the last reset (stars are preserved,
+                # but completion resets so the child replays all 4 games with fresh words)
+                reset_at = self._get_reset_at(session)
+                # Strip timezone for comparison with naive SQLite datetimes
+                if reset_at and reset_at.tzinfo is not None:
+                    reset_at = reset_at.replace(tzinfo=None)
                 games_by_session: Dict[str, set] = {}
                 for r in results:
+                    if reset_at and r.played_at < reset_at:
+                        continue
                     slug = r.session_slug
                     if slug:
                         if slug not in games_by_session:
