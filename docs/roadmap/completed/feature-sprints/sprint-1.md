@@ -1,7 +1,7 @@
 # Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
-Ship **v1.0.0 → v3.0.2** — Build a complete gamified English + Math learning app with 8 mini-games, persistent progress tracking, and a polished kid-friendly React SPA.
+Ship **v1.0.0 → v3.0.3** — Build a complete gamified English + Math learning app with 8 mini-games, persistent progress tracking, and a polished kid-friendly React SPA.
 
 ## Sprint Theme
 Foundation & Polish — Core game engine, vocabulary content, star rewards, word tracker, and visual delight for a Gen Alpha learner.
@@ -415,10 +415,21 @@ UI consistency pass across game screens and session navigation.
 
 ---
 
+### 48. Reset Button — Fresh Word Rounds (v3.0.3)
+Restored the 🔄 reset button (lost during React migration) so the child can start a fresh round with new words.
+- 🔄 IconButton next to title in GameMenu (English sessions only — math is algorithmic)
+- Hebrew confirmation dialog: "להתחיל סבב חדש?" with "⭐ הכוכבים נשארים, המילים מתחלפות"
+- On confirm: calls `POST /api/game/reset`, clears sessionStorage plan + completed games cache
+- Next game entry regenerates `planSession()` with freshly shuffled words/sentences
+- Stars always preserved — only word tracking and completion state reset
+- Spin animation on button for visual feedback
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v3.0.2 (47 releases)
-**Features Completed:** 47 (27 features, 8 UX polish, 1 content expansion, 3 chores, 8 bug fixes)
+**Versions Shipped:** v1.0.0 → v3.0.3 (48 releases)
+**Features Completed:** 48 (28 features, 8 UX polish, 1 content expansion, 3 chores, 8 bug fixes)
 **Test Coverage:** 71 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - Full React + TypeScript + MUI rewrite — single modern SPA

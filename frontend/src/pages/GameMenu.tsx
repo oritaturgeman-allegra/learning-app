@@ -3,13 +3,17 @@
  * Shows subject tabs, game cards with colors, and completion state.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Card, CardActionArea, Stack, Tab, Tabs, Typography } from "@mui/material";
+import {
+  Box, Button, Card, CardActionArea, Dialog, DialogActions, DialogContent,
+  DialogTitle, IconButton, Stack, Tab, Tabs, Typography,
+} from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CachedIcon from "@mui/icons-material/Cached";
 import { GAMES_BY_SUBJECT } from "@/data/games";
 import { getUnitData } from "@/data/english";
-import { getPracticedWords } from "@/api/game";
+import { getPracticedWords, resetPracticedWords } from "@/api/game";
 import { useApp } from "@/context/AppContext";
 import WordTracker from "@/games/english/WordTracker";
 
@@ -18,6 +22,7 @@ const SUBJECT_TABS = [
   { id: "math", label: "חשבון", icon: "/input-numbers-light.svg" },
 ];
 
+const SS_PLAN_KEY = "ariel_session_plan";
 const SS_COMPLETED_KEY = "ariel_session_completed_games";
 
 function getCompletedGames(sessionSlug: string): Set<number> {
@@ -34,8 +39,11 @@ export default function GameMenu() {
   const navigate = useNavigate();
   const [completedGames, setCompletedGames] = useState<Set<number>>(new Set());
   const [practicedWords, setPracticedWords] = useState<Set<string>>(new Set());
+  const [resetOpen, setResetOpen] = useState(false);
+  const [spinning, setSpinning] = useState(false);
+  const resetBtnRef = useRef<HTMLButtonElement>(null);
 
-  const { sessionsBySubject } = useApp();
+  const { sessionsBySubject, clearSessionCompletion } = useApp();
   const currentSubject = subject || "english";
   const slug = sessionSlug || "jet2-unit2";
   const games = GAMES_BY_SUBJECT[currentSubject] || [];
@@ -64,6 +72,24 @@ export default function GameMenu() {
 
   const handleGameClick = (gameId: number) => {
     navigate(`play/${gameId}`);
+  };
+
+  const handleReset = async () => {
+    setResetOpen(false);
+    setSpinning(true);
+    try {
+      await resetPracticedWords();
+    } catch {
+      // Reset still works client-side even if API fails
+    }
+    // Clear cached session plan → next game entry generates fresh words
+    sessionStorage.removeItem(`${SS_PLAN_KEY}_${slug}`);
+    // Clear completed games → cards become replayable
+    sessionStorage.removeItem(`${SS_COMPLETED_KEY}_${slug}`);
+    setCompletedGames(new Set());
+    setPracticedWords(new Set());
+    clearSessionCompletion(slug);
+    setTimeout(() => setSpinning(false), 600);
   };
 
   return (
@@ -111,18 +137,34 @@ export default function GameMenu() {
         ))}
       </Tabs>
 
-      {/* Title */}
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: 700,
-          mb: 3,
-          animation: "bounceIn 0.6s ease-out",
-          fontSize: { xs: "1.4rem", sm: "1.8rem" },
-        }}
-      >
-        אריאל, בחרי משחק 🎮
-      </Typography>
+      {/* Title + reset button */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 700,
+            animation: "bounceIn 0.6s ease-out",
+            fontSize: { xs: "1.4rem", sm: "1.8rem" },
+          }}
+        >
+          אריאל, בחרי משחק 🎮
+        </Typography>
+        {isEnglish && (
+          <IconButton
+            ref={resetBtnRef}
+            onClick={() => setResetOpen(true)}
+            size="small"
+            title="סבב חדש"
+            sx={{
+              color: "#a78bfa",
+              transition: "transform 0.6s",
+              ...(spinning && { animation: "spin 0.6s linear" }),
+            }}
+          >
+            <CachedIcon />
+          </IconButton>
+        )}
+      </Box>
 
       {/* Session name */}
       {currentSession && (
@@ -218,6 +260,50 @@ export default function GameMenu() {
       {isEnglish && unit && (
         <WordTracker vocabulary={unit.vocabulary} practicedWords={practicedWords} />
       )}
+
+      {/* Reset confirmation dialog */}
+      <Dialog
+        open={resetOpen}
+        onClose={() => setResetOpen(false)}
+        slotProps={{ paper: { sx: { borderRadius: 4, p: 1, textAlign: "center" } } }}
+      >
+        <DialogTitle sx={{ fontFamily: "'Fredoka', sans-serif", fontWeight: 700, fontSize: "1.3rem" }}>
+          להתחיל סבב חדש?
+        </DialogTitle>
+        <DialogContent>
+          <Typography sx={{ fontSize: "1rem", color: "text.secondary" }}>
+            ⭐ הכוכבים נשארים, המילים מתחלפות
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center", gap: 1, pb: 2 }}>
+          <Button
+            variant="contained"
+            onClick={handleReset}
+            sx={{
+              fontFamily: "'Fredoka', sans-serif",
+              fontWeight: 600,
+              borderRadius: 3,
+              px: 3,
+              bgcolor: "#7c3aed",
+              "&:hover": { bgcolor: "#6d28d9" },
+            }}
+          >
+            !יאללה
+          </Button>
+          <Button
+            onClick={() => setResetOpen(false)}
+            sx={{
+              fontFamily: "'Fredoka', sans-serif",
+              fontWeight: 600,
+              borderRadius: 3,
+              px: 3,
+              color: "text.secondary",
+            }}
+          >
+            ביטול
+          </Button>
+        </DialogActions>
+      </Dialog>
 
     </Box>
   );

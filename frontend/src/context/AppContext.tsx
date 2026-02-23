@@ -29,6 +29,7 @@ interface AppContextValue {
 
   // Actions
   awardStars: (count: number) => void;
+  clearSessionCompletion: (sessionSlug: string) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -71,6 +72,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       localStorage.setItem(LS_STARS, String(newTotal));
       return newTotal;
     });
+  }, []);
+
+  // Remove a session from completed list (used by reset button)
+  const clearSessionCompletion = useCallback((sessionSlug: string) => {
+    setCompletedSessions((prev) => prev.filter((s) => s !== sessionSlug));
   }, []);
 
   const refreshProgress = useCallback(async () => {
@@ -129,6 +135,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         loading,
         refreshProgress,
         awardStars,
+        clearSessionCompletion,
       }}
     >
       {children}
