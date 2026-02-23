@@ -12,12 +12,12 @@ A web app that teaches English vocabulary and math skills to Hebrew-speaking chi
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v2.14.1  | 02/23 | Infra: Backend serves React SPA build + new /api/game/config endpoint for React           |
 | v2.14.0  | 02/23 | Infra: Scaffold React + MUI + TypeScript frontend for mobile-responsive redesign          |
 | v2.13.3  | 02/23 | Fix: Word tracker scoped to session, env cleanup — remove newsletter Supabase config      |
 | v2.13.2  | 02/22 | Fix: Math games now advance on correct answers — null element crash in shared star display |
 | v2.13.1  | 02/22 | Polish: Replace emoji icons with custom SVG icons for math and English subjects           |
 | v2.13.0  | 02/22 | Refactor: Extract CSS/JS from monolithic templates into modular static files              |
-| v2.12.1  | 02/22 | Polish: Smart hints rewritten in natural Hebrew across all 4 math chapters                |
 
 ---
 
@@ -93,4 +93,5 @@ open http://localhost:8000
 | `/api/game/result` | POST | Save a game result with per-word accuracy |
 | `/api/game/progress` | GET | Get stars, games played, weak words, earned rewards |
 | `/api/game/practiced-words` | GET | Get practiced words since last reset |
+| `/api/game/config` | GET | App config for React SPA (version, sessions, rewards, changelog) |
 | `/api/game/reset` | POST | Reset practiced words for fresh round (stars preserved) |

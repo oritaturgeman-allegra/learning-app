@@ -22,6 +22,7 @@ Detailed technical reference. For quick overview, see [overview.md](./overview.m
 | `/api/game/result` | POST | `SaveGameResultRequest` | Save completed game |
 | `/api/game/progress` | GET | `ProgressResponse` | Get learning progress |
 | `/api/game/reset` | POST | — | Reset practiced words (sets `reset_at` timestamp) |
+| `/api/game/config` | GET | — | App config for React SPA (version, sessions, rewards, changelog) |
 
 **Request validation:**
 ```python
@@ -361,8 +362,23 @@ cd frontend && npm run dev      # Vite at :5173 (proxies /api to :8000)
 cd frontend && npm run build    # Production build to frontend/dist/
 ```
 
+### Production Serving (FastAPI)
+During migration, React is served under `/app/*` so both frontends coexist:
+- Legacy Jinja2: `http://localhost:8000/` (unchanged)
+- React SPA: `http://localhost:8000/app/` (new)
+
+FastAPI mounts `frontend/dist/assets/` at `/assets` and serves `index.html` via a catch-all route at `/app/{path}`. Vite builds with `base: "/app/"` so all asset paths are correct.
+
+### Config API (`/api/game/config`)
+Replaces Jinja2 template context injection. Returns all server-side config React needs:
+- `version` — app version string
+- `changelog` — recent changelog entries (Hebrew)
+- `reward_tiers` — star milestone rewards
+- `sessions_by_subject` — all sessions grouped by subject
+- `subject` / `session_slug` — optional query params for context
+
 ### Migration Plan
-See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phase 1 (scaffolding) is complete. Next: Phase 2 (backend API adaptation) → Phase 3 (navigation screens) → Phases 4-6 (games) → Phase 7 (cleanup).
+See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phases 1-2 complete. Next: Phase 3 (navigation screens) → Phases 4-6 (games) → Phase 7 (cleanup).
 
 ---
 

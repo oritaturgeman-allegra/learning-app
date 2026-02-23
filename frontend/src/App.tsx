@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Box, Container, Typography, Button } from "@mui/material";
 
 // Placeholder pages — replaced with real components in Phase 3
@@ -28,7 +28,8 @@ function Welcome() {
       <Button
         variant="contained"
         size="large"
-        href="/learning"
+        component={Link}
+        to="/learning"
         sx={{
           bgcolor: "white",
           color: "#a855f7",
@@ -52,10 +53,10 @@ function SubjectPicker() {
         ?מה לומדים היום
       </Typography>
       <Box sx={{ display: "flex", gap: 3, justifyContent: "center", flexWrap: "wrap" }}>
-        <Button variant="contained" href="/learning/english" size="large" sx={{ px: 4, py: 2, fontSize: "1.1rem" }}>
+        <Button variant="contained" component={Link} to="/learning/english" size="large" sx={{ px: 4, py: 2, fontSize: "1.1rem" }}>
           📘 אנגלית
         </Button>
-        <Button variant="contained" href="/learning/math" size="large" sx={{ px: 4, py: 2, fontSize: "1.1rem", bgcolor: "#3b82f6" }}>
+        <Button variant="contained" component={Link} to="/learning/math" size="large" sx={{ px: 4, py: 2, fontSize: "1.1rem", bgcolor: "#3b82f6" }}>
           🔢 חשבון
         </Button>
       </Box>
@@ -89,9 +90,12 @@ function GameMenu() {
   );
 }
 
+// In production (FastAPI), React is served under /app/. In dev (Vite), at /.
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/learning" element={<SubjectPicker />} />

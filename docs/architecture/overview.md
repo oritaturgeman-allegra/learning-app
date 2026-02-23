@@ -89,6 +89,8 @@ Star Tracking:
 | POST | `/api/game/result` | Save game result (score + per-word accuracy + session_slug) |
 | GET | `/api/game/progress` | Get total stars, stars_by_session, accuracy by game, weak words |
 | POST | `/api/game/reset` | Reset practiced words, sets `reset_at` timestamp |
+| GET | `/api/game/config` | App config for React SPA (version, sessions, rewards, changelog) |
+| GET | `/app/{path}` | React SPA catch-all (serves `index.html` from `frontend/dist/`) |
 
 ---
 

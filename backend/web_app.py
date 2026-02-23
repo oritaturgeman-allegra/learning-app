@@ -3,11 +3,12 @@
 import logging
 import uuid
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict
 
 import sentry_sdk
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -43,9 +44,14 @@ init_sentry(
 # Initialize FastAPI app
 app = FastAPI(**APP_METADATA)
 
-# Setup Jinja2 templates and static files
+# Setup Jinja2 templates and static files (legacy frontend)
 templates = Jinja2Templates(directory="frontend/templates")
 app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
+
+# Serve React build assets if available (new frontend)
+REACT_DIST = Path("frontend/dist")
+if REACT_DIST.is_dir():
+    app.mount("/assets", StaticFiles(directory=str(REACT_DIST / "assets")), name="react-assets")
 
 # Include routers
 app.include_router(game_router)
@@ -188,6 +194,21 @@ async def health() -> Dict[str, Any]:
         "timestamp": datetime.now().isoformat(),
         "version": APP_METADATA["version"],
     }
+
+
+# --- React SPA Catch-All ---
+# Serves React's index.html for any unmatched route so React Router handles navigation.
+# Only active when frontend/dist/ exists (after `npm run build`).
+# Legacy Jinja2 routes above take priority since they're registered first.
+
+
+@app.get("/app/{full_path:path}", response_class=HTMLResponse)
+async def react_spa(full_path: str) -> FileResponse:
+    """Serve the React SPA for all /app/* routes."""
+    index_file = REACT_DIST / "index.html"
+    if not index_file.is_file():
+        raise HTTPException(status_code=404, detail="React build not found. Run: cd frontend && npm run build")
+    return FileResponse(str(index_file))
 
 
 if __name__ == "__main__":

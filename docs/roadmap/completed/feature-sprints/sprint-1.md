@@ -316,10 +316,19 @@ React + MUI + TypeScript project initialized alongside legacy frontend for mobil
 
 ---
 
+### 39. Backend Serves React SPA (v2.14.1)
+FastAPI now serves the React build at `/app/` and provides a config API for the React SPA.
+- New `/api/game/config` endpoint returns version, changelog, reward tiers, sessions
+- React build served from `frontend/dist/` with SPA catch-all at `/app/{path}`
+- Vite uses `/app/` base path for production builds, `/` for dev
+- Legacy Jinja2 frontend continues to work alongside React
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.14.0 (38 releases)
-**Features Completed:** 37 (22 features, 6 UX polish, 1 content expansion, 2 chores, 6 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.14.1 (39 releases)
+**Features Completed:** 38 (22 features, 6 UX polish, 1 content expansion, 3 chores, 6 bug fixes)
 **Test Coverage:** 76 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

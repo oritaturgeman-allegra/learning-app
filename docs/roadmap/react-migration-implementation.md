@@ -18,12 +18,12 @@
 - [x] Configure Vite dev server proxy: `/api/*` → `localhost:8000`
 - [x] **Verify**: `npm run dev` shows React page at `localhost:5173`
 
-### Phase 2: Backend Adaptation
-- [ ] Add `/api/config/{subject}/{session_slug}` endpoint (reward_tiers, sessions, version, changelog)
-- [ ] Serve `frontend/dist/` as static files from FastAPI
-- [ ] Add SPA catch-all route `/{full_path:path}` → serve `index.html`
-- [ ] Keep Jinja2 routes alive alongside React during migration
-- [ ] **Verify**: `npm run build` → FastAPI serves React app at `localhost:8000`
+### Phase 2: Backend Adaptation ✅ (v2.14.1)
+- [x] Add `/api/game/config` endpoint (reward_tiers, sessions, version, changelog)
+- [x] Serve `frontend/dist/` as static files from FastAPI
+- [x] Add SPA catch-all route `/app/{full_path:path}` → serve `index.html`
+- [x] Keep Jinja2 routes alive alongside React during migration
+- [x] **Verify**: `npm run build` → FastAPI serves React app at `localhost:8000/app/`
 
 ### Phase 3: Core Layout & Navigation Screens
 - [ ] Create shared components: Layout, StarCounter, SubjectCard, SessionCard, GameCard
@@ -70,9 +70,9 @@
 
 | Action | File | Description |
 |--------|------|-------------|
-| Modify | `backend/web_app.py` | Add /api/config, SPA fallback, serve React build |
-| Modify | `backend/routes/game.py` | Add config endpoint |
-| Modify | `backend/defaults.py` | Version bump to 3.0.0 |
+| ✅ Done | `backend/web_app.py` | SPA fallback at /app/*, serve React build from frontend/dist/ |
+| ✅ Done | `backend/routes/game.py` | Added /api/game/config endpoint |
+| Modify | `backend/defaults.py` | Version bump to 3.0.0 (incremental bumps until then) |
 | ✅ Done | `frontend/package.json` | React, MUI, Vite dependencies |
 | ✅ Done | `frontend/vite.config.ts` | Build config, proxy, RTL |
 | ✅ Done | `frontend/tsconfig.json` | TypeScript config |
@@ -125,6 +125,7 @@ npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-do
 | Date | Phase | What was done | Version |
 |------|-------|---------------|---------|
 | 02/23 | Phase 1 | Vite + React 19 + TS + MUI 7 scaffolding, theme, RTL, routing, placeholder pages | v2.14.0 |
+| 02/23 | Phase 2 | /api/game/config endpoint, serve React build from FastAPI at /app/, SPA catch-all | v2.14.1 |
 
 ---
 

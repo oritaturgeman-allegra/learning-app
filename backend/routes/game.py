@@ -8,6 +8,12 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from backend.defaults import (
+    APP_CHANGELOG,
+    APP_VERSION,
+    REWARD_TIERS,
+    SESSIONS_BY_SUBJECT,
+)
 from backend.exceptions import GameError
 from backend.services.game_service import get_game_service
 
@@ -135,3 +141,26 @@ async def reset_practiced_words() -> Dict[str, Any]:
     except GameError as e:
         logger.error(f"Failed to reset practiced words: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/config")
+async def get_config(subject: Optional[str] = None, session_slug: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Get app configuration for the React frontend.
+
+    Returns reward tiers, sessions, version, and changelog that were
+    previously injected via Jinja2 template context.
+    """
+    sessions = SESSIONS_BY_SUBJECT.get(subject, []) if subject else SESSIONS_BY_SUBJECT
+    return {
+        "success": True,
+        "data": {
+            "version": APP_VERSION,
+            "changelog": APP_CHANGELOG,
+            "reward_tiers": REWARD_TIERS,
+            "sessions": sessions,
+            "sessions_by_subject": SESSIONS_BY_SUBJECT,
+            "subject": subject,
+            "session_slug": session_slug,
+        },
+    }
