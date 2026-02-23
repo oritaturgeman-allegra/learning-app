@@ -27,7 +27,7 @@ Sprint is successful if:
 - [x] Phase 1: React + MUI + TypeScript scaffolding (Vite, theme, routing, RTL)
 - [x] Phase 2: Backend API adaptation (serve SPA, /api/config endpoint)
 - [x] Phase 3: Core layout & navigation screens (API client, AppContext, Layout, 4 pages)
-- [ ] Phase 4: Audio & reward systems
+- [x] Phase 4: Audio & reward systems (useAudio, Confetti, Milestone, RewardPopup, useRewards)
 - [ ] Phase 5: English games
 - [ ] Phase 6: Math games
 - [ ] Phase 7: Cleanup & polish

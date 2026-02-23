@@ -34,10 +34,11 @@
 - [x] Bring over CSS keyframe animations in `styles/global.css`
 - [ ] **User tests**: Navigate all screens on iPhone — responsive layout, RTL, star counter
 
-### Phase 4: Audio & Reward Systems
-- [ ] Create `useAudio` hook (AudioContext tones + Web Speech API TTS)
-- [ ] Create `useRewards` hook (tier checking, unlock detection, collection)
-- [ ] Create reward components: RewardPopup, Confetti, EmojiParade, MilestoneOverlay, RewardCollection
+### Phase 4: Audio & Reward Systems ✅ (v2.16.0)
+- [x] Create `useAudio` module (AudioContext tones + Web Speech API TTS)
+- [x] Create `useRewards` hook (milestone checks, reward unlock, confetti orchestration)
+- [x] Create celebration components: Confetti, MilestoneOverlay, RewardPopup
+- [x] Wire into Layout (renders all overlays) + AppContext (`awardStars()`)
 - [ ] **Verify**: Earn stars → sound plays, confetti appears, rewards unlock
 
 ### Phase 5: English Games
@@ -136,6 +137,7 @@ npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-do
 | 02/23 | Phase 1 | Vite + React 19 + TS + MUI 7 scaffolding, theme, RTL, routing, placeholder pages | v2.14.0 |
 | 02/23 | Phase 2 | /api/game/config endpoint, serve React build from FastAPI at /app/, SPA catch-all | v2.14.1 |
 | 02/23 | Phase 3 | API client, AppContext, Layout, StarCounter, RewardCollection, 4 navigation pages, animations | v2.15.0 |
+| 02/23 | Phase 4 | useAudio (tones + TTS), Confetti, MilestoneOverlay, RewardPopup, useRewards orchestration, Layout + AppContext wiring | v2.16.0 |
 
 ---
 

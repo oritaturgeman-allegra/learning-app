@@ -12,12 +12,12 @@ A web app that teaches English vocabulary and math skills to Hebrew-speaking chi
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v2.16.0  | 02/23 | Feature: Audio system, confetti, milestones, reward popups for React frontend              |
 | v2.15.0  | 02/23 | Feature: React navigation screens — Welcome, SubjectPicker, SessionPicker, GameMenu       |
 | v2.14.1  | 02/23 | Infra: Backend serves React SPA build + new /api/game/config endpoint for React           |
 | v2.14.0  | 02/23 | Infra: Scaffold React + MUI + TypeScript frontend for mobile-responsive redesign          |
 | v2.13.3  | 02/23 | Fix: Word tracker scoped to session, env cleanup — remove newsletter Supabase config      |
 | v2.13.2  | 02/22 | Fix: Math games now advance on correct answers — null element crash in shared star display |
-| v2.13.1  | 02/22 | Polish: Replace emoji icons with custom SVG icons for math and English subjects           |
 
 ---
 

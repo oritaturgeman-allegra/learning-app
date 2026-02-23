@@ -1,6 +1,7 @@
 /**
  * Layout shell with sticky header for all screens except Welcome.
  * Uses React Router Outlet for nested route rendering.
+ * Renders celebration overlays (confetti, milestones, reward popups).
  */
 
 import { useState } from "react";
@@ -8,12 +9,27 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
 import StarCounter from "@/components/StarCounter";
 import RewardCollection from "@/components/RewardCollection";
+import Confetti from "@/components/Confetti";
+import MilestoneOverlay from "@/components/MilestoneOverlay";
+import RewardPopup from "@/components/RewardPopup";
 import { useApp } from "@/context/AppContext";
+import { useRewards } from "@/hooks/useRewards";
 
 export default function Layout() {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const { earnedRewards, rewardTiers } = useApp();
   const location = useLocation();
+
+  const {
+    milestoneOpen,
+    milestoneStars,
+    isParade,
+    closeMilestone,
+    rewardPopupOpen,
+    rewardTier,
+    closeReward,
+    confettiActive,
+  } = useRewards();
 
   // Hide home button on subject picker (already at top level)
   const isSubjectPicker = location.pathname === "/learning";
@@ -111,6 +127,20 @@ export default function Layout() {
 
       {/* Trophy gallery dialog */}
       <RewardCollection open={galleryOpen} onClose={() => setGalleryOpen(false)} />
+
+      {/* Celebration overlays */}
+      <Confetti active={confettiActive} />
+      <MilestoneOverlay
+        open={milestoneOpen}
+        stars={milestoneStars}
+        isParade={isParade}
+        onClose={closeMilestone}
+      />
+      <RewardPopup
+        tier={rewardTier}
+        open={rewardPopupOpen}
+        onClose={closeReward}
+      />
     </Box>
   );
 }

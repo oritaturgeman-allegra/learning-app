@@ -339,10 +339,22 @@ All 4 navigation screens ported to React with MUI components, responsive layout,
 
 ---
 
+### 41. Audio & Reward Systems for React (v2.16.0)
+Audio feedback, confetti, milestone celebrations, and reward unlock popups ported to React.
+- `useAudio.ts` — AudioContext tones (correct chime, wrong buzz, celebration melody) + Web Speech API TTS
+- `Confetti.tsx` — 30-piece confetti overlay with random colors/shapes/delays
+- `MilestoneOverlay.tsx` — celebration every 5 stars, emoji parade every 10 stars
+- `RewardPopup.tsx` — reward tier unlock popup with rewardReveal animation
+- `useRewards.ts` — orchestrates milestone → reward flow with correct timing
+- `AppContext` updated with `awardStars()` for optimistic star updates
+- Layout renders all celebration overlays
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.15.0 (40 releases)
-**Features Completed:** 39 (23 features, 6 UX polish, 1 content expansion, 3 chores, 6 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.16.0 (41 releases)
+**Features Completed:** 40 (24 features, 6 UX polish, 1 content expansion, 3 chores, 6 bug fixes)
 **Test Coverage:** 76 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

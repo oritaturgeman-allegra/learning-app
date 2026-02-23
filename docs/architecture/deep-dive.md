@@ -367,7 +367,7 @@ During migration, React is served under `/app/*` so both frontends coexist:
 - Legacy Jinja2: `http://localhost:8000/` (unchanged)
 - React SPA: `http://localhost:8000/app/` (new)
 
-FastAPI mounts `frontend/dist/assets/` at `/assets` and serves `index.html` via a catch-all route at `/app/{path}`. Vite builds with `base: "/app/"` so all asset paths are correct.
+FastAPI mounts `frontend/dist/assets/` at `/app/assets` and serves `index.html` via a catch-all route at `/app/{path}`. Vite builds with `base: "/app/"` so all asset paths are correct.
 
 ### Config API (`/api/game/config`)
 Replaces Jinja2 template context injection. Returns all server-side config React needs:
@@ -377,18 +377,24 @@ Replaces Jinja2 template context injection. Returns all server-side config React
 - `sessions_by_subject` — all sessions grouped by subject
 - `subject` / `session_slug` — optional query params for context
 
-### React Project Structure (Phase 3)
+### React Project Structure (Phases 3-4)
 ```
 frontend/src/
 ├── api/
 │   ├── types.ts              # TypeScript interfaces for API responses
 │   └── game.ts               # Typed API client (fetch wrapper)
 ├── context/
-│   └── AppContext.tsx         # React Context for progress + config data
+│   └── AppContext.tsx         # React Context for progress + config + awardStars()
+├── hooks/
+│   ├── useAudio.ts           # AudioContext tones (correct/wrong/celebration) + TTS
+│   └── useRewards.ts         # Milestone checks, reward unlocks, confetti orchestration
 ├── components/
-│   ├── Layout.tsx             # Header shell with Outlet (stars, trophy, home)
+│   ├── Layout.tsx             # Header shell + celebration overlays
 │   ├── StarCounter.tsx        # Gold pill star counter
-│   └── RewardCollection.tsx   # Trophy gallery dialog
+│   ├── RewardCollection.tsx   # Trophy gallery dialog
+│   ├── Confetti.tsx           # 30-piece confetti overlay (portal)
+│   ├── MilestoneOverlay.tsx   # 5-star / 10-star celebration
+│   └── RewardPopup.tsx        # Reward tier unlock popup
 ├── data/
 │   └── games.ts              # Game card metadata per subject
 ├── pages/
@@ -404,13 +410,26 @@ frontend/src/
 ```
 
 ### State Management
-- `AppContext` provides progress + config data to all pages
+- `AppContext` provides progress + config data to all pages, plus `awardStars()` for optimistic star updates
 - Fetches `/api/game/config` (once) and `/api/game/progress` (on mount + after games)
 - Falls back to localStorage (`ariel_stars`, `ariel_earned_rewards`) for instant display
+
+### Audio System (`useAudio.ts`)
+- Pure functions (not a React hook) — AudioContext singleton
+- `playCorrect()`: C5-E5-G5 ascending sine chime
+- `playWrong()`: 150Hz sawtooth buzz
+- `playCelebration()`: C5-E5-G5-C6 four-note melody
+- `speak(text)`: Web Speech API TTS (en-US, Samantha voice preferred)
+
+### Reward System (`useRewards.ts`)
+- Milestone every 5 stars (🎉 overlay + confetti + celebration audio)
+- Emoji parade every 10 stars (🏆 + 8 floating emojis)
+- Reward tier unlock popup after milestone (3s delay, 5s auto-close)
+- localStorage keys: `ariel_last_milestone`, `ariel_earned_rewards`
 - `refreshProgress()` exposed for re-fetch after game completion
 
 ### Migration Plan
-See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phases 1-3 complete. Next: Phase 4 (audio/rewards) → Phases 5-6 (games) → Phase 7 (cleanup).
+See `docs/roadmap/react-migration-implementation.md` for the full 7-phase plan. Phases 1-4 complete. Next: Phases 5-6 (games) → Phase 7 (cleanup).
 
 ---
 

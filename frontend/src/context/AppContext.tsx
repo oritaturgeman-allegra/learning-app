@@ -25,6 +25,9 @@ interface AppContextValue {
   // State
   loading: boolean;
   refreshProgress: () => Promise<void>;
+
+  // Actions
+  awardStars: (count: number) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -58,6 +61,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [sessionsBySubject, setSessionsBySubject] = useState<Record<string, Session[]>>({});
   const [appVersion, setAppVersion] = useState("");
   const [loading, setLoading] = useState(true);
+
+  // Optimistically update stars locally (for immediate UI feedback)
+  const awardStars = useCallback((count: number) => {
+    setTotalStars((prev) => {
+      const newTotal = prev + count;
+      localStorage.setItem(LS_STARS, String(newTotal));
+      return newTotal;
+    });
+  }, []);
 
   const refreshProgress = useCallback(async () => {
     try {
@@ -112,6 +124,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         appVersion,
         loading,
         refreshProgress,
+        awardStars,
       }}
     >
       {children}
