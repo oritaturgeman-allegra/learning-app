@@ -130,10 +130,10 @@ function saveStars() {
 
 /** Update all star counter displays */
 function updateStarDisplay() {
-    document.getElementById('subject-star-count').textContent = state.totalStars;
-    document.getElementById('star-count').textContent = state.totalStars;
-    document.getElementById('menu-star-count').textContent = state.totalStars;
-    document.getElementById('game-star-count').textContent = state.totalStars;
+    ['subject-star-count', 'star-count', 'menu-star-count', 'game-star-count'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = state.totalStars;
+    });
     updateTrophyCount();
 }
 

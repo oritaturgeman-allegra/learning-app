@@ -1,23 +1,23 @@
 # Ariel Learning App 🌟
 
-Gamified English learning for kids — fun, colorful, interactive.
+Gamified English + Math learning for kids — fun, colorful, interactive.
 
 ## Project Overview
 
-A web app that teaches English vocabulary to Hebrew-speaking children through 4 mini-games: word matching, sentence building, listening comprehension, and true/false. Features star rewards, confetti animations, sound feedback, and persistent progress.
+A web app that teaches English vocabulary and math skills to Hebrew-speaking children through interactive mini-games. Features star rewards, collectible trophies, confetti animations, sound feedback, and persistent progress across subjects.
 
-**Built for:** Ariel, Gen Alpha 4th grader, Jet 2 textbook — Unit 2 vocabulary (clothes, seasons, weather, nature, actions, people, body, food, places, descriptions, things).
+**Built for:** Ariel, Gen Alpha 4th grader — English (Jet 2 textbook, Unit 2) and Math (multiplication, division, primes).
 
 ## Recent Updates
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
-| v2.13.1  | 02/22 | Polish: Replace emoji icons (🔢, 🇺🇸, 🔤) with custom SVG icons for math and English subjects |
-| v2.13.0  | 02/22 | Refactor: Extract CSS/JS from monolithic templates into modular static files (92% template size reduction) |
-| v2.12.1  | 02/22 | Polish: Smart hints rewritten in natural Hebrew across all 4 math chapters, centralized in MATH_HINTS |
+| v2.13.2  | 02/22 | Fix: Math games now advance on correct answers — null element crash in shared star display |
+| v2.13.1  | 02/22 | Polish: Replace emoji icons with custom SVG icons for math and English subjects           |
+| v2.13.0  | 02/22 | Refactor: Extract CSS/JS from monolithic templates into modular static files              |
+| v2.12.1  | 02/22 | Polish: Smart hints rewritten in natural Hebrew across all 4 math chapters                |
 | v2.12.0  | 02/22 | Feature: Chapter D unlocked — primes, divisibility rules (3/6/9), and prime factorization |
-| v2.11.2  | 02/22 | Fix: Game card completion badge changed from green ✓ to ⭐ — no more conflict with session checkmark |
-| v2.11.1  | 02/22 | Fix: Session completion checkmarks now derived from DB — persist across browsers           |
+| v2.11.2  | 02/22 | Fix: Game card completion badge changed from green checkmark to star icon                  |
 
 ---
 
@@ -31,8 +31,24 @@ A web app that teaches English vocabulary to Hebrew-speaking children through 4 
 open http://localhost:8000
 ```
 
+## Subjects & Sessions
+
+### English
+| Session | Content |
+|---------|---------|
+| Jet 2: Unit 2 | Clothes, seasons, weather, nature, actions, people, body, food, places, descriptions |
+
+### Math
+| Session | Content |
+|---------|---------|
+| Tens & Hundreds | Multiply/divide by 10s and 100s, properties of 0 and 1, order of operations |
+| Two-Digit Multiply | Two-digit × one-digit, two-digit × two-digit |
+| Long Division | Long division with remainder, division verification |
+| Primes & Divisibility | Prime/composite numbers, divisibility rules (3/6/9), prime factorization |
+
 ## Games
 
+### English Games
 | Game | Hebrew Name | Description | Stars |
 |------|-------------|-------------|-------|
 | 🔤 Word Match | ?מה המילה | See emoji + Hebrew, pick the English word | +1⭐ × 10 rounds |
@@ -40,12 +56,22 @@ open http://localhost:8000
 | 👂 Listen & Choose | האזיני ובחרי | Hear English word, pick matching card | +1⭐ × 10 rounds |
 | 🤔 True or False | ?כן או לא | Is the English sentence correct? | +1⭐ × 8 rounds |
 
+### Math Games
+| Game | Hebrew Name | Description | Stars |
+|------|-------------|-------------|-------|
+| ⚡ Quick Solve | !פתרי מהר | Pick the correct answer to a math problem | +1⭐ × 8 rounds |
+| 🔍 Missing Number | !מצאי את המספר | Find the missing number in an equation | +1⭐ × 8 rounds |
+| 🤔 True or False | ?נכון או לא | Is the equation correct? | +1⭐ × 8 rounds |
+| 🫧 Bubble Pop | !פוצצי בועות | Pop bubbles with expressions equal to the target | +1⭐ × 5 rounds |
+
 ## Features
 
 - 🌈 Vibrant, kid-friendly UI with gradient cards and animations
-- ⭐ Star rewards system with persistent progress tracking
+- ⭐ Star rewards system — combined across all subjects, persistent progress
+- 🏆 Collectible reward trophies unlocked at star milestones (6 tiers)
 - 🎉 Confetti rain on correct answers, celebration at milestones
-- 🔊 Text-to-speech pronunciation for all English words
+- 💡 Smart hints for every math problem type (natural Hebrew explanations)
+- 🔊 Text-to-speech pronunciation for English words
 - 🎵 Sound effects via AudioContext (chime, buzz, celebration melody)
 - 🌟 Bouncing mascot star that wiggles on correct answers
 - 📱 Responsive design — works on desktop and mobile
@@ -53,15 +79,18 @@ open http://localhost:8000
 
 ## Tech Stack
 
-- **Backend:** Python 3.13, FastAPI, SQLAlchemy (SQLite)
+- **Backend:** Python 3.13, FastAPI, SQLAlchemy (SQLite dev / PostgreSQL prod)
 - **Frontend:** Jinja2-served HTML, vanilla JS + CSS animations
 - **Audio:** Web Speech API (TTS), AudioContext (sound effects)
 - **Fonts:** Google Fonts (Fredoka + Rubik)
+- **Storage:** Database (game results, progress) + localStorage (fallback)
+- **Languages:** Hebrew UI (RTL) + English/Math content (LTR)
 
 ## API
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/api/game/result` | POST | Save a game result with per-word accuracy |
-| `/api/game/progress` | GET | Get stars, games played, weak words, recent history |
-| `/api/game/practiced-words` | GET | Get all unique vocabulary words ever practiced |
+| `/api/game/progress` | GET | Get stars, games played, weak words, earned rewards |
+| `/api/game/practiced-words` | GET | Get practiced words since last reset |
+| `/api/game/reset` | POST | Reset practiced words for fresh round (stars preserved) |
