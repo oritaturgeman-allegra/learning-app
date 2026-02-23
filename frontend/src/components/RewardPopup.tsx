@@ -95,7 +95,7 @@ export default function RewardPopup({ tier, open, onClose }: Props) {
             mb: 2,
           }}
         >
-          ⭐ {tier.stars}
+          {tier.stars} ⭐
         </Typography>
 
         {/* Collect button */}

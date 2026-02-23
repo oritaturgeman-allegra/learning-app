@@ -29,15 +29,11 @@ export default function SubjectPicker() {
   return (
     <Box
       sx={{
-        minHeight: "calc(100vh - 72px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         px: 3,
         py: { xs: 4, sm: 6 },
-        background: "linear-gradient(135deg, #f5f0ff, #fce4ec, #fff7ed)",
-        backgroundSize: "400% 400%",
-        animation: "gradientCycle 8s ease infinite",
       }}
     >
       {/* Title */}
@@ -50,7 +46,7 @@ export default function SubjectPicker() {
           fontSize: { xs: "1.6rem", sm: "2rem" },
         }}
       >
-        📚 מה לומדים היום?
+        מה לומדים היום? 📚
       </Typography>
 
       {/* Subject cards */}

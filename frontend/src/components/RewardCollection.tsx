@@ -54,7 +54,7 @@ export default function RewardCollection({ open, onClose }: Props) {
           component="span"
           sx={{ fontFamily: "'Fredoka', sans-serif", fontWeight: 600 }}
         >
-          🏆 האוסף שלי
+          האוסף שלי 🏆
         </Typography>
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
@@ -66,7 +66,7 @@ export default function RewardCollection({ open, onClose }: Props) {
         {nextReward && (
           <Box sx={{ mb: 3 }}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
-              {nextReward.emoji} {nextReward.stars} ⭐ עד ל{nextReward.name_he}
+              עד ל{nextReward.name_he} — {nextReward.stars} ⭐ {nextReward.emoji}
             </Typography>
             <LinearProgress
               variant="determinate"
@@ -116,7 +116,7 @@ export default function RewardCollection({ open, onClose }: Props) {
                     {tier.name_he}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
-                    ⭐ {tier.stars}
+                    {tier.stars} ⭐
                   </Typography>
                   {earned && (
                     <Typography

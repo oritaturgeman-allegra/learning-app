@@ -33,7 +33,7 @@ export default function Welcome() {
           fontSize: { xs: "2.5rem", sm: "3.5rem" },
         }}
       >
-        👋 שלום אריאל!
+        שלום אריאל! 👋
       </Typography>
 
       {/* Subtitle */}
@@ -46,7 +46,7 @@ export default function Welcome() {
           fontSize: { xs: "1.1rem", sm: "1.4rem" },
         }}
       >
-        🎉 בואי ללמוד בכיף
+        בואי ללמוד בכיף 🎉
       </Typography>
 
       {/* CTA button */}
@@ -66,7 +66,7 @@ export default function Welcome() {
           "&:hover": { bgcolor: "rgba(255,255,255,0.9)" },
         }}
       >
-        ▶️ מתחילים
+        מתחילים ▶️
       </Button>
     </Box>
   );

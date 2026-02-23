@@ -34,7 +34,6 @@ export default function GameMenu() {
   return (
     <Box
       sx={{
-        minHeight: "calc(100vh - 72px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -86,7 +85,7 @@ export default function GameMenu() {
           fontSize: { xs: "1.4rem", sm: "1.8rem" },
         }}
       >
-        🎮 בחרי משחק, אריאל
+        אריאל, בחרי משחק 🎮
       </Typography>
 
       {/* Session slug display */}

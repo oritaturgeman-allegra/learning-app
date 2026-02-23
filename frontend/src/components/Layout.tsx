@@ -17,7 +17,7 @@ import { useRewards } from "@/hooks/useRewards";
 
 export default function Layout() {
   const [galleryOpen, setGalleryOpen] = useState(false);
-  const { earnedRewards, rewardTiers } = useApp();
+  const { earnedRewards, rewardTiers, appVersion } = useApp();
   const location = useLocation();
 
   const {
@@ -36,7 +36,7 @@ export default function Layout() {
   const trophyFraction = `${earnedRewards.length}/${rewardTiers.length}`;
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", display: "flex", flexDirection: "column" }}>
       {/* Sticky header */}
       <Box
         sx={{
@@ -54,7 +54,7 @@ export default function Layout() {
           backdropFilter: "blur(8px)",
         }}
       >
-        {/* Right side (RTL: home button) */}
+        {/* Right side (RTL: home button + version) */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           {!isSubjectPicker && (
             <Button
@@ -121,9 +121,29 @@ export default function Layout() {
       </Box>
 
       {/* Page content — offset below fixed header */}
-      <Box sx={{ pt: "72px" }}>
+      <Box
+        sx={{
+          pt: "72px",
+          flex: 1,
+          background: "linear-gradient(135deg, #f5f0ff, #fce4ec, #fff7ed)",
+          backgroundSize: "400% 400%",
+          animation: "gradientCycle 8s ease infinite",
+        }}
+      >
         <Outlet />
       </Box>
+
+      {/* Version footer — in lavender strip at bottom */}
+      {appVersion && (
+        <Typography
+          component="footer"
+          variant="caption"
+          color="text.disabled"
+          sx={{ textAlign: "center", py: 1.5 }}
+        >
+          v{appVersion}
+        </Typography>
+      )}
 
       {/* Trophy gallery dialog */}
       <RewardCollection open={galleryOpen} onClose={() => setGalleryOpen(false)} />

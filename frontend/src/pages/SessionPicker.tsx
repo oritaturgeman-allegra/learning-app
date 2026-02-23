@@ -27,15 +27,11 @@ export default function SessionPicker() {
   return (
     <Box
       sx={{
-        minHeight: "calc(100vh - 72px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         px: 3,
         py: { xs: 3, sm: 5 },
-        background: "linear-gradient(135deg, #f5f0ff, #fce4ec, #fff7ed)",
-        backgroundSize: "400% 400%",
-        animation: "gradientCycle 8s ease infinite",
       }}
     >
       {/* Subject tabs */}

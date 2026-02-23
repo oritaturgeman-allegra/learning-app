@@ -351,10 +351,19 @@ Audio feedback, confetti, milestone celebrations, and reward unlock popups porte
 
 ---
 
+### 42. RTL Emoji Fix + Version Footer + Unified Gradient (v2.16.1)
+Fixed RTL emoji placement across all React pages and added version footer.
+- All emojis moved to end of source strings (render on left in RTL per user preference)
+- Version footer in lavender strip at bottom using flex column layout
+- Animated gradient background moved from individual pages to Layout for consistency
+- Removed per-page `minHeight: calc(100vh - 72px)` — Layout handles viewport fill
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.16.0 (41 releases)
-**Features Completed:** 40 (24 features, 6 UX polish, 1 content expansion, 3 chores, 6 bug fixes)
+**Versions Shipped:** v1.0.0 → v2.16.1 (42 releases)
+**Features Completed:** 41 (24 features, 6 UX polish, 1 content expansion, 3 chores, 7 bug fixes)
 **Test Coverage:** 76 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback

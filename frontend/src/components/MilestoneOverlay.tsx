@@ -76,7 +76,7 @@ export default function MilestoneOverlay({ open, stars, isParade, onClose }: Pro
           variant="h6"
           sx={{ color: "rgba(255,255,255,0.9)" }}
         >
-          {isParade ? `🌟 ${stars} כוכבים — מדהים!` : `⭐ ${stars} כוכבים!`}
+          {isParade ? `${stars} כוכבים — מדהים! 🌟` : `${stars} כוכבים! ⭐`}
         </Typography>
       </Box>
 
