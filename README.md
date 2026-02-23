@@ -28,7 +28,7 @@ A web app that teaches English vocabulary and math skills to Hebrew-speaking chi
 .venv/bin/python -m backend.web_app
 
 # Open in browser
-open http://localhost:8000
+open http://localhost:8000/app/
 ```
 
 ## Subjects & Sessions
