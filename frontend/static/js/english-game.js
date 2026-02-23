@@ -480,7 +480,7 @@ function resetWordTracker() {
 /** Load practiced words from the database */
 async function loadPracticedWords() {
     try {
-        const res = await fetch(`${API_BASE}/practiced-words`);
+        const res = await fetch(`${API_BASE}/practiced-words?session_slug=${SESSION_SLUG}`);
         if (!res.ok) return;
         const data = await res.json();
         if (data.success && data.data.practiced_words) {

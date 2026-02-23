@@ -98,15 +98,16 @@ async def get_progress() -> Dict[str, Any]:
 
 
 @router.get("/practiced-words")
-async def get_practiced_words() -> Dict[str, Any]:
+async def get_practiced_words(session_slug: Optional[str] = None) -> Dict[str, Any]:
     """
     Get unique vocabulary words practiced since the last reset.
 
     Returns a sorted list of word strings derived from game result history.
+    Optionally filtered by session_slug to scope results to a specific session.
     """
     try:
         game_service = get_game_service()
-        words = game_service.get_practiced_words()
+        words = game_service.get_practiced_words(session_slug=session_slug)
         return {
             "success": True,
             "data": {"practiced_words": words},

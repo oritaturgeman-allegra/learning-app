@@ -295,7 +295,9 @@ class GameService:
         except SQLAlchemyError as e:
             raise GameError("reset_practiced_words", str(e))
 
-    def get_practiced_words(self, user_id: Optional[int] = None) -> List[str]:
+    def get_practiced_words(
+        self, user_id: Optional[int] = None, session_slug: Optional[str] = None,
+    ) -> List[str]:
         """
         Get unique vocabulary words practiced since the last reset.
 
@@ -304,6 +306,7 @@ class GameService:
 
         Args:
             user_id: Optional user ID filter
+            session_slug: Optional session slug filter (e.g. 'jet2-unit2')
 
         Returns:
             Sorted list of unique practiced word strings
@@ -315,6 +318,8 @@ class GameService:
                 query = session.query(GameResult.word_results)
                 if user_id is not None:
                     query = query.filter(GameResult.user_id == user_id)
+                if session_slug is not None:
+                    query = query.filter(GameResult.session_slug == session_slug)
                 if reset_at is not None:
                     query = query.filter(GameResult.played_at > reset_at)
 

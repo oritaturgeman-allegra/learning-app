@@ -290,11 +290,27 @@ Replaced emoji icons (🔢, 🇺🇸, 🔤) with custom SVG icons for a more pol
 
 ---
 
+### 36. Math Game Correct Answer Fix (v2.13.2)
+Fixed math games freezing on correct answers — `updateStarDisplay()` crashed on null elements missing from math template.
+- Added null checks to `updateStarDisplay()` matching existing `updateTrophyCount()` pattern
+- Also fixed star counter not loading on math pages (same root cause)
+
+---
+
+### 37. Word Tracker Session Scoping + Env Cleanup (v2.13.3)
+Word tracker now scoped to session — math equations no longer inflate English word count. Cleaned up `.env` to remove newsletter project's Supabase config.
+- Added `session_slug` query param to `GET /api/game/practiced-words` endpoint
+- Frontend passes `SESSION_SLUG` when fetching practiced words
+- Removed newsletter Supabase `DATABASE_URL`, API keys, and OAuth config from `.env`
+- Replaced `.env.example` with learning-app-specific template
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.13.1 (35 releases)
-**Features Completed:** 35 (22 features, 6 UX polish, 1 content expansion, 2 chores, 4 bug fixes)
-**Test Coverage:** 72 tests, 82% coverage, 100% pass rate
+**Versions Shipped:** v1.0.0 → v2.13.3 (37 releases)
+**Features Completed:** 37 (22 features, 6 UX polish, 1 content expansion, 2 chores, 6 bug fixes)
+**Test Coverage:** 76 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
 - 4 complete mini-games with star rewards and sound feedback
 - 55 vocabulary words from Jet 2 Unit 2 — full coverage guaranteed per session
