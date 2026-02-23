@@ -51,7 +51,7 @@ app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 # Serve React build assets if available (new frontend)
 REACT_DIST = Path("frontend/dist")
 if REACT_DIST.is_dir():
-    app.mount("/assets", StaticFiles(directory=str(REACT_DIST / "assets")), name="react-assets")
+    app.mount("/app/assets", StaticFiles(directory=str(REACT_DIST / "assets")), name="react-assets")
 
 # Include routers
 app.include_router(game_router)
