@@ -9,6 +9,7 @@ import {
   Box, Button, Card, CardActionArea, Dialog, DialogActions, DialogContent,
   DialogTitle, IconButton, Stack, Tab, Tabs, Typography,
 } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CachedIcon from "@mui/icons-material/Cached";
 import { GAMES_BY_SUBJECT } from "@/data/games";
@@ -102,6 +103,36 @@ export default function GameMenu() {
         py: { xs: 3, sm: 5 },
       }}
     >
+      {/* Back button header */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          width: "100%",
+          maxWidth: 500,
+          mb: 2,
+        }}
+      >
+        <IconButton onClick={() => navigate(-1)} size="small">
+          <ArrowForwardIcon />
+        </IconButton>
+        <Typography
+          sx={{
+            fontFamily: "'Fredoka', sans-serif",
+            fontWeight: 600,
+            fontSize: { xs: "1.1rem", sm: "1.3rem" },
+            flex: 1,
+            textAlign: "center",
+          }}
+        >
+          {currentSession
+            ? isEnglish ? currentSession.name : currentSession.name_he
+            : ""}
+        </Typography>
+        <Box sx={{ width: 34 }} />
+      </Box>
+
       {/* Subject tabs */}
       <Tabs
         value={currentSubject}
@@ -165,17 +196,6 @@ export default function GameMenu() {
           </IconButton>
         )}
       </Box>
-
-      {/* Session name */}
-      {currentSession && (
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ mb: 2, opacity: 0.7 }}
-        >
-          {isEnglish ? currentSession.name : currentSession.name_he}
-        </Typography>
-      )}
 
       {/* Game cards */}
       <Stack spacing={2} sx={{ width: "100%", maxWidth: 500 }}>
@@ -288,7 +308,7 @@ export default function GameMenu() {
               "&:hover": { bgcolor: "#6d28d9" },
             }}
           >
-            !יאללה
+            יאללה!
           </Button>
           <Button
             onClick={() => setResetOpen(false)}
