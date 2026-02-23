@@ -306,9 +306,19 @@ Word tracker now scoped to session — math equations no longer inflate English 
 
 ---
 
+### 38. React Frontend Scaffolding (v2.14.0)
+React + MUI + TypeScript project initialized alongside legacy frontend for mobile-responsive redesign.
+- Vite build toolchain with dev proxy to FastAPI
+- MUI theme with all design tokens migrated from shared.css
+- RTL support via stylis-plugin-rtl + Emotion cache
+- React Router with 4 routes matching existing URL structure
+- Placeholder pages — real components in upcoming phases
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.13.3 (37 releases)
+**Versions Shipped:** v1.0.0 → v2.14.0 (38 releases)
 **Features Completed:** 37 (22 features, 6 UX polish, 1 content expansion, 2 chores, 6 bug fixes)
 **Test Coverage:** 76 tests, 83% coverage, 100% pass rate
 **Key Achievements:**

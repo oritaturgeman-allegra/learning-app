@@ -22,6 +22,16 @@ Sprint is successful if:
 - [x] Chapter C (`math-long-division`) unlocked and playable
 - [x] Chapter D (`math-primes`) unlocked and playable
 
+## Bonus: React Migration (started mid-sprint)
+
+- [x] Phase 1: React + MUI + TypeScript scaffolding (Vite, theme, routing, RTL)
+- [ ] Phase 2: Backend API adaptation (serve SPA, /api/config endpoint)
+- [ ] Phase 3: Core layout & navigation screens
+- [ ] Phase 4: Audio & reward systems
+- [ ] Phase 5: English games
+- [ ] Phase 6: Math games
+- [ ] Phase 7: Cleanup & polish
+
 ---
 
 **Sprint Start:** February 20, 2026

@@ -93,8 +93,3 @@ When running `/new-task`, the output MUST include ALL these sections in order:
 7. Security Review
 8. Potential Issues
 9. Next Steps
-
-## Git-Ignored Files (Do NOT include in commits)
-
-These files/folders are git-ignored and should never be committed:
-- `docs/architecture/` - Local architecture docs

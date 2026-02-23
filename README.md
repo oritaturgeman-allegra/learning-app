@@ -12,12 +12,12 @@ A web app that teaches English vocabulary and math skills to Hebrew-speaking chi
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v2.14.0  | 02/23 | Infra: Scaffold React + MUI + TypeScript frontend for mobile-responsive redesign          |
 | v2.13.3  | 02/23 | Fix: Word tracker scoped to session, env cleanup — remove newsletter Supabase config      |
 | v2.13.2  | 02/22 | Fix: Math games now advance on correct answers — null element crash in shared star display |
 | v2.13.1  | 02/22 | Polish: Replace emoji icons with custom SVG icons for math and English subjects           |
 | v2.13.0  | 02/22 | Refactor: Extract CSS/JS from monolithic templates into modular static files              |
 | v2.12.1  | 02/22 | Polish: Smart hints rewritten in natural Hebrew across all 4 math chapters                |
-| v2.12.0  | 02/22 | Feature: Chapter D unlocked — primes, divisibility rules (3/6/9), and prime factorization |
 
 ---
 
