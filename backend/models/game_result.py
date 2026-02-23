@@ -33,14 +33,13 @@ class GameResult(Base):
     # Core fields
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     category: Mapped[str] = mapped_column(String(30), nullable=False, default="english", index=True)
+    topic: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, index=True)
+    session_slug: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, index=True)
     game_type: Mapped[str] = mapped_column(String(30), nullable=False, index=True)
     score: Mapped[int] = mapped_column(Integer, nullable=False)
     max_score: Mapped[int] = mapped_column(Integer, nullable=False)
     accuracy: Mapped[float] = mapped_column(Float, nullable=False)
     word_results: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
-
-    # Session tracking (which unit the game was played in)
-    session_slug: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, index=True)
 
     # Future multi-user support
     user_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, index=True)
@@ -61,11 +60,12 @@ class GameResult(Base):
         return {
             "id": self.id,
             "category": self.category,
+            "topic": self.topic,
+            "session_slug": self.session_slug,
             "game_type": self.game_type,
             "score": self.score,
             "max_score": self.max_score,
             "accuracy": self.accuracy,
             "word_results": json.loads(self.word_results) if self.word_results else [],
-            "session_slug": self.session_slug,
             "played_at": self.played_at.isoformat() if self.played_at else None,
         }

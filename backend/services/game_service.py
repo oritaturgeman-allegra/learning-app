@@ -46,6 +46,15 @@ REQUIRED_GAMES_BY_PREFIX = {
     "jet": ENGLISH_GAME_TYPES,
 }
 
+# Topic (broad subject area) by session slug
+TOPIC_BY_SESSION: Dict[str, str] = {
+    "jet2-unit2": "Vocabulary",
+    "math-tens-hundreds": "Multiplication and Division",
+    "math-two-digit": "Multiplication and Division",
+    "math-long-division": "Multiplication and Division",
+    "math-primes": "Multiplication and Division",
+}
+
 # Rounds per game type
 ROUNDS_PER_GAME = {
     "word_match": 10,
@@ -101,11 +110,13 @@ class GameService:
 
         accuracy = score / max_score if max_score > 0 else 0.0
         category = "math" if game_type in MATH_GAME_TYPES else "english"
+        topic = TOPIC_BY_SESSION.get(session_slug, None) if session_slug else None
 
         try:
             with session_scope() as session:
                 result = GameResult(
                     category=category,
+                    topic=topic,
                     game_type=game_type,
                     score=score,
                     max_score=max_score,
