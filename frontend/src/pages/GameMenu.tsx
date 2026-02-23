@@ -13,8 +13,8 @@ import { getPracticedWords } from "@/api/game";
 import WordTracker from "@/games/english/WordTracker";
 
 const SUBJECT_TABS = [
-  { id: "english", label: "אנגלית", icon: "/static/input-letters-light.svg" },
-  { id: "math", label: "חשבון", icon: "/static/input-numbers-light.svg" },
+  { id: "english", label: "אנגלית", icon: "/input-letters-light.svg" },
+  { id: "math", label: "חשבון", icon: "/input-numbers-light.svg" },
 ];
 
 const SS_COMPLETED_KEY = "ariel_session_completed_games";

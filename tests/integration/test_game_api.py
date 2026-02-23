@@ -365,67 +365,37 @@ class TestResetAPI:
 
 
 class TestPageRoutes:
-    """Tests for HTML page routes."""
+    """Tests for React SPA routes and backward-compatibility redirects."""
 
-    def test_index_returns_welcome_screen(self, client):
-        """GET / returns the welcome screen."""
+    def test_react_spa_serves_index(self, client):
+        """GET / returns the React SPA index.html (contains root div)."""
         response = client.get("/")
         assert response.status_code == 200
-        assert 'id="welcome-screen"' in response.text
+        assert 'id="root"' in response.text
 
-    def test_learning_returns_subject_picker(self, client):
-        """GET /learning returns the subject picker screen."""
-        response = client.get("/learning")
-        assert response.status_code == 200
-        assert 'id="subject-picker-screen"' in response.text
-
-    def test_learning_english_returns_session_picker(self, client):
-        """GET /learning/english returns the session picker with English sessions."""
-        response = client.get("/learning/english")
-        assert response.status_code == 200
-        assert 'id="session-picker-screen"' in response.text
-        assert "Jet 2: Unit 2" in response.text
-
-    def test_learning_math_returns_session_picker(self, client):
-        """GET /learning/math returns the session picker with 4 chapter cards."""
-        response = client.get("/learning/math")
-        assert response.status_code == 200
-        assert 'id="session-picker-screen"' in response.text
-        assert "כפל וחילוק בעשרות ובמאות" in response.text
-        assert "כפל דו-ספרתי" in response.text
-        assert "חילוק ארוך" in response.text
-        assert "מספרים ראשוניים" in response.text
-
-    def test_learning_session_returns_menu(self, client):
-        """GET /learning/english/jet2-unit2 returns the game menu."""
-        response = client.get("/learning/english/jet2-unit2")
-        assert response.status_code == 200
-        assert 'id="menu-screen"' in response.text
-
-    def test_math_session_returns_menu(self, client):
-        """GET /learning/math/math-tens-hundreds returns the game menu."""
-        response = client.get("/learning/math/math-tens-hundreds")
-        assert response.status_code == 200
-        assert 'id="menu-screen"' in response.text
-
-    def test_math_locked_session_is_valid_slug(self, client):
-        """Locked math sessions have valid slugs (return 200, not 404)."""
-        for slug in ["math-two-digit", "math-long-division", "math-primes"]:
-            response = client.get(f"/learning/math/{slug}")
+    def test_react_spa_serves_learning_routes(self, client):
+        """GET /learning/* returns the React SPA for client-side routing."""
+        for path in ["/learning", "/learning/english", "/learning/math"]:
+            response = client.get(path)
             assert response.status_code == 200
+            assert 'id="root"' in response.text
 
-    def test_learning_invalid_subject_returns_404(self, client):
-        """GET /learning/invalid-subject/jet2-unit2 returns 404."""
-        response = client.get("/learning/invalid-subject/jet2-unit2")
-        assert response.status_code == 404
-
-    def test_learning_invalid_session_returns_404(self, client):
-        """GET /learning/english/invalid-slug returns 404."""
-        response = client.get("/learning/english/invalid-slug")
-        assert response.status_code == 404
-
-    def test_old_url_redirects_to_new(self, client):
-        """GET /learning/jet2-unit2 redirects to /learning/english/jet2-unit2."""
-        response = client.get("/learning/jet2-unit2", follow_redirects=False)
+    def test_app_url_redirects_to_root(self, client):
+        """GET /app/learning redirects to /learning (backward compat)."""
+        response = client.get("/app/learning", follow_redirects=False)
         assert response.status_code == 301
-        assert response.headers["location"] == "/learning/english/jet2-unit2"
+        assert response.headers["location"] == "/learning"
+
+    def test_health_still_works(self, client):
+        """GET /health returns JSON health check (not intercepted by SPA)."""
+        response = client.get("/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "healthy"
+
+    def test_api_routes_not_intercepted_by_spa(self, client):
+        """API routes still return JSON, not the SPA HTML."""
+        response = client.get("/api/game/progress")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["success"] is True

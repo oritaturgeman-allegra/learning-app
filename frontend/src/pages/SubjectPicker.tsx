@@ -10,14 +10,14 @@ const SUBJECTS = [
   {
     id: "english",
     name: "אנגלית",
-    icon: "/static/input-letters-light.svg",
+    icon: "/input-letters-light.svg",
     iconAlt: "אנגלית",
     iconClass: "english-icon",
   },
   {
     id: "math",
     name: "חשבון",
-    icon: "/static/input-numbers-light.svg",
+    icon: "/input-numbers-light.svg",
     iconAlt: "חשבון",
     iconClass: "math-icon",
   },

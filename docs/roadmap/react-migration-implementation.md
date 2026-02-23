@@ -83,15 +83,18 @@
 - [x] Bump version, update README + sprint docs
 - [ ] **User tests all 4 Math games on iPhone**
 
-### Phase 7: Cleanup & Polish
-- [ ] Delete old frontend files (templates/*.html, static/css/*.css, static/js/*.js)
-- [ ] Remove Jinja2 dependency from `backend/web_app.py`
-- [ ] Add `React.lazy()` + Suspense for game components
-- [ ] Touch tuning: min-height 44px on all interactive elements
-- [ ] Test on iPhone SE (375px), iPhone 15 (393px), iPad (768px)
-- [ ] Check & update architecture docs (`docs/architecture/`)
-- [ ] Bump version to v3.0.0 in `backend/defaults.py`
-- [ ] Update README.md, APP_CHANGELOG, sprint docs
+### Phase 7: Cleanup & Polish ✅ (v3.0.0)
+- [x] Delete old frontend files (templates/*.html, static/css/*.css, static/js/*.js) — 11 files, ~5000 lines removed
+- [x] Remove Jinja2 dependency from `backend/web_app.py` and `requirements.txt`
+- [x] Move React SPA from `/app/` to root `/` with backward-compat redirects
+- [x] Migrate static assets to `frontend/public/`
+- [x] Add `React.lazy()` + Suspense for all 8 game components + CompletionScreen
+- [x] Touch tuning: min-height 48px on CompletionScreen buttons, HintButton
+- [x] Remove unused CSS animation (`@keyframes wiggle`)
+- [x] Check & update architecture docs (`docs/architecture/`)
+- [x] Bump version to v3.0.0 in `backend/defaults.py`
+- [x] Update README.md, APP_CHANGELOG, CLAUDE.md
+- [ ] **User tests on iPhone SE (375px), iPhone 15 (393px), iPad (768px)**
 
 ---
 
@@ -167,6 +170,7 @@ npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-do
 | 02/23 | Phase 4 | useAudio (tones + TTS), Confetti, MilestoneOverlay, RewardPopup, useRewards orchestration, Layout + AppContext wiring | v2.16.0 |
 | 02/23 | Phase 5 | English games: data/english.ts, useGameEngine, 4 game components, GameScreen, CompletionScreen, WordTracker, GameMenu navigation | v2.17.0 |
 | 02/23 | Phase 6 | Math games: data/math.ts (15 categories, hints, distractors, TF, bubbles), 4 game components (QuickSolve, MissingNumber, MathTrueFalse, BubblePop), HintButton, MathGameScreen, GameRouter, GameMenu enabled | v2.18.0 |
+| 02/23 | Phase 7 | Delete legacy frontend (11 files, ~5000 lines), remove Jinja2, move React to root /, code splitting (React.lazy), touch target polish, migrate assets to public/ | v3.0.0 |
 
 ---
 
@@ -177,11 +181,11 @@ npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-do
 - [ ] Stars persist across sessions (localStorage + API)
 - [ ] Audio works (sound effects + TTS)
 - [ ] All reward tiers unlock correctly
-- [ ] Old frontend files deleted
-- [ ] Architecture docs updated
-- [ ] Version bumped to v3.0.0
-- [ ] README.md updated
-- [ ] Tests passing
+- [x] Old frontend files deleted
+- [x] Architecture docs updated
+- [x] Version bumped to v3.0.0
+- [x] README.md updated
+- [x] Tests passing (71 tests)
 
 ---
 

@@ -7,7 +7,7 @@ Gamified English + Math learning web app for a Gen Alpha Israeli girl (4th grade
 ```bash
 # Run web app
 .venv/bin/python -m backend.web_app
-# Open http://localhost:8000/app/
+# Open http://localhost:8000
 
 # Frontend dev
 cd frontend && npm run dev    # Vite at :5173 (proxies /api to :8000)
@@ -21,8 +21,7 @@ cd frontend && npm run build  # Production build to frontend/dist/
 ## Stack
 
 - **Backend:** Python 3.13, FastAPI, SQLAlchemy (SQLite dev / PostgreSQL prod)
-- **Frontend (legacy):** Jinja2 HTML templates + vanilla JS (being replaced)
-- **Frontend (new):** React 19 + TypeScript + MUI 7 + Vite, SPA at `/app/`
+- **Frontend:** React 19 + TypeScript + MUI 7 + Vite, SPA with code splitting
 - **Audio:** Web Speech API (TTS), AudioContext (sound effects)
 - **Fonts:** Google Fonts (Fredoka display, Rubik body/Hebrew)
 - **Storage:** Database (game results, progress) + localStorage (fallback)

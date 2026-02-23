@@ -10,8 +10,8 @@ import { Box, Card, CardActionArea, Stack, Tab, Tabs, Typography } from "@mui/ma
 import { useApp } from "@/context/AppContext";
 
 const SUBJECT_TABS = [
-  { id: "english", label: "אנגלית", icon: "/static/input-letters-light.svg" },
-  { id: "math", label: "חשבון", icon: "/static/input-numbers-light.svg" },
+  { id: "english", label: "אנגלית", icon: "/input-letters-light.svg" },
+  { id: "math", label: "חשבון", icon: "/input-numbers-light.svg" },
 ];
 
 export default function SessionPicker() {

@@ -10,18 +10,9 @@ import sentry_sdk
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 from backend.config import config
-from backend.defaults import (
-    APP_METADATA,
-    APP_VERSION,
-    REWARD_TIERS,
-    SESSIONS,
-    SESSIONS_BY_SUBJECT,
-    VALID_SESSION_SLUGS,
-    VALID_SUBJECTS,
-)
+from backend.defaults import APP_METADATA
 from backend.exceptions import AppError
 from backend.logging_config import setup_logging
 from backend.routes.game import router as game_router
@@ -44,16 +35,7 @@ init_sentry(
 # Initialize FastAPI app
 app = FastAPI(**APP_METADATA)
 
-# Setup Jinja2 templates and static files (legacy frontend)
-templates = Jinja2Templates(directory="frontend/templates")
-app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
-
-# Serve React build assets if available (new frontend)
-REACT_DIST = Path("frontend/dist")
-if REACT_DIST.is_dir():
-    app.mount("/app/assets", StaticFiles(directory=str(REACT_DIST / "assets")), name="react-assets")
-
-# Include routers
+# Include API routers (must be before static file mounts)
 app.include_router(game_router)
 
 
@@ -114,78 +96,6 @@ async def request_context_middleware(request: Request, call_next):  # type: igno
 logger.info("Web application initialized")
 
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request) -> HTMLResponse:
-    """Serve the landing page."""
-    return templates.TemplateResponse(
-        "english-fun.html",
-        {
-            "request": request,
-            "version": APP_VERSION,
-            "reward_tiers": REWARD_TIERS,
-            "sessions": SESSIONS,
-            "initial_screen": "welcome",
-        },
-    )
-
-
-@app.get("/learning", response_class=HTMLResponse)
-async def learning(request: Request) -> HTMLResponse:
-    """Serve the subject picker screen."""
-    return templates.TemplateResponse(
-        "english-fun.html",
-        {
-            "request": request,
-            "version": APP_VERSION,
-            "reward_tiers": REWARD_TIERS,
-            "sessions": SESSIONS,
-            "initial_screen": "subject-picker",
-        },
-    )
-
-
-@app.get("/learning/{subject}/{session_slug}", response_class=HTMLResponse)
-async def learning_session(request: Request, subject: str, session_slug: str) -> HTMLResponse:
-    """Serve the game menu for a specific learning session under a subject."""
-    if subject not in VALID_SUBJECTS:
-        raise HTTPException(status_code=404, detail="Subject not found")
-    if session_slug not in VALID_SESSION_SLUGS:
-        raise HTTPException(status_code=404, detail="Session not found")
-    template_name = "math-fun.html" if subject == "math" else "english-fun.html"
-    return templates.TemplateResponse(
-        template_name,
-        {
-            "request": request,
-            "version": APP_VERSION,
-            "reward_tiers": REWARD_TIERS,
-            "sessions": SESSIONS,
-            "subject": subject,
-            "session_slug": session_slug,
-            "initial_screen": "menu",
-        },
-    )
-
-
-@app.get("/learning/{subject_or_slug}", response_class=HTMLResponse)
-async def learning_subject_or_redirect(request: Request, subject_or_slug: str) -> HTMLResponse:
-    """Serve session picker for a subject, or redirect old session slug URLs."""
-    if subject_or_slug in VALID_SUBJECTS:
-        return templates.TemplateResponse(
-            "english-fun.html",
-            {
-                "request": request,
-                "version": APP_VERSION,
-                "reward_tiers": REWARD_TIERS,
-                "sessions": SESSIONS_BY_SUBJECT.get(subject_or_slug, []),
-                "subject": subject_or_slug,
-                "initial_screen": "session-picker",
-            },
-        )
-    if subject_or_slug in VALID_SESSION_SLUGS:
-        return RedirectResponse(url=f"/learning/english/{subject_or_slug}", status_code=301)
-    raise HTTPException(status_code=404, detail="Not found")
-
-
 @app.get("/health")
 async def health() -> Dict[str, Any]:
     """Health check endpoint."""
@@ -196,15 +106,33 @@ async def health() -> Dict[str, Any]:
     }
 
 
-# --- React SPA Catch-All ---
-# Serves React's index.html for any unmatched route so React Router handles navigation.
-# Only active when frontend/dist/ exists (after `npm run build`).
-# Legacy Jinja2 routes above take priority since they're registered first.
+# --- Backward-compatibility redirect for old /app/ URLs ---
 
 
-@app.get("/app/{full_path:path}", response_class=HTMLResponse)
+@app.get("/app/{full_path:path}")
+async def redirect_app_urls(full_path: str) -> RedirectResponse:
+    """Redirect old /app/ URLs to root equivalents."""
+    return RedirectResponse(url=f"/{full_path}", status_code=301)
+
+
+# --- React SPA ---
+# Mount /assets for built JS/CSS chunks.
+# Catch-all route serves index.html for SPA client-side routing,
+# or static files from dist root (favicon, SVGs).
+
+REACT_DIST = Path("frontend/dist")
+if REACT_DIST.is_dir():
+    app.mount("/assets", StaticFiles(directory=str(REACT_DIST / "assets")), name="react-assets")
+
+
+@app.get("/{full_path:path}", response_class=HTMLResponse)
 async def react_spa(full_path: str) -> FileResponse:
-    """Serve the React SPA for all /app/* routes."""
+    """Serve static files from dist or fall back to index.html for SPA routing."""
+    # First check if this is a real file in dist (favicon.png, SVGs)
+    file_path = REACT_DIST / full_path
+    if full_path and file_path.is_file():
+        return FileResponse(str(file_path))
+    # Otherwise serve index.html for React Router
     index_file = REACT_DIST / "index.html"
     if not index_file.is_file():
         raise HTTPException(status_code=404, detail="React build not found. Run: cd frontend && npm run build")

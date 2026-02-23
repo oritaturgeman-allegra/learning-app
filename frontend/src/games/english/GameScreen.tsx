@@ -5,9 +5,9 @@
  * URL: /learning/:subject/:sessionSlug/play/:gameId
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { getUnitData, planSession, GAME_TYPE_MAP } from "@/data/english";
 import type { SessionPlan } from "@/data/english";
@@ -15,11 +15,12 @@ import { saveGameResult, getPracticedWords } from "@/api/game";
 import { useApp } from "@/context/AppContext";
 import type { WordResult } from "@/api/types";
 import { ENGLISH_GAMES } from "@/data/games";
-import WordMatch from "./WordMatch";
-import SentenceScramble from "./SentenceScramble";
-import ListenAndChoose from "./ListenAndChoose";
-import TrueFalse from "./TrueFalse";
-import CompletionScreen from "./CompletionScreen";
+
+const WordMatch = lazy(() => import("./WordMatch"));
+const SentenceScramble = lazy(() => import("./SentenceScramble"));
+const ListenAndChoose = lazy(() => import("./ListenAndChoose"));
+const TrueFalse = lazy(() => import("./TrueFalse"));
+const CompletionScreen = lazy(() => import("./CompletionScreen"));
 
 const SS_PLAN_KEY = "ariel_session_plan";
 const SS_COMPLETED_KEY = "ariel_session_completed_games";
@@ -136,14 +137,22 @@ export default function GameScreen() {
     navigate(`/learning/${subject}/${slug}`);
   };
 
+  const suspenseFallback = (
+    <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+      <CircularProgress />
+    </Box>
+  );
+
   if (finished) {
     return (
-      <CompletionScreen
-        score={finalScore}
-        maxScore={finalMax}
-        onReplay={handleReplay}
-        onBackToMenu={handleBackToMenu}
-      />
+      <Suspense fallback={suspenseFallback}>
+        <CompletionScreen
+          score={finalScore}
+          maxScore={finalMax}
+          onReplay={handleReplay}
+          onBackToMenu={handleBackToMenu}
+        />
+      </Suspense>
     );
   }
 
@@ -179,36 +188,38 @@ export default function GameScreen() {
       </Box>
 
       {/* Game content */}
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        {gameId === 1 && (
-          <WordMatch
-            words={plan.game1Words}
-            vocabulary={unit.vocabulary}
-            onFinish={handleFinish}
-          />
-        )}
-        {gameId === 2 && (
-          <SentenceScramble
-            sentences={plan.game2Sentences}
-            vocabulary={unit.vocabulary}
-            onFinish={handleFinish}
-          />
-        )}
-        {gameId === 3 && (
-          <ListenAndChoose
-            words={plan.game3Words}
-            vocabulary={unit.vocabulary}
-            onFinish={handleFinish}
-          />
-        )}
-        {gameId === 4 && (
-          <TrueFalse
-            sentences={plan.game4Sentences}
-            vocabulary={unit.vocabulary}
-            onFinish={handleFinish}
-          />
-        )}
-      </Box>
+      <Suspense fallback={suspenseFallback}>
+        <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          {gameId === 1 && (
+            <WordMatch
+              words={plan.game1Words}
+              vocabulary={unit.vocabulary}
+              onFinish={handleFinish}
+            />
+          )}
+          {gameId === 2 && (
+            <SentenceScramble
+              sentences={plan.game2Sentences}
+              vocabulary={unit.vocabulary}
+              onFinish={handleFinish}
+            />
+          )}
+          {gameId === 3 && (
+            <ListenAndChoose
+              words={plan.game3Words}
+              vocabulary={unit.vocabulary}
+              onFinish={handleFinish}
+            />
+          )}
+          {gameId === 4 && (
+            <TrueFalse
+              sentences={plan.game4Sentences}
+              vocabulary={unit.vocabulary}
+              onFinish={handleFinish}
+            />
+          )}
+        </Box>
+      </Suspense>
     </Box>
   );
 }

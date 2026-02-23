@@ -12,12 +12,12 @@ A web app that teaches English vocabulary and math skills to Hebrew-speaking chi
 
 | Version  | Date  | Change                                                                                   |
 |----------|-------|------------------------------------------------------------------------------------------|
+| v3.0.0   | 02/23 | Major: React is sole frontend — legacy Jinja2 removed, code splitting, served at root     |
 | v2.18.0  | 02/23 | Feature: All 4 math games in React — QuickSolve, MissingNumber, MathTrueFalse, BubblePop |
 | v2.17.0  | 02/23 | Feature: All 4 English games playable in React — WordMatch, SentenceScramble, ListenAndChoose, TrueFalse |
 | v2.16.1  | 02/23 | Fix: RTL emoji placement, version footer in lavender strip, unified gradient background   |
 | v2.16.0  | 02/23 | Feature: Audio system, confetti, milestones, reward popups for React frontend              |
 | v2.15.0  | 02/23 | Feature: React navigation screens — Welcome, SubjectPicker, SessionPicker, GameMenu       |
-| v2.14.1  | 02/23 | Infra: Backend serves React SPA build + new /api/game/config endpoint for React           |
 
 ---
 
@@ -28,7 +28,7 @@ A web app that teaches English vocabulary and math skills to Hebrew-speaking chi
 .venv/bin/python -m backend.web_app
 
 # Open in browser
-open http://localhost:8000/app/
+open http://localhost:8000/
 ```
 
 ## Subjects & Sessions
@@ -80,7 +80,7 @@ open http://localhost:8000/app/
 ## Tech Stack
 
 - **Backend:** Python 3.13, FastAPI, SQLAlchemy (SQLite dev / PostgreSQL prod)
-- **Frontend:** Jinja2-served HTML, vanilla JS + CSS animations
+- **Frontend:** React 19 + TypeScript + MUI 7 + Vite (SPA with code splitting)
 - **Audio:** Web Speech API (TTS), AudioContext (sound effects)
 - **Fonts:** Google Fonts (Fredoka + Rubik)
 - **Storage:** Database (game results, progress) + localStorage (fallback)

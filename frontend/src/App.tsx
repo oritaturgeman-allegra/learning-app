@@ -15,12 +15,9 @@ function GameRouter() {
   return subject === "math" ? <MathGameScreen /> : <GameScreen />;
 }
 
-// In production (FastAPI), React is served under /app/. In dev (Vite), at /.
-const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
-
 export default function App() {
   return (
-    <BrowserRouter basename={basename}>
+    <BrowserRouter>
       <AppProvider>
         <Routes>
           {/* Welcome — standalone, no header */}

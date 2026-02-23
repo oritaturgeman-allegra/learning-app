@@ -46,8 +46,8 @@ export default function HintButton({ hint }: HintButtonProps) {
           color: "#f59e0b",
           bgcolor: "rgba(245, 158, 11, 0.1)",
           "&:hover": { bgcolor: "rgba(245, 158, 11, 0.2)" },
-          width: 44,
-          height: 44,
+          width: 48,
+          height: 48,
         }}
       >
         <LightbulbIcon />

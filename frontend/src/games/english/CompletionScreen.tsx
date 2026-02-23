@@ -87,6 +87,7 @@ export default function CompletionScreen({
             borderRadius: 9999,
             px: 3,
             py: 1.5,
+            minHeight: 48,
           }}
         >
           חזרה לתפריט 🏠
@@ -101,6 +102,7 @@ export default function CompletionScreen({
             borderRadius: 9999,
             px: 3,
             py: 1.5,
+            minHeight: 48,
           }}
         >
           שחקי שוב 🔄

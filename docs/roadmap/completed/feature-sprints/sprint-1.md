@@ -1,7 +1,7 @@
 # Sprint 1: Feb 20 - Mar 5, 2026
 
 ## Sprint Goal
-Ship **v1.0.0 → v2.5.0** — Build a complete gamified English learning app with 4 mini-games, persistent progress tracking, and a polished kid-friendly UI.
+Ship **v1.0.0 → v3.0.0** — Build a complete gamified English + Math learning app with 8 mini-games, persistent progress tracking, and a polished kid-friendly React SPA.
 
 ## Sprint Theme
 Foundation & Polish — Core game engine, vocabulary content, star rewards, word tracker, and visual delight for a Gen Alpha learner.
@@ -374,19 +374,46 @@ Ported all 4 English mini-games from vanilla JS to React + TypeScript + MUI.
 
 ---
 
+### 44. React Math Games + Topic Navigation — Phase 6 Complete (v2.18.0)
+Ported all 4 math mini-games from vanilla JS to React + TypeScript + MUI, with topic-based navigation for multi-chapter math.
+- **Data module** (`data/math.ts`): Algorithmic problem generators for all 4 chapters (tens/hundreds, two-digit multiply, long division, primes & divisibility)
+- **4 game components**: QuickSolve, MissingNumber, MathTrueFalse, BubblePop — with Israeli notation (× and :)
+- **MathGameScreen**: Route wrapper managing problem generation, scoring, API save
+- **HintButton**: Shared lightbulb popover with per-problem Hebrew hints, auto-close after 4s
+- **Topic navigation**: TopicSessions page for multi-chapter subjects, `TOPICS_BY_SUBJECT` config
+- **GameMenu**: Session-aware, loads correct game data per session slug
+- **Games registry** (`data/games.ts`): Centralized game metadata with subject-specific game lists
+
+---
+
+### 45. Cleanup & Polish — Phase 7 / v3.0.0 (v3.0.0)
+Final React migration step: deleted legacy Jinja2/vanilla JS frontend, promoted React SPA from `/app/` to root `/`, added code splitting, polished touch targets. ~5,000 lines of dead code removed.
+- **Legacy deletion**: Removed 11 files — 2 Jinja2 templates, 3 CSS, 5 JS, 1 unused SVG
+- **React at root**: SPA served from `/` instead of `/app/`, catch-all route for client-side routing
+- **Backward compat**: `/app/{path}` → `/{path}` 301 redirect for old bookmarks
+- **Code splitting**: `React.lazy()` + Suspense for all 8 game components + CompletionScreen (separate chunks)
+- **Static assets**: Migrated favicon + SVG icons to Vite `public/` directory
+- **Touch polish**: All game buttons meet 48px min-height, HintButton bumped to 48×48
+- **Dependency cleanup**: Removed Jinja2 from requirements.txt
+- **Vite simplification**: Base path always `/`, removed conditional build config
+- **Tests updated**: Page route tests rewritten for React SPA behavior (71 tests passing)
+
+---
+
 ## Sprint Summary
 
-**Versions Shipped:** v1.0.0 → v2.17.0 (43 releases)
-**Features Completed:** 42 (25 features, 6 UX polish, 1 content expansion, 3 chores, 7 bug fixes)
-**Test Coverage:** 76 tests, 83% coverage, 100% pass rate
+**Versions Shipped:** v1.0.0 → v3.0.0 (45 releases)
+**Features Completed:** 45 (27 features, 6 UX polish, 1 content expansion, 3 chores, 8 bug fixes)
+**Test Coverage:** 71 tests, 83% coverage, 100% pass rate
 **Key Achievements:**
-- 4 complete mini-games with star rewards and sound feedback
+- Full React + TypeScript + MUI rewrite — single modern SPA
+- 8 complete mini-games (4 English, 4 Math) with star rewards and sound feedback
 - 55 vocabulary words from Jet 2 Unit 2 — full coverage guaranteed per session
-- Persistent progress tracking in SQLite
-- Word tracker sidebar with practiced/unpracticed chip states
-- Session celebration with fireworks after all 4 games
-- Collectible reward cards with trophy gallery
-- Session picker for multi-unit support
+- 4 math chapters covering 4th-grade Israeli curriculum (tens/hundreds through primes)
+- Persistent progress tracking in SQLite with per-session stars
+- Code-split game components for faster initial load
+- Collectible reward cards with trophy gallery (6 tiers, 25–300 stars)
+- Topic-based navigation for multi-chapter subjects
 - Kid-friendly pastel UI with Hebrew RTL support
 - American English female voice for pronunciation
 

@@ -5,20 +5,21 @@
  * URL: /learning/math/:sessionSlug/play/:gameId
  */
 
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { saveGameResult } from "@/api/game";
 import { useApp } from "@/context/AppContext";
 import { MATH_GAME_TYPE_MAP } from "@/data/math";
 import { MATH_GAMES } from "@/data/games";
 import type { WordResult } from "@/api/types";
-import CompletionScreen from "@/games/english/CompletionScreen";
-import QuickSolve from "./QuickSolve";
-import MissingNumber from "./MissingNumber";
-import MathTrueFalse from "./MathTrueFalse";
-import BubblePop from "./BubblePop";
+
+const CompletionScreen = lazy(() => import("@/games/english/CompletionScreen"));
+const QuickSolve = lazy(() => import("./QuickSolve"));
+const MissingNumber = lazy(() => import("./MissingNumber"));
+const MathTrueFalse = lazy(() => import("./MathTrueFalse"));
+const BubblePop = lazy(() => import("./BubblePop"));
 
 const SS_COMPLETED_KEY = "ariel_session_completed_games";
 
@@ -91,14 +92,22 @@ export default function MathGameScreen() {
     navigate(`/learning/math/${slug}`);
   };
 
+  const suspenseFallback = (
+    <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+      <CircularProgress />
+    </Box>
+  );
+
   if (finished) {
     return (
-      <CompletionScreen
-        score={finalScore}
-        maxScore={finalMax}
-        onReplay={handleReplay}
-        onBackToMenu={handleBackToMenu}
-      />
+      <Suspense fallback={suspenseFallback}>
+        <CompletionScreen
+          score={finalScore}
+          maxScore={finalMax}
+          onReplay={handleReplay}
+          onBackToMenu={handleBackToMenu}
+        />
+      </Suspense>
     );
   }
 
@@ -133,20 +142,22 @@ export default function MathGameScreen() {
       </Box>
 
       {/* Game content */}
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        {gameId === 1 && (
-          <QuickSolve sessionSlug={slug} onFinish={handleFinish} />
-        )}
-        {gameId === 2 && (
-          <MissingNumber sessionSlug={slug} onFinish={handleFinish} />
-        )}
-        {gameId === 3 && (
-          <MathTrueFalse sessionSlug={slug} onFinish={handleFinish} />
-        )}
-        {gameId === 4 && (
-          <BubblePop sessionSlug={slug} onFinish={handleFinish} />
-        )}
-      </Box>
+      <Suspense fallback={suspenseFallback}>
+        <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          {gameId === 1 && (
+            <QuickSolve sessionSlug={slug} onFinish={handleFinish} />
+          )}
+          {gameId === 2 && (
+            <MissingNumber sessionSlug={slug} onFinish={handleFinish} />
+          )}
+          {gameId === 3 && (
+            <MathTrueFalse sessionSlug={slug} onFinish={handleFinish} />
+          )}
+          {gameId === 4 && (
+            <BubblePop sessionSlug={slug} onFinish={handleFinish} />
+          )}
+        </Box>
+      </Suspense>
     </Box>
   );
 }
