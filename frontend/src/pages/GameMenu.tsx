@@ -103,34 +103,11 @@ export default function GameMenu() {
         py: { xs: 3, sm: 5 },
       }}
     >
-      {/* Back button header */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          width: "100%",
-          maxWidth: 500,
-          mb: 2,
-        }}
-      >
+      {/* Back button */}
+      <Box sx={{ width: "100%", maxWidth: 500, mb: 1 }}>
         <IconButton onClick={() => navigate(-1)} size="small">
           <ArrowForwardIcon />
         </IconButton>
-        <Typography
-          sx={{
-            fontFamily: "'Fredoka', sans-serif",
-            fontWeight: 600,
-            fontSize: { xs: "1.1rem", sm: "1.3rem" },
-            flex: 1,
-            textAlign: "center",
-          }}
-        >
-          {currentSession
-            ? isEnglish ? currentSession.name : currentSession.name_he
-            : ""}
-        </Typography>
-        <Box sx={{ width: 34 }} />
       </Box>
 
       {/* Subject tabs */}
@@ -167,6 +144,20 @@ export default function GameMenu() {
           />
         ))}
       </Tabs>
+
+      {/* Session name */}
+      {currentSession && (
+        <Typography
+          sx={{
+            fontFamily: "'Fredoka', sans-serif",
+            fontWeight: 600,
+            fontSize: { xs: "1.1rem", sm: "1.3rem" },
+            mb: 1,
+          }}
+        >
+          {isEnglish ? currentSession.name : currentSession.name_he}
+        </Typography>
+      )}
 
       {/* Title + reset button */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
